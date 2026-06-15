@@ -14,6 +14,7 @@ __pycache__/
 *.egg-info/
 *.tsbuildinfo
 build/work/
+*.render-*.png
 tmp/source_text/
 tmp/visual_source/
 tmp/test-runs/

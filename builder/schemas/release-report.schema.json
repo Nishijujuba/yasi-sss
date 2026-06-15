@@ -1,0 +1,75 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "blocked",
+        "released"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "questionCoverage": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Questioncoverage",
+      "type": "array"
+    },
+    "overlayCount": {
+      "minimum": 0,
+      "title": "Overlaycount",
+      "type": "integer"
+    },
+    "answerCount": {
+      "minimum": 0,
+      "title": "Answercount",
+      "type": "integer"
+    },
+    "transcriptSections": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Transcriptsections",
+      "type": "array"
+    },
+    "audioSections": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Audiosections",
+      "type": "array"
+    },
+    "pageAssets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pageassets",
+      "type": "array"
+    },
+    "pendingAnswerCandidates": {
+      "minimum": 0,
+      "title": "Pendinganswercandidates",
+      "type": "integer"
+    },
+    "errors": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Errors",
+      "type": "array"
+    }
+  },
+  "required": [
+    "status",
+    "questionCoverage",
+    "overlayCount",
+    "answerCount",
+    "transcriptSections",
+    "audioSections",
+    "pageAssets",
+    "pendingAnswerCandidates"
+  ],
+  "title": "ReleaseReport",
+  "type": "object"
+}

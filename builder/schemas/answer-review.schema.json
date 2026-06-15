@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "questionNumber": {
+      "maximum": 40,
+      "minimum": 1,
+      "title": "Questionnumber",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "candidate": {
+      "title": "Candidate",
+      "type": "string"
+    },
+    "sourceUrl": {
+      "title": "Sourceurl",
+      "type": "string"
+    },
+    "accessedAt": {
+      "title": "Accessedat",
+      "type": "string"
+    },
+    "questionCrop": {
+      "title": "Questioncrop",
+      "type": "string"
+    },
+    "answerKeyCrop": {
+      "title": "Answerkeycrop",
+      "type": "string"
+    },
+    "transcriptEvidence": {
+      "title": "Transcriptevidence",
+      "type": "string"
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision"
+    }
+  },
+  "required": [
+    "questionNumber",
+    "status",
+    "candidate",
+    "sourceUrl",
+    "accessedAt",
+    "questionCrop",
+    "answerKeyCrop",
+    "transcriptEvidence"
+  ],
+  "title": "PendingAnswerCandidate",
+  "type": "object"
+}

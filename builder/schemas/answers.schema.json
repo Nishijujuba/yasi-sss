@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "AnswerEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "official-answer-key",
+            "official-audioscript",
+            "internet-candidate",
+            "user-approval"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "sourceUrl": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourceurl"
+        },
+        "accessedAt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accessedat"
+        }
+      },
+      "required": [
+        "kind",
+        "source",
+        "detail"
+      ],
+      "title": "AnswerEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "questionIds": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Questionids",
+      "type": "array"
+    },
+    "accepted": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "minItems": 1,
+      "title": "Accepted",
+      "type": "array"
+    },
+    "orderIndependent": {
+      "default": false,
+      "title": "Orderindependent",
+      "type": "boolean"
+    },
+    "provenance": {
+      "items": {
+        "$ref": "#/$defs/AnswerEvidence"
+      },
+      "minItems": 1,
+      "title": "Provenance",
+      "type": "array"
+    },
+    "reviewStatus": {
+      "enum": [
+        "official",
+        "user-confirmed"
+      ],
+      "title": "Reviewstatus",
+      "type": "string"
+    }
+  },
+  "required": [
+    "questionIds",
+    "accepted",
+    "provenance",
+    "reviewStatus"
+  ],
+  "title": "Answer",
+  "type": "object"
+}

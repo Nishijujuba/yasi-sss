@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "ChoiceOption": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "ChoiceOption",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "number": {
+      "maximum": 40,
+      "minimum": 1,
+      "title": "Number",
+      "type": "integer"
+    },
+    "section": {
+      "maximum": 4,
+      "minimum": 1,
+      "title": "Section",
+      "type": "integer"
+    },
+    "responseType": {
+      "enum": [
+        "blank",
+        "single-choice",
+        "multi-choice"
+      ],
+      "title": "Responsetype",
+      "type": "string"
+    },
+    "page": {
+      "title": "Page",
+      "type": "string"
+    },
+    "focusOrder": {
+      "minimum": 1,
+      "title": "Focusorder",
+      "type": "integer"
+    },
+    "selectionLimit": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selectionlimit"
+    },
+    "groupId": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Groupid"
+    },
+    "options": {
+      "items": {
+        "$ref": "#/$defs/ChoiceOption"
+      },
+      "title": "Options",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "number",
+    "section",
+    "responseType",
+    "page",
+    "focusOrder"
+  ],
+  "title": "Question",
+  "type": "object"
+}

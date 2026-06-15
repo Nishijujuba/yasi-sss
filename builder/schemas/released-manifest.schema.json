@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "BuildMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "sourceCommit": {
+          "title": "Sourcecommit",
+          "type": "string"
+        },
+        "builtAt": {
+          "format": "date-time",
+          "title": "Builtat",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sourceCommit",
+        "builtAt"
+      ],
+      "title": "BuildMetadata",
+      "type": "object"
+    },
+    "ManifestAssets": {
+      "additionalProperties": false,
+      "properties": {
+        "questions": {
+          "title": "Questions",
+          "type": "string"
+        },
+        "answers": {
+          "title": "Answers",
+          "type": "string"
+        },
+        "overlays": {
+          "title": "Overlays",
+          "type": "string"
+        },
+        "transcript": {
+          "title": "Transcript",
+          "type": "string"
+        }
+      },
+      "required": [
+        "questions",
+        "answers",
+        "overlays",
+        "transcript"
+      ],
+      "title": "ManifestAssets",
+      "type": "object"
+    },
+    "SectionManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "number": {
+          "maximum": 4,
+          "minimum": 1,
+          "title": "Number",
+          "type": "integer"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "questionNumbers": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 10,
+          "minItems": 10,
+          "title": "Questionnumbers",
+          "type": "array"
+        },
+        "audio": {
+          "title": "Audio",
+          "type": "string"
+        },
+        "pages": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "number",
+        "title",
+        "questionNumbers",
+        "audio",
+        "pages"
+      ],
+      "title": "SectionManifest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "packId": {
+      "title": "Packid",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1,
+      "title": "Schemaversion",
+      "type": "integer"
+    },
+    "status": {
+      "const": "released",
+      "title": "Status",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "sections": {
+      "items": {
+        "$ref": "#/$defs/SectionManifest"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "title": "Sections",
+      "type": "array"
+    },
+    "assets": {
+      "$ref": "#/$defs/ManifestAssets"
+    },
+    "build": {
+      "$ref": "#/$defs/BuildMetadata"
+    }
+  },
+  "required": [
+    "packId",
+    "schemaVersion",
+    "status",
+    "title",
+    "sections",
+    "assets",
+    "build"
+  ],
+  "title": "ReleasedManifest",
+  "type": "object"
+}

@@ -59,11 +59,6 @@
           "exclusiveMinimum": 0,
           "title": "H",
           "type": "number"
-        },
-        "normalized": {
-          "default": false,
-          "title": "Normalized",
-          "type": "boolean"
         }
       },
       "required": [
@@ -114,7 +109,7 @@
     },
     "deterministicConfidence": {
       "maximum": 1,
-      "minimum": 0.85,
+      "minimum": 0,
       "title": "Deterministicconfidence",
       "type": "number"
     },

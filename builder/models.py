@@ -8,7 +8,12 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from builder.config import OVERLAY_CONFIDENCE_GATE, SCHEMA_ROOT, SCHEMA_VERSION
+from builder.config import (
+    OVERLAY_CONFIDENCE_GATE,
+    SCHEMA_ROOT,
+    SCHEMA_VERSION,
+    SECTION_QUESTION_RANGES,
+)
 
 
 class PackModel(BaseModel):
@@ -20,13 +25,6 @@ class Rect(PackModel):
     y: float = Field(ge=0)
     w: float = Field(gt=0)
     h: float = Field(gt=0)
-    normalized: bool = Field(default=False, exclude=True)
-
-    @model_validator(mode="after")
-    def validate_page_bounds(self) -> Rect:
-        if self.normalized and (self.x + self.w > 1 or self.y + self.h > 1):
-            raise ValueError("normalized rectangle must stay within the page")
-        return self
 
 
 class NormalizedRect(PackModel):
@@ -55,7 +53,6 @@ class Question(PackModel):
     page: str
     focusOrder: int = Field(ge=1)
     selectionLimit: int | None = Field(default=None, ge=1)
-    groupId: str | None = None
     options: list[ChoiceOption] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -106,6 +103,7 @@ class Answer(PackModel):
 
 
 Confidence = Annotated[float, Field(ge=OVERLAY_CONFIDENCE_GATE, le=1)]
+DetectionConfidence = Annotated[float, Field(ge=0, le=1)]
 
 
 class Overlay(PackModel):
@@ -115,7 +113,7 @@ class Overlay(PackModel):
     interactionType: Literal["blank", "choice-option"]
     pixel: Rect
     normalized: NormalizedRect
-    deterministicConfidence: Confidence
+    deterministicConfidence: DetectionConfidence
     visionConfidence: Confidence
     confidence: Confidence
     validationEvidence: list[str] = Field(min_length=1)
@@ -217,6 +215,41 @@ def validate_question_coverage(values: Iterable[int | Question]) -> None:
     ]
     if sorted(numbers) != list(range(1, 41)):
         raise ValueError("question coverage must be exactly 1 through 40")
+
+
+def validate_questions(questions: Iterable[Question]) -> None:
+    question_list = list(questions)
+    validate_question_coverage(question_list)
+    focus_orders = [question.focusOrder for question in question_list]
+    if sorted(focus_orders) != list(range(1, 41)):
+        raise ValueError("question focus order must be unique and cover 1 through 40")
+    for question in question_list:
+        expected_section = next(
+            section
+            for section, question_range in SECTION_QUESTION_RANGES.items()
+            if question.number in question_range
+        )
+        if question.section != expected_section:
+            raise ValueError(
+                "question section ownership mismatch: "
+                f"q{question.number} belongs to section {expected_section}"
+            )
+
+
+def validate_answer_membership(
+    answers: Iterable[Answer],
+    questions: Iterable[Question],
+) -> None:
+    question_ids = {question.id for question in questions}
+    answer_ids = [
+        question_id
+        for answer in answers
+        for question_id in answer.questionIds
+    ]
+    if len(answer_ids) != len(set(answer_ids)) or set(answer_ids) != question_ids:
+        raise ValueError(
+            "answer membership must cover every known question exactly once"
+        )
 
 
 def export_json_schemas(output_dir: Path = SCHEMA_ROOT) -> None:

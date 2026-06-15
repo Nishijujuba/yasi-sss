@@ -6,8 +6,15 @@ dist/
 coverage/
 test-results/
 playwright-report/
+output/playwright/results/
+output/playwright/report/
 __pycache__/
 .pytest_cache/
 *.pyc
 *.egg-info/
+*.tsbuildinfo
 build/work/
+tmp/source_text/
+tmp/visual_source/
+tmp/test-runs/
+待删除/

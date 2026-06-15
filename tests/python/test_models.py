@@ -2,10 +2,16 @@ import pytest
 from pydantic import ValidationError
 
 from builder.models import (
+    Answer,
+    ChoiceOption,
+    NormalizedRect,
     Overlay,
+    Question,
     Rect,
     ReleasedManifest,
+    validate_answer_membership,
     validate_question_coverage,
+    validate_questions,
 )
 
 
@@ -57,11 +63,91 @@ def test_overlay_rejects_confidence_below_gate():
         Overlay.model_validate(payload)
 
 
+def test_overlay_allows_lower_deterministic_confidence_when_combined_gate_passes():
+    overlay = Overlay.model_validate(
+        {
+            "questionId": "q1",
+            "optionId": None,
+            "page": "page-010.png",
+            "interactionType": "blank",
+            "pixel": {"x": 10, "y": 20, "w": 100, "h": 30},
+            "normalized": {"x": 0.01, "y": 0.02, "w": 0.1, "h": 0.03},
+            "deterministicConfidence": 0.75,
+            "visionConfidence": 0.95,
+            "confidence": 0.90,
+            "validationEvidence": ["synthetic"],
+        }
+    )
+
+    assert overlay.deterministicConfidence == 0.75
+
+
 def test_rect_rejects_normalized_coordinate_outside_page():
     with pytest.raises(ValidationError):
-        Rect(x=0.9, y=0.1, w=0.2, h=0.1, normalized=True)
+        NormalizedRect(x=0.9, y=0.1, w=0.2, h=0.1)
 
 
 def test_question_coverage_must_be_exactly_one_to_forty():
     with pytest.raises(ValueError, match="1 through 40"):
         validate_question_coverage(list(range(1, 40)))
+
+
+def make_question(number: int, *, section: int | None = None, focus: int | None = None):
+    response_type = "single-choice" if 21 <= number <= 25 else "blank"
+    return Question(
+        id=f"q{number}",
+        number=number,
+        section=section or ((number - 1) // 10 + 1),
+        responseType=response_type,
+        page=f"page-{10 + min((number - 1) // 6, 6):03d}.png",
+        focusOrder=focus or number,
+        options=(
+            [
+                ChoiceOption(id="A", label="A"),
+                ChoiceOption(id="B", label="B"),
+                ChoiceOption(id="C", label="C"),
+            ]
+            if response_type == "single-choice"
+            else []
+        ),
+    )
+
+
+def test_question_collection_rejects_duplicate_focus_order():
+    questions = [make_question(number) for number in range(1, 41)]
+    questions[39] = make_question(40, focus=39)
+
+    with pytest.raises(ValueError, match="focus order"):
+        validate_questions(questions)
+
+
+def test_question_collection_rejects_wrong_section_owner():
+    questions = [make_question(number) for number in range(1, 41)]
+    questions[20] = make_question(21, section=2)
+
+    with pytest.raises(ValueError, match="section ownership"):
+        validate_questions(questions)
+
+
+def test_answer_membership_rejects_unknown_question_id():
+    questions = [make_question(number) for number in range(1, 41)]
+    answers = [
+        Answer(
+            questionIds=[f"q{number}"],
+            accepted=[[f"answer-{number}"]],
+            provenance=[
+                {
+                    "kind": "official-answer-key",
+                    "source": "answer-key.pdf",
+                    "page": 151,
+                    "detail": "TEST 1 LISTENING",
+                }
+            ],
+            reviewStatus="official",
+        )
+        for number in range(1, 41)
+    ]
+    answers[-1] = answers[-1].model_copy(update={"questionIds": ["q41"]})
+
+    with pytest.raises(ValueError, match="answer membership"):
+        validate_answer_membership(answers, questions)

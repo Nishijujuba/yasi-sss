@@ -1,0 +1,163 @@
+[
+  {
+    "questionId": "q1",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is centered on the dotted answer line for q1 after 24 1."
+  },
+  {
+    "questionId": "q2",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q2 dotted answer line after Heard about company from."
+  },
+  {
+    "questionId": "q3",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the full q3 dotted answer line in the Los Angeles bullet."
+  },
+  {
+    "questionId": "q4",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is aligned with the q4 dotted answer line after not a."
+  },
+  {
+    "questionId": "q5",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q5 dotted answer line in the Trip Two bullet."
+  },
+  {
+    "questionId": "q6",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q6 dotted answer line after on the."
+  },
+  {
+    "questionId": "q7",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.92,
+    "evidence": "Box is centered on q7 dotted answer line in the Total distance column."
+  },
+  {
+    "questionId": "q8",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.87,
+    "evidence": "Box covers the q8 dotted answer line after one in the Includes column."
+  },
+  {
+    "questionId": "q9",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box is aligned with q9 price answer line after the pound sign."
+  },
+  {
+    "questionId": "q10",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.92,
+    "evidence": "Box is centered on the q10 dotted answer line in the Includes column."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.95,
+    "evidence": "Box surrounds option A text line, the gym."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box surrounds option B text line, the tracks."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box surrounds option C text line, the indoor pool."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "D",
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box surrounds option D text line, the outdoor pool."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "E",
+    "status": "approved",
+    "confidence": 0.99,
+    "evidence": "Box surrounds the full option E text line, the sports training for children."
+  },
+  {
+    "questionId": "q13",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q13 dotted answer line after any."
+  },
+  {
+    "questionId": "q14",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q14 dotted answer line before will be explained."
+  },
+  {
+    "questionId": "q15",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q15 dotted answer line after six-week."
+  },
+  {
+    "questionId": "q16",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box covers the q16 dotted answer line before fee for members."
+  },
+  {
+    "questionId": "q17",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q17 dotted answer line before to all the LP clubs."
+  },
+  {
+    "questionId": "q18",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q18 dotted answer line before hours."
+  },
+  {
+    "questionId": "q19",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is centered on the q19 dotted answer line before every month."
+  },
+  {
+    "questionId": "q20",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q20 dotted answer line before with them."
+  }
+]

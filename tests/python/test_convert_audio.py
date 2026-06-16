@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+import builder.convert_audio as convert_audio_module
 from builder.convert_audio import (
     AudioValidationError,
     assert_duration_match,
@@ -83,6 +84,14 @@ def test_convert_audio_sections_runs_expected_ffmpeg_command_and_validates_outpu
     files, sizes, contents = _patch_virtual_files(monkeypatch, [*sources, ffmpeg, ffprobe])
     commands = []
 
+    def fake_replace(self, target):
+        source_key = _key(self)
+        target_key = _key(target)
+        files.add(target_key)
+        sizes[target_key] = sizes[source_key]
+        contents[target_key] = contents[source_key]
+        return Path(target)
+
     def fake_run(command, *, capture_output, text, check, encoding, errors):
         assert encoding == "utf-8"
         assert errors == "replace"
@@ -107,6 +116,7 @@ def test_convert_audio_sections_runs_expected_ffmpeg_command_and_validates_outpu
         raise AssertionError(f"unexpected command: {command}")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(Path, "replace", fake_replace)
 
     outputs = convert_audio_sections(
         sources=sources,
@@ -117,7 +127,7 @@ def test_convert_audio_sections_runs_expected_ffmpeg_command_and_validates_outpu
 
     assert outputs == [output_dir / f"section-0{index}.mp3" for index in range(1, 5)]
     assert [output.read_bytes() for output in outputs] == [b"mp3"] * 4
-    assert commands == [
+    assert [command[:-1] for command in commands] == [
         [
             str(ffmpeg),
             "-y",
@@ -128,10 +138,113 @@ def test_convert_audio_sections_runs_expected_ffmpeg_command_and_validates_outpu
             "libmp3lame",
             "-q:a",
             "2",
-            str(output_dir / f"section-0{index}.mp3"),
         ]
         for index, source in enumerate(sources, start=1)
     ]
+    for index, command in enumerate(commands, start=1):
+        output = Path(command[-1])
+        assert output.name.startswith(f".section-0{index}.")
+        assert output.name.endswith(".tmp.mp3")
+
+
+def test_convert_audio_sections_accepts_valid_existing_output_when_publish_is_locked(monkeypatch):
+    source = Path(r"C:\fake\01 Track 1.wma")
+    ffmpeg = Path(r"C:\fake\ffmpeg.exe")
+    ffprobe = Path(r"C:\fake\ffprobe.exe")
+    output_dir = Path(r"C:\fake\audio")
+    output_path = output_dir / "section-01.mp3"
+    files, sizes, contents = _patch_virtual_files(
+        monkeypatch,
+        [source, ffmpeg, ffprobe, output_path],
+        sizes={output_path: 3},
+        contents={output_path: b"existing mp3"},
+    )
+    monkeypatch.setattr(convert_audio_module.time, "sleep", lambda seconds: None)
+
+    def fake_replace(self, target):
+        raise PermissionError("locked")
+
+    def fake_run(command, *, capture_output, text, check, encoding, errors):
+        assert encoding == "utf-8"
+        assert errors == "replace"
+        if Path(command[0]) == ffmpeg:
+            output_key = _key(command[-1])
+            files.add(output_key)
+            sizes[output_key] = 3
+            contents[output_key] = b"existing mp3"
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        if Path(command[0]) == ffprobe:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout=json.dumps({"streams": [{"codec_type": "audio"}], "format": {"duration": "42.00"}}),
+                stderr="",
+            )
+
+        raise AssertionError(f"unexpected command: {command}")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(Path, "replace", fake_replace)
+
+    outputs = convert_audio_sections(
+        sources=[source],
+        output_dir=output_dir,
+        ffmpeg_path=ffmpeg,
+        ffprobe_path=ffprobe,
+    )
+
+    assert outputs == [output_path]
+    assert output_path.read_bytes() == b"existing mp3"
+
+
+def test_convert_audio_sections_rejects_locked_stale_existing_output(monkeypatch):
+    source = Path(r"C:\fake\01 Track 1.wma")
+    ffmpeg = Path(r"C:\fake\ffmpeg.exe")
+    ffprobe = Path(r"C:\fake\ffprobe.exe")
+    output_dir = Path(r"C:\fake\audio")
+    output_path = output_dir / "section-01.mp3"
+    files, sizes, contents = _patch_virtual_files(
+        monkeypatch,
+        [source, ffmpeg, ffprobe, output_path],
+        sizes={output_path: 3},
+        contents={output_path: b"old mp3"},
+    )
+    monkeypatch.setattr(convert_audio_module.time, "sleep", lambda seconds: None)
+
+    def fake_replace(self, target):
+        raise PermissionError("locked")
+
+    def fake_run(command, *, capture_output, text, check, encoding, errors):
+        assert encoding == "utf-8"
+        assert errors == "replace"
+        if Path(command[0]) == ffmpeg:
+            output_key = _key(command[-1])
+            files.add(output_key)
+            sizes[output_key] = 3
+            contents[output_key] = b"new mp3"
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        if Path(command[0]) == ffprobe:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout=json.dumps({"streams": [{"codec_type": "audio"}], "format": {"duration": "42.00"}}),
+                stderr="",
+            )
+
+        raise AssertionError(f"unexpected command: {command}")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(Path, "replace", fake_replace)
+
+    with pytest.raises(AudioValidationError, match="existing output differs"):
+        convert_audio_sections(
+            sources=[source],
+            output_dir=output_dir,
+            ffmpeg_path=ffmpeg,
+            ffprobe_path=ffprobe,
+        )
 
 
 def test_convert_audio_sections_reports_missing_ffmpeg_and_source_file(monkeypatch):

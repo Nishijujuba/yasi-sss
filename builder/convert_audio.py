@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
+import time
+import uuid
 from pathlib import Path
 from typing import Iterable
 
@@ -23,6 +26,8 @@ DEFAULT_SOURCES = [
 DEFAULT_OUTPUT_DIR = (
     PROJECT_ROOT / "public" / "packs" / "cambridge-10" / "test-1" / "listening" / "assets" / "audio"
 )
+TRASH_DIR = PROJECT_ROOT / "待删除"
+TEMP_OUTPUT_DIR = TRASH_DIR / "audio-conversion"
 
 
 def _require_existing_file(path: Path, description: str) -> None:
@@ -41,6 +46,52 @@ def _run_captured(command: list[str]) -> subprocess.CompletedProcess[str]:
         errors="replace",
         check=True,
     )
+
+
+def _temporary_output_path(output_path: Path) -> Path:
+    TEMP_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    return TEMP_OUTPUT_DIR / f".{output_path.stem}.{uuid.uuid4().hex}.tmp{output_path.suffix}"
+
+
+def _file_digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _same_file_content(first: Path, second: Path) -> bool:
+    if not first.exists() or not second.exists():
+        return False
+    if first.stat().st_size != second.stat().st_size:
+        return False
+    return _file_digest(first) == _file_digest(second)
+
+
+def _replace_with_retries(source: Path, target: Path, *, attempts: int = 8, delay_seconds: float = 0.25) -> Path:
+    last_error: PermissionError | None = None
+    for attempt in range(attempts):
+        try:
+            return source.replace(target)
+        except PermissionError as exc:
+            last_error = exc
+            if attempt + 1 == attempts:
+                break
+            time.sleep(delay_seconds)
+
+    if last_error is not None:
+        raise last_error
+    return source.replace(target)
+
+
+def _archive_temp_file(path: Path) -> None:
+    if not path.exists():
+        return
+    if TRASH_DIR in path.resolve().parents:
+        return
+    TRASH_DIR.mkdir(exist_ok=True)
+    archive_path = TRASH_DIR / f"{uuid.uuid4().hex}-{path.name}"
+    try:
+        _replace_with_retries(path, archive_path)
+    except OSError:
+        return
 
 
 def probe_duration_seconds(media_path: Path, *, ffprobe_path: Path = DEFAULT_FFPROBE_PATH) -> float:
@@ -136,6 +187,7 @@ def convert_audio_sections(
     for index, source_path in enumerate(source_paths, start=1):
         source_duration = probe_duration_seconds(source_path, ffprobe_path=ffprobe_path)
         output_path = output_dir / f"section-{index:02d}.mp3"
+        temp_output_path = _temporary_output_path(output_path)
         command = [
             str(ffmpeg_path),
             "-y",
@@ -146,26 +198,48 @@ def convert_audio_sections(
             "libmp3lame",
             "-q:a",
             "2",
-            str(output_path),
+            str(temp_output_path),
         ]
 
         try:
             _run_captured(command)
         except subprocess.CalledProcessError as exc:
+            _archive_temp_file(temp_output_path)
             details = exc.stderr.strip() or exc.stdout.strip() or str(exc)
             raise AudioValidationError(f"ffmpeg failed for {source_path}: {details}") from exc
 
-        if not output_path.exists() or output_path.stat().st_size == 0:
-            raise AudioValidationError(f"Converted output is missing or empty: {output_path}")
+        try:
+            if not temp_output_path.exists() or temp_output_path.stat().st_size == 0:
+                raise AudioValidationError(f"Converted output is missing or empty: {temp_output_path}")
 
-        output_duration = probe_duration_seconds(output_path, ffprobe_path=ffprobe_path)
-        assert_duration_match(
-            source_path,
-            source_duration,
-            output_path,
-            output_duration,
-            tolerance_seconds=tolerance_seconds,
-        )
+            output_duration = probe_duration_seconds(temp_output_path, ffprobe_path=ffprobe_path)
+            assert_duration_match(
+                source_path,
+                source_duration,
+                temp_output_path,
+                output_duration,
+                tolerance_seconds=tolerance_seconds,
+            )
+        except AudioValidationError:
+            _archive_temp_file(temp_output_path)
+            raise
+
+        try:
+            if _same_file_content(temp_output_path, output_path):
+                _archive_temp_file(temp_output_path)
+                outputs.append(output_path)
+                continue
+            _replace_with_retries(temp_output_path, output_path)
+        except OSError as exc:
+            _archive_temp_file(temp_output_path)
+            if output_path.exists() and output_path.stat().st_size > 0:
+                raise AudioValidationError(
+                    f"Could not publish converted audio {temp_output_path} to {output_path}: {exc}. "
+                    "The existing output differs from the newly converted file."
+                ) from exc
+            raise AudioValidationError(
+                f"Could not publish converted audio {temp_output_path} to {output_path}: {exc}"
+            ) from exc
         outputs.append(output_path)
 
     return outputs

@@ -59,6 +59,16 @@ def test_page_011_q8_region_tracks_answer_line_below_one():
     assert q8.pixel.y + q8.pixel.h >= 525
 
 
+def test_page_013_q18_region_tracks_answer_line_before_hours():
+    with Image.open(PAGE_ROOT / "page-013.png") as image:
+        regions = detect_blank_regions(image, expected_count=8)
+
+    q18 = regions[5]
+    assert q18.pixel.x >= 520
+    assert q18.pixel.y <= 682
+    assert q18.pixel.y + q18.pixel.h >= 698
+
+
 def test_detects_five_multi_choice_rows():
     with Image.open(PAGE_ROOT / "page-012.png") as image:
         regions = detect_choice_regions(
@@ -167,6 +177,23 @@ def test_merge_vision_evidence_requires_approved_confidence():
                     "status": "approved",
                     "confidence": 0.80,
                     "evidence": "too uncertain",
+                }
+            ],
+        )
+
+    with pytest.raises(DetectionError, match="missing vision evidence"):
+        merge_vision_evidence([proposal], [])
+
+    with pytest.raises(DetectionError, match="vision evidence rejected"):
+        merge_vision_evidence(
+            [proposal],
+            [
+                {
+                    "questionId": "q1",
+                    "optionId": None,
+                    "status": "rejected",
+                    "confidence": 0.99,
+                    "evidence": "box is wrong",
                 }
             ],
         )

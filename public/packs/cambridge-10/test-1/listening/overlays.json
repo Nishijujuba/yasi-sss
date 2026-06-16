@@ -410,25 +410,25 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 103.0,
-      "y": 667.0,
-      "w": 370.0,
+      "x": 537.0,
+      "y": 676.0,
+      "w": 208.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.09653233364573571,
-      "y": 0.45560109289617484,
-      "w": 0.3467666354264292,
+      "x": 0.5032802249297095,
+      "y": 0.46174863387978143,
+      "w": 0.1949390815370197,
       "h": 0.02459016393442623
     },
-    "deterministicConfidence": 0.9567,
-    "visionConfidence": 0.98,
-    "confidence": 0.9567,
+    "deterministicConfidence": 0.9778,
+    "visionConfidence": 0.96,
+    "confidence": 0.96,
     "validationEvidence": [
-      "blank line 6: y=689.0",
-      "small-dot runs=32",
-      "span=354px",
-      "Box is centered on the q18 dotted answer line before hours."
+      "blank line 6: y=698.4",
+      "small-dot runs=44",
+      "span=192px",
+      "After detector correction, the box is centered on the q18 dotted answer line after question number 18 and before hours."
     ]
   },
   {
@@ -464,24 +464,24 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 107.0,
-      "y": 753.0,
-      "w": 658.0,
+      "x": 439.0,
+      "y": 762.0,
+      "w": 225.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.10028116213683223,
-      "y": 0.514344262295082,
-      "w": 0.6166822867853796,
+      "x": 0.4114339268978444,
+      "y": 0.5204918032786885,
+      "w": 0.21087160262417995,
       "h": 0.02459016393442623
     },
-    "deterministicConfidence": 0.9296,
+    "deterministicConfidence": 0.9843,
     "visionConfidence": 0.98,
-    "confidence": 0.9296,
+    "confidence": 0.98,
     "validationEvidence": [
-      "blank line 8: y=774.6",
-      "small-dot runs=19",
-      "span=642px",
+      "blank line 8: y=783.5",
+      "small-dot runs=46",
+      "span=209px",
       "Box is centered on the q20 dotted answer line before with them."
     ]
   },
@@ -599,24 +599,24 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 132.0,
-      "y": 543.0,
-      "w": 583.0,
+      "x": 378.0,
+      "y": 552.0,
+      "w": 221.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.12382739212007504,
-      "y": 0.3698910081743869,
-      "w": 0.5469043151969981,
+      "x": 0.3545966228893058,
+      "y": 0.3760217983651226,
+      "w": 0.2073170731707317,
       "h": 0.02452316076294278
     },
-    "deterministicConfidence": 0.9296,
+    "deterministicConfidence": 0.9817,
     "visionConfidence": 0.95,
-    "confidence": 0.9296,
+    "confidence": 0.95,
     "validationEvidence": [
-      "blank line 5: y=565.0",
-      "small-dot runs=19",
-      "span=567px",
+      "blank line 5: y=574.5",
+      "small-dot runs=45",
+      "span=205px",
       "Box covers the q30 dotted answer line and avoids the adjacent text row."
     ]
   },
@@ -842,24 +842,24 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 189.0,
-      "y": 1104.0,
-      "w": 698.0,
+      "x": 260.0,
+      "y": 1113.0,
+      "w": 558.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.17516218721038,
-      "y": 0.7525562372188139,
-      "w": 0.6468952734012975,
+      "x": 0.24096385542168675,
+      "y": 0.7586912065439673,
+      "w": 0.5171455050973123,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.9,
     "confidence": 0.9,
     "validationEvidence": [
-      "blank line 9: y=1126.2",
-      "small-dot runs=61",
-      "span=682px",
+      "blank line 9: y=1134.6",
+      "small-dot runs=53",
+      "span=542px",
       "Box includes q39 row text but covers the correct dotted answer line."
     ]
   },

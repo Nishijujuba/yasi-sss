@@ -145,25 +145,7 @@ def _thin_line_candidates(image: Image.Image) -> list[_LineCandidate]:
                 _LineCandidate(y=float(y), x1=x1, x2=x2, run_count=count, row_count=1)
             )
 
-    nearby_clusters: list[list[_LineCandidate]] = []
-    for candidate in sorted(_cluster_line_rows(row_candidates), key=lambda item: item.y):
-        if not nearby_clusters or candidate.y - nearby_clusters[-1][-1].y > 12:
-            nearby_clusters.append([candidate])
-            continue
-        nearby_clusters[-1].append(candidate)
-
-    selected: list[_LineCandidate] = []
-    for cluster in nearby_clusters:
-        # Within one printed line, the answer dots form the strongest regular
-        # horizontal sequence. Nearby table or text fragments can sit above or
-        # below the answer line, so score is a safer representative than y.
-        strong = [
-            candidate
-            for candidate in cluster
-            if candidate.score >= 1500 or candidate.x2 - candidate.x1 >= 100
-        ]
-        selected.append(max(strong or cluster, key=lambda item: (item.score, item.y)))
-    return selected
+    return sorted(_cluster_line_rows(row_candidates), key=lambda item: item.y)
 
 
 def _official_blank_y_anchors(expected_count: int, skip_leading: int) -> list[float] | None:

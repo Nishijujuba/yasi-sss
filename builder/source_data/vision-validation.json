@@ -108,8 +108,8 @@
     "questionId": "q18",
     "optionId": null,
     "status": "approved",
-    "confidence": 0.98,
-    "evidence": "Box is centered on the q18 dotted answer line before hours."
+    "confidence": 0.96,
+    "evidence": "After detector correction, the box is centered on the q18 dotted answer line after question number 18 and before hours."
   },
   {
     "questionId": "q19",

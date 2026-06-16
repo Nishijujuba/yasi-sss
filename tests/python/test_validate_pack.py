@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import shutil
 import uuid
 from pathlib import Path
 
 import pytest
 
+from builder.build_pack import build_pack
+from builder.config import PACK_ROOT, REVIEW_ROOT
 from builder.models import PendingAnswerCandidate
 from builder.validate_pack import (
     ReleaseBlocked,
@@ -14,6 +17,7 @@ from builder.validate_pack import (
     load_source_answers,
     load_source_transcript,
     validate_answer_authority,
+    validate_pack,
     validate_transcript_sections,
 )
 
@@ -74,3 +78,44 @@ def test_export_answers_and_transcript_writes_public_pack():
 
     assert len(answers) == 39
     assert {section["section"] for section in transcript} == {1, 2, 3, 4}
+
+
+def test_build_pack_writes_released_manifest_and_report():
+    report = build_pack()
+
+    manifest = json.loads((PACK_ROOT / "manifest.json").read_text(encoding="utf-8"))
+    release_report = json.loads(
+        (REVIEW_ROOT / "release-report.json").read_text(encoding="utf-8")
+    )
+
+    assert report.status == "released"
+    assert manifest["status"] == "released"
+    assert release_report["questionCoverage"] == list(range(1, 41))
+    assert release_report["overlayCount"] == 53
+    assert release_report["answerCount"] == 40
+
+
+def test_release_requires_all_assets():
+    build_pack()
+    pack_copy = unique_test_dir("pack-copy") / "listening"
+    shutil.copytree(PACK_ROOT, pack_copy)
+    manifest_path = pack_copy / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["sections"][3]["audio"] = "assets/audio/missing-section-04.mp3"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ReleaseBlocked, match="missing-section-04.mp3"):
+        validate_pack(pack_copy)
+
+
+def test_release_requires_vision_and_final_confidence_gate():
+    build_pack()
+    pack_copy = unique_test_dir("pack-low-confidence") / "listening"
+    shutil.copytree(PACK_ROOT, pack_copy)
+    overlays_path = pack_copy / "overlays.json"
+    overlays = json.loads(overlays_path.read_text(encoding="utf-8"))
+    overlays[0]["visionConfidence"] = 0.80
+    overlays_path.write_text(json.dumps(overlays, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(ReleaseBlocked, match="0.85"):
+        validate_pack(pack_copy)

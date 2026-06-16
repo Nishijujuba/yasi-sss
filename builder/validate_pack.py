@@ -6,7 +6,19 @@ from pathlib import Path
 from typing import Iterable
 
 from builder.config import PACK_ROOT, SOURCE_DATA_ROOT
-from builder.models import Answer, PendingAnswerCandidate, TranscriptSection
+from pydantic import ValidationError
+
+from builder.models import (
+    Answer,
+    Overlay,
+    PendingAnswerCandidate,
+    Question,
+    ReleaseReport,
+    ReleasedManifest,
+    TranscriptSection,
+    validate_answer_membership,
+    validate_questions,
+)
 
 
 class ReleaseBlocked(RuntimeError):
@@ -127,6 +139,103 @@ def export_answers_and_transcript(
         encoding="utf-8",
     )
     return answers, transcript
+
+
+def _read_json(path: Path) -> object:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise ReleaseBlocked(f"required pack file is missing: {path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ReleaseBlocked(f"invalid JSON in pack file: {path}") from exc
+
+
+def _require_asset(pack_root: Path, relative_path: str) -> Path:
+    path = pack_root / relative_path
+    if not path.is_file():
+        raise ReleaseBlocked(f"required asset is missing: {relative_path}")
+    if path.stat().st_size <= 0:
+        raise ReleaseBlocked(f"required asset is empty: {relative_path}")
+    return path
+
+
+def _validate_model_list(model_type, payload: object, label: str):
+    if not isinstance(payload, list):
+        raise ReleaseBlocked(f"{label} must be a JSON array")
+    try:
+        return [model_type.model_validate(item) for item in payload]
+    except ValidationError as exc:
+        raise ReleaseBlocked(f"{label} failed schema validation: {exc}") from exc
+
+
+def validate_pack(pack_root: Path = PACK_ROOT) -> ReleaseReport:
+    pack_root = Path(pack_root)
+    try:
+        manifest = ReleasedManifest.model_validate(_read_json(pack_root / "manifest.json"))
+    except ValidationError as exc:
+        raise ReleaseBlocked(f"manifest must be released: {exc}") from exc
+
+    questions = _validate_model_list(
+        Question,
+        _read_json(pack_root / manifest.assets.questions),
+        "questions",
+    )
+    validate_questions(questions)
+
+    answers = _validate_model_list(
+        Answer,
+        _read_json(pack_root / manifest.assets.answers),
+        "answers",
+    )
+    validate_answer_authority(answers)
+    validate_answer_membership(answers, questions)
+
+    overlays = _validate_model_list(
+        Overlay,
+        _read_json(pack_root / manifest.assets.overlays),
+        "overlays",
+    )
+    transcript = _validate_model_list(
+        TranscriptSection,
+        _read_json(pack_root / manifest.assets.transcript),
+        "transcript",
+    )
+    validate_transcript_sections(transcript, answers)
+
+    question_ids = {question.id for question in questions}
+    overlay_question_ids = {overlay.questionId for overlay in overlays}
+    missing_overlay_questions = question_ids - overlay_question_ids - {"q12"}
+    if missing_overlay_questions:
+        raise ReleaseBlocked(
+            "missing overlays for questions: "
+            + ", ".join(sorted(missing_overlay_questions))
+        )
+
+    page_assets: list[str] = []
+    audio_sections: list[int] = []
+    for section in manifest.sections:
+        _require_asset(pack_root, section.audio)
+        audio_sections.append(section.number)
+        for page in section.pages:
+            _require_asset(pack_root, page)
+            page_assets.append(page)
+
+    question_numbers = sorted(question.number for question in questions)
+    answer_numbers = sorted(covered_numbers(answers))
+    if question_numbers != list(range(1, 41)) or answer_numbers != list(range(1, 41)):
+        raise ReleaseBlocked("questions and answers must cover 1 through 40")
+
+    return ReleaseReport(
+        status="released",
+        questionCoverage=question_numbers,
+        overlayCount=len(overlays),
+        answerCount=len(answer_numbers),
+        transcriptSections=sorted(section.section for section in transcript),
+        audioSections=sorted(audio_sections),
+        pageAssets=sorted(set(page_assets)),
+        pendingAnswerCandidates=0,
+        errors=[],
+    )
 
 
 def main() -> None:

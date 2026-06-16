@@ -1,0 +1,357 @@
+{
+  "section": 3,
+  "source": {
+    "pdf": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/08_Audioscripts_p130-p150.pdf",
+    "pages": [
+      132,
+      133
+    ]
+  },
+  "segments": [
+    {
+      "order": 1,
+      "speaker": "JOHN",
+      "text": "Erm ... hello Professor, I'm John Wishart. I'm working on my entry for the Global Design Competition. My tutor said you might be able to help me with it.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 2,
+      "speaker": "PROFESSOR",
+      "text": "Ah, yes, I got a copy of your drawings. Come in and tell me about it. What sort of competition is it?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 3,
+      "speaker": "JOHN",
+      "text": "Well, it's an international design competition and we have to come up with a new design for a typical domestic kitchen appliance.",
+      "answerRefs": [
+        21
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 4,
+      "speaker": "PROFESSOR",
+      "text": "I see, and are there any special conditions? Does it have to save energy for example?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 5,
+      "speaker": "JOHN",
+      "text": "Actually that was the focus in last year's competition. This year's different. We have to adopt an innovative approach to existing technology, using it in a way that hasn't been thought of before.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 6,
+      "speaker": "PROFESSOR",
+      "text": "I see, that sounds tricky. And what kitchen appliance have you chosen?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 7,
+      "speaker": "JOHN",
+      "text": "Well, I decided to choose the dishwasher.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 8,
+      "speaker": "PROFESSOR",
+      "text": "Interesting, what made you choose that?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 9,
+      "speaker": "JOHN",
+      "text": "Well, they're an everyday kitchen appliance in most Australian houses but they're all pretty boring and almost identical to each other. I think some people will be prepared to pay a little extra for something that looks different.",
+      "answerRefs": [
+        22
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 10,
+      "speaker": "PROFESSOR",
+      "text": "That's a nice idea. I see you've called your design 'the Rockpool'; why is that?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 11,
+      "speaker": "JOHN",
+      "text": "Basically because it looks like the rock pools you find on a beach. The top is made of glass so that you can look down into it.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 12,
+      "speaker": "PROFESSOR",
+      "text": "And there's a stone at the bottom. Is that just for decoration?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 13,
+      "speaker": "JOHN",
+      "text": "Actually it does have a function. Instead of pushing a button, you turn the stone.",
+      "answerRefs": [
+        23
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 14,
+      "speaker": "PROFESSOR",
+      "text": "So it's really just a novel way of starting the dishwasher.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 15,
+      "speaker": "JOHN",
+      "text": "That's right.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 16,
+      "speaker": "PROFESSOR",
+      "text": "It's a really nice design, but what makes it innovative?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 17,
+      "speaker": "JOHN",
+      "text": "Well, I decided to make a dishwasher that uses carbon dioxide.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 18,
+      "speaker": "PROFESSOR",
+      "text": "In place of water and detergent? How will you manage that?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 19,
+      "speaker": "JOHN",
+      "text": "The idea is to pressurise the carbon dioxide so that it becomes a liquid. The fluid is then released into the dishwasher where it cleans the dishes all by itself.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 20,
+      "speaker": "PROFESSOR",
+      "text": "Sounds like a brilliant idea! Your system will totally do away with the need for strong detergents. So what happens once the dishes are clean?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 21,
+      "speaker": "JOHN",
+      "text": "Well, to allow them to dry, the liquid carbon dioxide and the waste materials all go to an area called the holding chamber. That's where the liquid is depressurised and so it reverts to a gas. Then the oil and grease are separated out and sent to the waste system.",
+      "answerRefs": [
+        24
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 22,
+      "speaker": "PROFESSOR",
+      "text": "It sounds like you've thought it all out very thoroughly. So, what happens to the carbon dioxide once the process is complete? Not wasted I hope.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 23,
+      "speaker": "JOHN",
+      "text": "Actually, that's where the real savings are made. The carbon dioxide is sent back to the cylinder and can be used again and again.",
+      "answerRefs": [
+        25
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 24,
+      "speaker": "PROFESSOR",
+      "text": "What a terrific idea. Do you think it will ever be built?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 25,
+      "speaker": "JOHN",
+      "text": "Probably not, but that's OK.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 26,
+      "speaker": "PROFESSOR",
+      "text": "Well, I'm sure a lot of positive things will come out of your design.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 27,
+      "speaker": "PROFESSOR",
+      "text": "Now, you seem to have thought about everything so what exactly did you need me to help you with?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 28,
+      "speaker": "JOHN",
+      "text": "Well, my design has made it to the final stage of the competition and, in a few months' time, I have to give a presentation. And that's the part I was hoping you could help me with.",
+      "answerRefs": [
+        26
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 29,
+      "speaker": "PROFESSOR",
+      "text": "Right, well that should be easy enough. What have you managed to do so far?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 30,
+      "speaker": "JOHN",
+      "text": "Well, I've got detailed drawings to show how it will work and I've also written a 500-word paper on it.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 31,
+      "speaker": "PROFESSOR",
+      "text": "I see. Well, if you want to stand a good chance of winning you really need a model of the machine.",
+      "answerRefs": [
+        27
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 32,
+      "speaker": "JOHN",
+      "text": "Yes, I thought I might but I'm having a few problems.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 33,
+      "speaker": "PROFESSOR",
+      "text": "What is the main difficulty so far? Let me guess - is it the materials?",
+      "answerRefs": [
+        28
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 34,
+      "speaker": "JOHN",
+      "text": "Yes. I want it to look professional but everything that's top quality is also very expensive.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 35,
+      "speaker": "PROFESSOR",
+      "text": "Look, projects like this are very important to us. They really help lift our profile. So why don't you talk to the university about a grant? I can help you fill out the application forms if you like.",
+      "answerRefs": [
+        29
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 36,
+      "speaker": "JOHN",
+      "text": "That would be great.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 37,
+      "speaker": "PROFESSOR",
+      "text": "You'd better show me this paper you've written as well. For a global competition such as this you need to make sure the technical details you've given are accurate and thorough.",
+      "answerRefs": [
+        30
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 38,
+      "speaker": "JOHN",
+      "text": "That would be a great help.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 39,
+      "speaker": "PROFESSOR",
+      "text": "Is there anything else I can do?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 40,
+      "speaker": "JOHN",
+      "text": "Well, I'm really ...",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    }
+  ],
+  "review": {
+    "method": "visual-transcription",
+    "status": "reviewed",
+    "notes": "Visually transcribed word for word from the official audioscript images for pages 132-133; speaker turns, punctuation, and marginal question references Q21-Q30 were reviewed against the page images."
+  }
+}

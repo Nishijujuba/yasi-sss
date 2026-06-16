@@ -53,6 +53,18 @@ describe("session storage lifecycle", () => {
     );
   });
 
+  it("archives sessions with malformed marking results", () => {
+    vi.setSystemTime(new Date("2026-06-16T04:05:00.000Z"));
+    const malformed = { ...session, results: { incorrectIds: [1] } };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(malformed));
+
+    expect(loadSession()).toBeNull();
+    expect(localStorage.getItem(SESSION_KEY)).toBeNull();
+    expect(localStorage.getItem(`${SESSION_KEY}:archived:2026-06-16T04:05:00.000Z`)).toBe(
+      JSON.stringify(malformed),
+    );
+  });
+
   it("resets answers, results, and audio positions while preserving activeSection", () => {
     saveSession(session);
 

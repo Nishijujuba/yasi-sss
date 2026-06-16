@@ -38,6 +38,31 @@ function isNumberRecord(value: unknown): value is Record<string, number> {
   return isRecord(value) && Object.values(value).every((entry) => typeof entry === "number");
 }
 
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((entry) => typeof entry === "string");
+}
+
+function isQuestionResult(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    typeof value.questionId === "string" &&
+    typeof value.correct === "boolean" &&
+    isStringArray(value.expected) &&
+    typeof value.actual === "string"
+  );
+}
+
+function isMarkResult(value: unknown): value is MarkResult {
+  return (
+    isRecord(value) &&
+    typeof value.score === "number" &&
+    typeof value.total === "number" &&
+    isRecord(value.byQuestion) &&
+    Object.values(value.byQuestion).every(isQuestionResult) &&
+    isStringArray(value.incorrectIds)
+  );
+}
+
 function isPracticeSession(value: unknown): value is PracticeSession {
   if (!isRecord(value)) {
     return false;
@@ -51,7 +76,7 @@ function isPracticeSession(value: unknown): value is PracticeSession {
     Number.isInteger(value.activeSection) &&
     value.activeSection >= 1 &&
     typeof value.submitted === "boolean" &&
-    (value.results === null || isRecord(value.results)) &&
+    (value.results === null || isMarkResult(value.results)) &&
     isNumberRecord(value.audioPositions)
   );
 }

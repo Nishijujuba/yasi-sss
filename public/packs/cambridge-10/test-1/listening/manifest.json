@@ -95,7 +95,7 @@
     "transcript": "transcript.json"
   },
   "build": {
-    "sourceCommit": "6d17b78dcf6012c918e5eb03634a0c916fcfdbfe",
-    "builtAt": "2026-06-16T12:38:17.913938Z"
+    "sourceCommit": "0cc6c0bd572f73931a26df7168efdcf471c6e5f5",
+    "builtAt": "2026-06-16T12:44:44.672819Z"
   }
 }

@@ -1,17 +1,24 @@
 import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
-import { expect, type Page, test } from '@playwright/test'
+import { expect, type Page, type TestInfo, test } from '@playwright/test'
 
 const viewports = [
   { width: 1440, height: 900 },
   { width: 1920, height: 1080 },
 ]
 
-async function saveScreenshot(page: Page, viewportName: string, name: string) {
-  const dir = path.join('output', 'playwright', viewportName)
+async function waitForImages(page: Page) {
   await page.waitForFunction(() =>
     Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0),
   )
+}
+
+async function saveScreenshot(page: Page, testInfo: TestInfo, viewportName: string, name: string) {
+  await waitForImages(page)
+  if (testInfo.project.name !== 'chrome') {
+    return
+  }
+  const dir = path.join('output', 'playwright', viewportName)
   await mkdir(dir, { recursive: true })
   await page.screenshot({ path: path.join(dir, `${name}.png`), fullPage: true })
 }
@@ -42,22 +49,22 @@ for (const viewport of viewports) {
   test.describe(`visual coverage ${viewportName}`, () => {
     test.use({ viewport })
 
-    test(`captures home, section 1, section 2, and submitted states at ${viewportName}`, async ({ page }) => {
+    test(`captures home, section 1, section 2, and submitted states at ${viewportName}`, async ({ page }, testInfo) => {
       await page.goto('/')
       await expect(page.getByRole('main')).toBeVisible()
-      await saveScreenshot(page, viewportName, 'home')
+      await saveScreenshot(page, testInfo, viewportName, 'home')
 
       await enterPractice(page)
       await questionInput(page, 1).scrollIntoViewIfNeeded()
       await expect(questionInput(page, 1)).toBeVisible()
-      await saveScreenshot(page, viewportName, 'section-1')
+      await saveScreenshot(page, testInfo, viewportName, 'section-1')
 
       await switchToSection(page, '02')
-      await saveScreenshot(page, viewportName, 'section-2')
+      await saveScreenshot(page, testInfo, viewportName, 'section-2')
 
       await switchToSection(page, '01')
       await submitPractice(page)
-      await saveScreenshot(page, viewportName, 'submitted')
+      await saveScreenshot(page, testInfo, viewportName, 'submitted')
     })
   })
 }

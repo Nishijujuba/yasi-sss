@@ -10,7 +10,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'python scripts/serve.py --no-build --no-open',
+    command: 'python scripts/serve.py --no-build --no-open --strict-port',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: true,
   },

@@ -15,7 +15,7 @@ async function waitForImages(page: Page) {
 
 async function saveScreenshot(page: Page, testInfo: TestInfo, viewportName: string, name: string) {
   await waitForImages(page)
-  if (testInfo.project.name !== 'chrome') {
+  if (testInfo.project.name !== 'chrome' || process.env.YASI_UPDATE_SCREENSHOTS !== '1') {
     return
   }
   const dir = path.join('output', 'playwright', viewportName)

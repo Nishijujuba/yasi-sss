@@ -68,16 +68,20 @@ _Avoid_: Unanswered blank capture, choice mistake capture, full answer-key impor
 The rule that repeated submission of the same incorrect learner response does not increase a Mistake Vocabulary Card's mistake count, while a changed response that is still incorrect creates a new capture event.
 _Avoid_: Click-count mistakes, duplicate-submit inflation, daily cap
 
-**Mistake Vocabulary Audio Clip**:
-An official-audio excerpt aligned to a missed accepted answer word or phrase, used by a Mistake Vocabulary Card for targeted listening practice.
-_Avoid_: Browser text-to-speech, full section replay, generated pronunciation
+**Mistake Vocabulary Answer Audio**:
+A pre-generated pronunciation audio asset for a Mistake Vocabulary Card's canonical first accepted answer, derived from the known accepted answer text and used for targeted spelling recall.
+_Avoid_: Official-audio excerpt, full section replay, runtime browser text-to-speech
+
+**Mistake Vocabulary Spoken Text**:
+The explicit English text sent to the pronunciation generator for a Mistake Vocabulary Answer Audio asset, kept separate from the displayed and marked canonical answer so numeric answers can use natural value reading such as `four hundred twenty-nine` for `429`.
+_Avoid_: Accepted answer variant, marking value, browser text-to-speech input
 
 **Mistake Vocabulary Definition**:
 A short, common Simplified Chinese meaning for a missed accepted answer word or phrase, maintained in the practice pack vocabulary data.
 _Avoid_: Long dictionary entry, generated explanation, semantic marking hint
 
 **Mistake Vocabulary Practice**:
-An active recall exercise where the learner hears the official Mistake Vocabulary Audio Clip, types the English word or phrase, then sees the correct spelling and short Simplified Chinese meaning.
+An active recall exercise where the learner hears the Mistake Vocabulary Answer Audio, types the English word or phrase, then sees the correct spelling and short Simplified Chinese meaning.
 _Avoid_: Passive word list, multiple-choice drill, Chinese-to-English flashcard
 
 **Mistake Vocabulary Practice Queue**:

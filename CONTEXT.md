@@ -24,6 +24,10 @@ _Avoid_: Intensive listening, shadowing, generated drill
 One of the four ordered audio-and-question units in a complete listening test, shown as `01`, `02`, `03`, or `04` while retaining answers across navigation.
 _Avoid_: Page, test, track tab
 
+**Attempted Listening Section**:
+A Listening Section that contains at least one non-empty learner response in the current Practice Session, making that whole section eligible for section-scoped submission, feedback, and mistake-review capture.
+_Avoid_: Visited section, played audio section, current section
+
 **Practice Playback**:
 The unrestricted audio behavior used by the first exam simulation, allowing pause, seeking, replay, and keyboard controls without limiting attempts.
 _Avoid_: Strict exam playback, one-time playback
@@ -31,6 +35,58 @@ _Avoid_: Strict exam playback, one-time playback
 **Marking Feedback**:
 The post-submission result view showing the raw score, correct, incorrect, and unanswered states, accepted answers for mistakes, and navigation to the next incorrect response.
 _Avoid_: Band estimate, semantic explanation
+
+**Section-Scoped Marking Feedback**:
+Marking Feedback for all submitted Attempted Listening Sections, grouped by Listening Section and limited to those sections when displaying accepted answers.
+_Avoid_: Current-section-only feedback, all-40 feedback, unattempted-section answer reveal
+
+**Submission Readiness**:
+The state where at least one answer in the current Practice Session is non-empty, enabling submission and preventing empty `0 / 0` marking.
+_Avoid_: Empty submission, current-section assumption, answer reveal without response
+
+**Mistake Vocabulary Notebook**:
+A locally persisted review collection made from incorrect Blank Responses in submitted Attempted Listening Sections, where each card represents the accepted answer word or phrase that the learner missed.
+_Avoid_: Choice question review, full question history, general vocabulary list
+
+**Mistake Vocabulary Card**:
+One review item in the Mistake Vocabulary Notebook, centered on a missed accepted answer word or phrase from a Blank Response and the learning aids needed to practise it again.
+_Avoid_: Question card, answer-key row, transcript segment
+
+**Mistake Vocabulary Canonical Term**:
+The first accepted answer form for an incorrect Blank Response, used as the Mistake Vocabulary Card's primary word or phrase while other accepted forms remain visible as accepted variants.
+_Avoid_: One card per variant, learner-error-derived term, hidden accepted variant
+
+**Mistake Vocabulary Deduplication**:
+The rule that the Mistake Vocabulary Notebook keeps one card per normalized accepted answer word or phrase and updates only its mistake count when the learner misses it again.
+_Avoid_: Per-attempt card, per-question card, question-number history
+
+**Mistake Vocabulary Capture**:
+The section-scoped submission rule that adds only non-empty, incorrect Blank Responses from submitted Attempted Listening Sections to the Mistake Vocabulary Notebook.
+_Avoid_: Unanswered blank capture, choice mistake capture, full answer-key import
+
+**Mistake Vocabulary Capture Idempotence**:
+The rule that repeated submission of the same incorrect learner response does not increase a Mistake Vocabulary Card's mistake count, while a changed response that is still incorrect creates a new capture event.
+_Avoid_: Click-count mistakes, duplicate-submit inflation, daily cap
+
+**Mistake Vocabulary Audio Clip**:
+An official-audio excerpt aligned to a missed accepted answer word or phrase, used by a Mistake Vocabulary Card for targeted listening practice.
+_Avoid_: Browser text-to-speech, full section replay, generated pronunciation
+
+**Mistake Vocabulary Definition**:
+A short, common Simplified Chinese meaning for a missed accepted answer word or phrase, maintained in the practice pack vocabulary data.
+_Avoid_: Long dictionary entry, generated explanation, semantic marking hint
+
+**Mistake Vocabulary Practice**:
+An active recall exercise where the learner hears the official Mistake Vocabulary Audio Clip, types the English word or phrase, then sees the correct spelling and short Simplified Chinese meaning.
+_Avoid_: Passive word list, multiple-choice drill, Chinese-to-English flashcard
+
+**Mistake Vocabulary Practice Queue**:
+A fixed sequence of Mistake Vocabulary Cards created when a review run starts, either from the full notebook order or from a one-time random sample of ten cards, and completed with an end-of-run result summary.
+_Avoid_: Infinite loop, reshuffled after every card, dynamically expanding queue
+
+**Mistake Vocabulary Mastery Tracking**:
+The local review state that keeps a Mistake Vocabulary Card after correct practice, records recent practice outcomes and mastery count, and allows the learner to remove the card manually.
+_Avoid_: Automatic removal, permanent pack data deletion, hidden archival
 
 **Desktop Practice Workspace**:
 The first-version display environment for the exam simulation, designed for desktop browsers with enough space for the original question layout and supporting controls.
@@ -55,6 +111,10 @@ _Avoid_: User account, server session
 **Practice Pack Home**:
 The minimal entry view for opening Cambridge IELTS 10 Test 1 Listening and resuming its locally stored practice session.
 _Avoid_: Marketing landing page, content portal
+
+**Mistake Vocabulary Notebook Entry**:
+The independent Practice Pack Home command that opens the Mistake Vocabulary Notebook outside the Exam Simulation workspace.
+_Avoid_: Side-panel shortcut, disabled future feature, transcript action
 
 **Transcript Segment**:
 An ordered portion of the official listening audioscript associated with a listening section, optional speaker identity, currently empty timing fields, and relevant answer references.

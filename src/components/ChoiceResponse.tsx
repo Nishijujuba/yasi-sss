@@ -67,7 +67,12 @@ export function ChoiceResponse({
       {options.map((option) => {
         const checked = current.includes(option.id);
         return (
-          <label className="choice-option" data-selected={checked ? "true" : "false"} key={option.id}>
+          <label
+            className="choice-option"
+            data-overlay-only={optionId === undefined ? "false" : "true"}
+            data-selected={checked ? "true" : "false"}
+            key={option.id}
+          >
             <input
               aria-describedby={describedBy}
               aria-label={`第 ${question.number} 题 ${option.id} ${option.label}`}
@@ -78,8 +83,12 @@ export function ChoiceResponse({
               type={multi ? "checkbox" : "radio"}
               value={option.id}
             />
-            <span aria-hidden="true">{option.id}</span>
-            {optionId === undefined ? <span>{option.label}</span> : null}
+            {optionId === undefined ? (
+              <>
+                <span aria-hidden="true">{option.id}</span>
+                <span>{option.label}</span>
+              </>
+            ) : null}
           </label>
         );
       })}

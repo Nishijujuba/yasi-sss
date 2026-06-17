@@ -236,7 +236,7 @@ export function ExamWorkspace({
           onAnswerChange={changeAnswer}
           onAnswersChange={changeAnswers}
         />
-        <div>
+        <div className="workspace-side-panel">
           <MarkingFeedback
             answers={answers}
             questions={pack.questions}

@@ -7,6 +7,15 @@ export interface MarkingFeedbackProps {
   onNextIncorrect?: () => void;
 }
 
+function formatExpected(expected: string[]): string {
+  return expected.length === 0 ? "无" : expected.join(" / ");
+}
+
+function formatActual(actual: string): string {
+  const trimmed = actual.trim();
+  return trimmed === "" ? "未答" : `你的答案：${trimmed}`;
+}
+
 export function MarkingFeedback({ result, questions, answers, onNextIncorrect }: MarkingFeedbackProps) {
   if (result === null) {
     const answered = questions.filter((question) => (answers[question.id] ?? "").trim() !== "").length;
@@ -19,6 +28,17 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
 
   const unanswered = questions.filter((question) => (answers[question.id] ?? "").trim() === "").length;
   const incorrect = Math.max(result.incorrectIds.length - unanswered, 0);
+  const questionsById = new Map(questions.map((question) => [question.id, question]));
+  const incorrectAnswers = result.incorrectIds
+    .map((questionId) => {
+      const question = questionsById.get(questionId);
+      const questionResult = result.byQuestion[questionId];
+      if (question === undefined || questionResult === undefined) {
+        return null;
+      }
+      return { question, questionResult };
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 
   return (
     <section aria-label="判分反馈" className="feedback-card">
@@ -31,6 +51,22 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
       <button disabled={result.incorrectIds.length === 0} onClick={onNextIncorrect} type="button">
         下一错误题
       </button>
+      {incorrectAnswers.length === 0 ? null : (
+        <div aria-label="正确答案" className="feedback-answers">
+          <h3>正确答案</h3>
+          <ol>
+            {incorrectAnswers.map(({ question, questionResult }) => (
+              <li key={question.id}>
+                <strong>Q{question.number}</strong>
+                <span className="feedback-answer__actual">{formatActual(questionResult.actual)}</span>
+                <span className="feedback-answer__expected">
+                  正确答案：{formatExpected(questionResult.expected)}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </section>
   );
 }

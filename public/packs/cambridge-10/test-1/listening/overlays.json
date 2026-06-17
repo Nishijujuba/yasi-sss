@@ -32,15 +32,15 @@
     "page": "page-010.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 475.0,
+      "x": 497.0,
       "y": 890.0,
-      "w": 212.0,
+      "w": 190.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.4451733833177132,
+      "x": 0.46579194001874413,
       "y": 0.6087551299589603,
-      "w": 0.19868791002811623,
+      "w": 0.1780693533270853,
       "h": 0.024623803009575923
     },
     "deterministicConfidence": 0.9805,
@@ -50,6 +50,7 @@
       "blank line 2: y=912.5",
       "small-dot runs=45",
       "span=196px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q2 dotted answer line after Heard about company from."
     ]
   },
@@ -59,15 +60,15 @@
     "page": "page-010.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 228.0,
+      "x": 585.0,
       "y": 1052.0,
-      "w": 573.0,
+      "w": 185.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.21368322399250234,
+      "x": 0.5482661668228679,
       "y": 0.719562243502052,
-      "w": 0.5370196813495782,
+      "w": 0.1733833177132146,
       "h": 0.024623803009575923
     },
     "deterministicConfidence": 0.99,
@@ -77,6 +78,7 @@
       "blank line 3: y=1074.4",
       "small-dot runs=48",
       "span=557px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the full q3 dotted answer line in the Los Angeles bullet."
     ]
   },
@@ -113,15 +115,15 @@
     "page": "page-010.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 410.0,
+      "x": 446.0,
       "y": 1213.0,
-      "w": 226.0,
+      "w": 185.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.38425492033739456,
+      "x": 0.41799437675726336,
       "y": 0.8296853625170999,
-      "w": 0.21180880974695407,
+      "w": 0.1733833177132146,
       "h": 0.024623803009575923
     },
     "deterministicConfidence": 0.9803,
@@ -131,6 +133,7 @@
       "blank line 5: y=1235.1",
       "small-dot runs=44",
       "span=210px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q5 dotted answer line in the Trip Two bullet."
     ]
   },
@@ -140,15 +143,15 @@
     "page": "page-010.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 561.0,
+      "x": 579.0,
       "y": 1320.0,
-      "w": 207.0,
+      "w": 189.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.5257731958762887,
+      "x": 0.542642924086223,
       "y": 0.9028727770177839,
-      "w": 0.19400187441424555,
+      "w": 0.17713214620431114,
       "h": 0.024623803009575923
     },
     "deterministicConfidence": 0.9777,
@@ -158,6 +161,7 @@
       "blank line 6: y=1342.5",
       "small-dot runs=44",
       "span=191px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q6 dotted answer line after on the."
     ]
   },
@@ -174,9 +178,9 @@
     },
     "normalized": {
       "x": 0.327683615819209,
-      "y": 0.2739071038251366,
+      "y": 0.50125,
       "w": 0.09698681732580038,
-      "h": 0.02459016393442623
+      "h": 0.045
     },
     "deterministicConfidence": 0.9177,
     "visionConfidence": 0.92,
@@ -194,24 +198,25 @@
     "page": "page-011.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 781.0,
+      "x": 800.0,
       "y": 502.0,
-      "w": 118.0,
+      "w": 99.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.7354048964218456,
-      "y": 0.34289617486338797,
-      "w": 0.1111111111111111,
-      "h": 0.02459016393442623
+      "x": 0.7532956685499058,
+      "y": 0.6275,
+      "w": 0.09322033898305085,
+      "h": 0.045
     },
-    "deterministicConfidence": 0.9218,
+    "deterministicConfidence": 0.95,
     "visionConfidence": 0.87,
     "confidence": 0.87,
     "validationEvidence": [
       "blank line 2: y=524.5",
       "small-dot runs=23",
       "span=102px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q8 dotted answer line after one in the Includes column."
     ]
   },
@@ -221,24 +226,25 @@
     "page": "page-011.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 551.0,
+      "x": 573.0,
       "y": 563.0,
-      "w": 122.0,
+      "w": 100.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.5188323917137476,
-      "y": 0.38456284153005466,
-      "w": 0.11487758945386065,
-      "h": 0.02459016393442623
+      "x": 0.53954802259887,
+      "y": 0.70375,
+      "w": 0.09416195856873823,
+      "h": 0.045
     },
-    "deterministicConfidence": 0.9245,
+    "deterministicConfidence": 0.95,
     "visionConfidence": 0.9,
     "confidence": 0.9,
     "validationEvidence": [
       "blank line 3: y=584.5",
       "small-dot runs=24",
       "span=106px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is aligned with q9 price answer line after the pound sign."
     ]
   },
@@ -248,24 +254,25 @@
     "page": "page-011.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 749.0,
+      "x": 768.0,
       "y": 664.0,
-      "w": 119.0,
+      "w": 100.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.7052730696798494,
-      "y": 0.453551912568306,
-      "w": 0.1120527306967985,
-      "h": 0.02459016393442623
+      "x": 0.7231638418079096,
+      "y": 0.83,
+      "w": 0.09416195856873823,
+      "h": 0.045
     },
-    "deterministicConfidence": 0.922,
+    "deterministicConfidence": 0.95,
     "visionConfidence": 0.92,
     "confidence": 0.92,
     "validationEvidence": [
       "blank line 4: y=685.5",
       "small-dot runs=23",
       "span=103px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q10 dotted answer line in the Includes column."
     ]
   },
@@ -275,16 +282,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 466.0,
-      "y": 406.0,
-      "w": 219.0,
-      "h": 36.0
+      "x": 489.0,
+      "y": 414.0,
+      "w": 178.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.43673851921274603,
-      "y": 0.2773224043715847,
-      "w": 0.20524835988753515,
-      "h": 0.02459016393442623
+      "x": 0.45829428303655106,
+      "y": 0.47045454545454546,
+      "w": 0.1668228678537957,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9814,
     "visionConfidence": 0.98,
@@ -293,6 +300,7 @@
       "blank line 1: y=428.5",
       "small-dot runs=45",
       "span=203px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q13 dotted answer line after any."
     ]
   },
@@ -302,16 +310,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 161.0,
-      "y": 448.0,
-      "w": 321.0,
-      "h": 36.0
+      "x": 169.0,
+      "y": 455.0,
+      "w": 178.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.15089034676663543,
-      "y": 0.30601092896174864,
-      "w": 0.30084348641049674,
-      "h": 0.02459016393442623
+      "x": 0.1583880037488285,
+      "y": 0.5170454545454546,
+      "w": 0.1668228678537957,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9796,
     "visionConfidence": 0.97,
@@ -320,6 +328,7 @@
       "blank line 2: y=470.3",
       "small-dot runs=43",
       "span=305px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q14 dotted answer line before will be explained."
     ]
   },
@@ -329,16 +338,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 392.0,
-      "y": 491.0,
-      "w": 219.0,
-      "h": 36.0
+      "x": 415.0,
+      "y": 499.0,
+      "w": 179.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.3673851921274602,
-      "y": 0.3353825136612022,
-      "w": 0.20524835988753515,
-      "h": 0.02459016393442623
+      "x": 0.3889409559512652,
+      "y": 0.5670454545454545,
+      "w": 0.16776007497656983,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9814,
     "visionConfidence": 0.98,
@@ -347,6 +356,7 @@
       "blank line 3: y=513.5",
       "small-dot runs=45",
       "span=203px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q15 dotted answer line after six-week."
     ]
   },
@@ -356,16 +366,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 378.0,
-      "y": 592.0,
-      "w": 208.0,
-      "h": 36.0
+      "x": 401.0,
+      "y": 599.0,
+      "w": 178.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.3542642924086223,
-      "y": 0.40437158469945356,
-      "w": 0.1949390815370197,
-      "h": 0.02459016393442623
+      "x": 0.37582005623242737,
+      "y": 0.6806818181818182,
+      "w": 0.1668228678537957,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9778,
     "visionConfidence": 0.98,
@@ -374,6 +384,7 @@
       "blank line 4: y=614.2",
       "small-dot runs=44",
       "span=192px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q16 dotted answer line before fee for members."
     ]
   },
@@ -383,16 +394,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 374.0,
-      "y": 634.0,
-      "w": 205.0,
-      "h": 36.0
+      "x": 382.0,
+      "y": 642.0,
+      "w": 178.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.35051546391752575,
-      "y": 0.43306010928961747,
-      "w": 0.19212746016869728,
-      "h": 0.02459016393442623
+      "x": 0.3580131208997188,
+      "y": 0.7295454545454545,
+      "w": 0.1668228678537957,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9774,
     "visionConfidence": 0.98,
@@ -401,6 +412,7 @@
       "blank line 5: y=656.5",
       "small-dot runs=44",
       "span=189px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q17 dotted answer line before to all the LP clubs."
     ]
   },
@@ -410,16 +422,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 537.0,
-      "y": 676.0,
-      "w": 208.0,
-      "h": 36.0
+      "x": 561.0,
+      "y": 683.0,
+      "w": 177.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.5032802249297095,
-      "y": 0.46174863387978143,
-      "w": 0.1949390815370197,
-      "h": 0.02459016393442623
+      "x": 0.5257731958762887,
+      "y": 0.7761363636363636,
+      "w": 0.16588566073102157,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9778,
     "visionConfidence": 0.96,
@@ -428,6 +440,7 @@
       "blank line 6: y=698.4",
       "small-dot runs=44",
       "span=192px",
+      "manual visible-control refinement avoids printed prompt text",
       "After detector correction, the box is centered on the q18 dotted answer line after question number 18 and before hours."
     ]
   },
@@ -437,16 +450,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 469.0,
-      "y": 719.0,
-      "w": 193.0,
-      "h": 36.0
+      "x": 477.0,
+      "y": 727.0,
+      "w": 178.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.4395501405810684,
-      "y": 0.491120218579235,
-      "w": 0.18088097469540768,
-      "h": 0.02459016393442623
+      "x": 0.44704779756326146,
+      "y": 0.8261363636363637,
+      "w": 0.1668228678537957,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9737,
     "visionConfidence": 0.97,
@@ -455,6 +468,7 @@
       "blank line 7: y=741.5",
       "small-dot runs=43",
       "span=177px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q19 dotted answer line before every month."
     ]
   },
@@ -464,16 +478,16 @@
     "page": "page-013.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 439.0,
-      "y": 762.0,
-      "w": 225.0,
-      "h": 36.0
+      "x": 478.0,
+      "y": 769.0,
+      "w": 179.0,
+      "h": 30.0
     },
     "normalized": {
-      "x": 0.4114339268978444,
-      "y": 0.5204918032786885,
-      "w": 0.21087160262417995,
-      "h": 0.02459016393442623
+      "x": 0.44798500468603564,
+      "y": 0.8738636363636364,
+      "w": 0.16776007497656983,
+      "h": 0.03409090909090909
     },
     "deterministicConfidence": 0.9843,
     "visionConfidence": 0.98,
@@ -482,6 +496,7 @@
       "blank line 8: y=783.5",
       "small-dot runs=46",
       "span=209px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is centered on the q20 dotted answer line before with them."
     ]
   },
@@ -491,16 +506,16 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 413.0,
-      "y": 322.0,
-      "w": 252.0,
+      "x": 469.0,
+      "y": 327.0,
+      "w": 189.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.3874296435272045,
-      "y": 0.21934604904632152,
-      "w": 0.23639774859287055,
-      "h": 0.02452316076294278
+      "x": 0.4399624765478424,
+      "y": 0.47391304347826085,
+      "w": 0.1772983114446529,
+      "h": 0.05217391304347826
     },
     "deterministicConfidence": 0.9879,
     "visionConfidence": 0.96,
@@ -509,6 +524,7 @@
       "blank line 1: y=344.5",
       "small-dot runs=47",
       "span=236px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q26 dotted answer line after the question number."
     ]
   },
@@ -518,16 +534,16 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 274.0,
-      "y": 380.0,
-      "w": 429.0,
+      "x": 518.0,
+      "y": 384.0,
+      "w": 179.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.2570356472795497,
-      "y": 0.25885558583106266,
-      "w": 0.4024390243902439,
-      "h": 0.02452316076294278
+      "x": 0.48592870544090055,
+      "y": 0.5565217391304348,
+      "w": 0.16791744840525327,
+      "h": 0.05217391304347826
     },
     "deterministicConfidence": 0.9796,
     "visionConfidence": 0.94,
@@ -536,6 +552,7 @@
       "blank line 2: y=401.7",
       "small-dot runs=43",
       "span=413px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q27 dotted answer line and stays on the correct row."
     ]
   },
@@ -545,16 +562,16 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 530.0,
-      "y": 437.0,
-      "w": 234.0,
+      "x": 569.0,
+      "y": 442.0,
+      "w": 189.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.4971857410881801,
-      "y": 0.29768392370572205,
-      "w": 0.21951219512195122,
-      "h": 0.02452316076294278
+      "x": 0.5337711069418386,
+      "y": 0.6405797101449275,
+      "w": 0.1772983114446529,
+      "h": 0.05217391304347826
     },
     "deterministicConfidence": 0.9876,
     "visionConfidence": 0.96,
@@ -563,6 +580,7 @@
       "blank line 3: y=459.5",
       "small-dot runs=47",
       "span=218px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q28 dotted answer line after the question number."
     ]
   },
@@ -572,16 +590,16 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 232.0,
-      "y": 495.0,
-      "w": 502.0,
+      "x": 539.0,
+      "y": 499.0,
+      "w": 178.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.2176360225140713,
-      "y": 0.3371934604904632,
-      "w": 0.4709193245778612,
-      "h": 0.02452316076294278
+      "x": 0.5056285178236398,
+      "y": 0.7231884057971014,
+      "w": 0.1669793621013133,
+      "h": 0.05217391304347826
     },
     "deterministicConfidence": 0.9879,
     "visionConfidence": 0.9,
@@ -590,6 +608,7 @@
       "blank line 4: y=517.2",
       "small-dot runs=47",
       "span=486px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes surrounding q29 prompt text but covers the correct dotted answer line."
     ]
   },
@@ -599,16 +618,16 @@
     "page": "page-015.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 378.0,
-      "y": 552.0,
-      "w": 221.0,
+      "x": 413.0,
+      "y": 557.0,
+      "w": 179.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.3545966228893058,
-      "y": 0.3760217983651226,
-      "w": 0.2073170731707317,
-      "h": 0.02452316076294278
+      "x": 0.3874296435272045,
+      "y": 0.8072463768115942,
+      "w": 0.16791744840525327,
+      "h": 0.05217391304347826
     },
     "deterministicConfidence": 0.9817,
     "visionConfidence": 0.95,
@@ -617,6 +636,7 @@
       "blank line 5: y=574.5",
       "small-dot runs=45",
       "span=205px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q30 dotted answer line and avoids the adjacent text row."
     ]
   },
@@ -626,15 +646,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 171.0,
+      "x": 573.0,
       "y": 459.0,
-      "w": 600.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.15848007414272475,
+      "x": 0.531047265987025,
       "y": 0.3128834355828221,
-      "w": 0.5560704355885079,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.9817,
@@ -644,6 +664,7 @@
       "blank line 1: y=480.9",
       "small-dot runs=44",
       "span=584px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes q31 prompt text but covers the correct dotted answer line."
     ]
   },
@@ -653,15 +674,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 181.0,
+      "x": 595.0,
       "y": 501.0,
-      "w": 613.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.16774791473586653,
+      "x": 0.5514365152919369,
       "y": 0.34151329243353784,
-      "w": 0.5681186283595923,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -671,6 +692,7 @@
       "blank line 2: y=522.8",
       "small-dot runs=62",
       "span=597px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes q32 prompt text but covers the correct dotted answer line."
     ]
   },
@@ -680,15 +702,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 228.0,
+      "x": 474.0,
       "y": 544.0,
-      "w": 445.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.211306765523633,
+      "x": 0.4392956441149212,
       "y": 0.37082481254260397,
-      "w": 0.41241890639481,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -698,6 +720,7 @@
       "blank line 3: y=565.6",
       "small-dot runs=74",
       "span=429px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q33 dotted answer line on the correct row."
     ]
   },
@@ -707,15 +730,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 175.0,
+      "x": 358.0,
       "y": 682.0,
-      "w": 591.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.16218721037998146,
+      "x": 0.33178869323447635,
       "y": 0.4648943421949557,
-      "w": 0.5477293790546802,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -725,6 +748,7 @@
       "blank line 4: y=704.4",
       "small-dot runs=52",
       "span=575px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q34 dotted answer line and stays within the habitat row."
     ]
   },
@@ -734,15 +758,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 362.0,
+      "x": 622.0,
       "y": 768.0,
-      "w": 458.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.33549582947173306,
+      "x": 0.5764596848934198,
       "y": 0.523517382413088,
-      "w": 0.42446709916589437,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.9858,
@@ -752,6 +776,7 @@
       "blank line 5: y=789.6",
       "small-dot runs=46",
       "span=442px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q35 dotted answer line after the question number."
     ]
   },
@@ -761,15 +786,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 172.0,
+      "x": 207.0,
       "y": 891.0,
-      "w": 239.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.15940685820203893,
+      "x": 0.19184430027803523,
       "y": 0.6073619631901841,
-      "w": 0.22150139017608897,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -779,6 +804,7 @@
       "blank line 6: y=913.5",
       "small-dot runs=48",
       "span=223px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q36 dotted answer line before the phrase by logging companies."
     ]
   },
@@ -788,15 +814,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 176.0,
+      "x": 335.0,
       "y": 934.0,
-      "w": 643.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.16311399443929564,
+      "x": 0.31047265987025024,
       "y": 0.6366734832992502,
-      "w": 0.5959221501390176,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -806,6 +832,7 @@
       "blank line 7: y=955.5",
       "small-dot runs=62",
       "span=627px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes q37 row text but covers the correct dotted answer line."
     ]
   },
@@ -815,15 +842,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 190.0,
+      "x": 775.0,
       "y": 972.0,
-      "w": 781.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.17608897126969417,
+      "x": 0.7182576459684893,
       "y": 0.6625766871165644,
-      "w": 0.7238183503243745,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.9838,
@@ -833,6 +860,7 @@
       "blank line 8: y=993.8",
       "small-dot runs=45",
       "span=765px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box is wide on the q38 row but covers the correct dotted answer line without crossing rows."
     ]
   },
@@ -842,15 +870,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 260.0,
+      "x": 594.0,
       "y": 1113.0,
-      "w": 558.0,
+      "w": 184.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.24096385542168675,
+      "x": 0.5505097312326228,
       "y": 0.7586912065439673,
-      "w": 0.5171455050973123,
+      "w": 0.1705282669138091,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -860,6 +888,7 @@
       "blank line 9: y=1134.6",
       "small-dot runs=53",
       "span=542px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes q39 row text but covers the correct dotted answer line."
     ]
   },
@@ -869,15 +898,15 @@
     "page": "page-016.png",
     "interactionType": "blank",
     "pixel": {
-      "x": 364.0,
+      "x": 359.0,
       "y": 1155.0,
-      "w": 579.0,
+      "w": 208.0,
       "h": 36.0
     },
     "normalized": {
-      "x": 0.3373493975903614,
+      "x": 0.33271547729379053,
       "y": 0.787321063394683,
-      "w": 0.5366079703429101,
+      "w": 0.1927710843373494,
       "h": 0.024539877300613498
     },
     "deterministicConfidence": 0.99,
@@ -887,6 +916,7 @@
       "blank line 10: y=1176.7",
       "small-dot runs=48",
       "span=563px",
+      "manual visible-control refinement avoids printed prompt text",
       "Box includes q40 row text but covers the correct dotted answer line."
     ]
   },
@@ -896,23 +926,24 @@
     "page": "page-012.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 161.0,
-      "y": 342.0,
-      "w": 149.0,
-      "h": 34.0
+      "x": 197.0,
+      "y": 350.0,
+      "w": 18.0,
+      "h": 18.0
     },
     "normalized": {
-      "x": 0.15060804490177737,
-      "y": 0.2334470989761092,
-      "w": 0.13938260056127222,
-      "h": 0.023208191126279865
+      "x": 0.1842843779232928,
+      "y": 0.625,
+      "w": 0.01683816651075772,
+      "h": 0.03214285714285714
     },
-    "deterministicConfidence": 0.948,
+    "deterministicConfidence": 0.95,
     "visionConfidence": 0.95,
-    "confidence": 0.948,
+    "confidence": 0.95,
     "validationEvidence": [
       "choice row 1: crop=(140, 330, 700, 500)",
       "text-band dark pixels=640",
+      "manual visible-control refinement avoids printed prompt text",
       "Box surrounds option A text line, the gym."
     ]
   },
@@ -922,16 +953,16 @@
     "page": "page-012.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 163.0,
-      "y": 369.0,
-      "w": 166.0,
-      "h": 30.0
+      "x": 197.0,
+      "y": 375.0,
+      "w": 18.0,
+      "h": 18.0
     },
     "normalized": {
-      "x": 0.15247895229186156,
-      "y": 0.25187713310580206,
-      "w": 0.15528531337698784,
-      "h": 0.020477815699658702
+      "x": 0.1842843779232928,
+      "y": 0.6696428571428571,
+      "w": 0.01683816651075772,
+      "h": 0.03214285714285714
     },
     "deterministicConfidence": 0.9612,
     "visionConfidence": 0.96,
@@ -939,6 +970,7 @@
     "validationEvidence": [
       "choice row 2: crop=(140, 330, 700, 500)",
       "text-band dark pixels=816",
+      "manual visible-control refinement avoids printed prompt text",
       "Box surrounds option B text line, the tracks."
     ]
   },
@@ -948,16 +980,16 @@
     "page": "page-012.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 162.0,
-      "y": 397.0,
-      "w": 219.0,
-      "h": 30.0
+      "x": 197.0,
+      "y": 403.0,
+      "w": 18.0,
+      "h": 18.0
     },
     "normalized": {
-      "x": 0.15154349859681945,
-      "y": 0.27098976109215017,
-      "w": 0.2048643592142189,
-      "h": 0.020477815699658702
+      "x": 0.1842843779232928,
+      "y": 0.7196428571428571,
+      "w": 0.01683816651075772,
+      "h": 0.03214285714285714
     },
     "deterministicConfidence": 0.9774,
     "visionConfidence": 0.98,
@@ -965,6 +997,7 @@
     "validationEvidence": [
       "choice row 3: crop=(140, 330, 700, 500)",
       "text-band dark pixels=1032",
+      "manual visible-control refinement avoids printed prompt text",
       "Box surrounds option C text line, the indoor pool."
     ]
   },
@@ -974,16 +1007,16 @@
     "page": "page-012.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 163.0,
-      "y": 424.0,
-      "w": 232.0,
-      "h": 30.0
+      "x": 197.0,
+      "y": 430.0,
+      "w": 18.0,
+      "h": 18.0
     },
     "normalized": {
-      "x": 0.15247895229186156,
-      "y": 0.289419795221843,
-      "w": 0.21702525724976612,
-      "h": 0.020477815699658702
+      "x": 0.1842843779232928,
+      "y": 0.7678571428571429,
+      "w": 0.01683816651075772,
+      "h": 0.03214285714285714
     },
     "deterministicConfidence": 0.9874,
     "visionConfidence": 0.98,
@@ -991,6 +1024,7 @@
     "validationEvidence": [
       "choice row 4: crop=(140, 330, 700, 500)",
       "text-band dark pixels=1165",
+      "manual visible-control refinement avoids printed prompt text",
       "Box surrounds option D text line, the outdoor pool."
     ]
   },
@@ -1000,16 +1034,16 @@
     "page": "page-012.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 163.0,
-      "y": 451.0,
-      "w": 369.0,
-      "h": 35.0
+      "x": 197.0,
+      "y": 460.0,
+      "w": 18.0,
+      "h": 18.0
     },
     "normalized": {
-      "x": 0.15247895229186156,
-      "y": 0.3078498293515358,
-      "w": 0.3451824134705332,
-      "h": 0.023890784982935155
+      "x": 0.1842843779232928,
+      "y": 0.8214285714285714,
+      "w": 0.01683816651075772,
+      "h": 0.03214285714285714
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.99,
@@ -1017,6 +1051,7 @@
     "validationEvidence": [
       "choice row 5: crop=(140, 330, 700, 500)",
       "text-band dark pixels=2037",
+      "manual visible-control refinement avoids printed prompt text",
       "Box surrounds the full option E text line, the sports training for children."
     ]
   },
@@ -1026,16 +1061,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 164.0,
-      "y": 389.0,
-      "w": 427.0,
-      "h": 35.0
+      "x": 142.0,
+      "y": 397.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15370196813495782,
-      "y": 0.2657103825136612,
-      "w": 0.4001874414245548,
-      "h": 0.02390710382513661
+      "x": 0.1330834114339269,
+      "y": 0.35446428571428573,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1043,6 +1078,7 @@
     "validationEvidence": [
       "choice row 1: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=2393",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q21 option A text line."
     ]
   },
@@ -1052,16 +1088,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 417.0,
-      "w": 502.0,
-      "h": 34.0
+      "x": 142.0,
+      "y": 424.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.2848360655737705,
-      "w": 0.4704779756326148,
-      "h": 0.023224043715846996
+      "x": 0.1330834114339269,
+      "y": 0.37857142857142856,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1069,6 +1105,7 @@
     "validationEvidence": [
       "choice row 2: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=2947",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q21 option B text line."
     ]
   },
@@ -1078,16 +1115,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 444.0,
-      "w": 492.0,
-      "h": 34.0
+      "x": 142.0,
+      "y": 451.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.30327868852459017,
-      "w": 0.4611059044048735,
-      "h": 0.023224043715846996
+      "x": 0.1330834114339269,
+      "y": 0.40267857142857144,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1095,6 +1132,7 @@
     "validationEvidence": [
       "choice row 3: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=2641",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q21 option C text line."
     ]
   },
@@ -1104,16 +1142,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 164.0,
-      "y": 529.0,
-      "w": 232.0,
-      "h": 34.0
+      "x": 142.0,
+      "y": 536.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15370196813495782,
-      "y": 0.36133879781420764,
-      "w": 0.21743205248359887,
-      "h": 0.023224043715846996
+      "x": 0.1330834114339269,
+      "y": 0.4785714285714286,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.9871,
     "visionConfidence": 0.96,
@@ -1121,6 +1159,7 @@
     "validationEvidence": [
       "choice row 4: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1161",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q22 option A text line."
     ]
   },
@@ -1130,16 +1169,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 556.0,
-      "w": 219.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 561.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.3797814207650273,
-      "w": 0.20524835988753515,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.5008928571428571,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.9818,
     "visionConfidence": 0.96,
@@ -1147,6 +1186,7 @@
     "validationEvidence": [
       "choice row 5: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1091",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q22 option B text line."
     ]
   },
@@ -1156,16 +1196,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 583.0,
-      "w": 248.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 588.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.398224043715847,
-      "w": 0.232427366447985,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.525,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.96,
@@ -1173,6 +1213,7 @@
     "validationEvidence": [
       "choice row 6: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1208",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q22 option C text line."
     ]
   },
@@ -1182,16 +1223,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 164.0,
-      "y": 668.0,
-      "w": 214.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 673.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15370196813495782,
-      "y": 0.4562841530054645,
-      "w": 0.20056232427366447,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.6008928571428571,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.9773,
     "visionConfidence": 0.96,
@@ -1199,6 +1240,7 @@
     "validationEvidence": [
       "choice row 7: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1030",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q23 option A text line."
     ]
   },
@@ -1208,16 +1250,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 166.0,
-      "y": 695.0,
-      "w": 211.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 700.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15557638238050608,
-      "y": 0.47472677595628415,
-      "w": 0.19775070290534208,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.625,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.9739,
     "visionConfidence": 0.96,
@@ -1225,6 +1267,7 @@
     "validationEvidence": [
       "choice row 8: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=986",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q23 option B text line."
     ]
   },
@@ -1234,16 +1277,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 723.0,
-      "w": 303.0,
-      "h": 34.0
+      "x": 142.0,
+      "y": 730.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.49385245901639346,
-      "w": 0.2839737582005623,
-      "h": 0.023224043715846996
+      "x": 0.1330834114339269,
+      "y": 0.6517857142857143,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1251,6 +1294,7 @@
     "validationEvidence": [
       "choice row 9: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1562",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q23 option C text line."
     ]
   },
@@ -1260,16 +1304,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 164.0,
-      "y": 807.0,
-      "w": 304.0,
-      "h": 35.0
+      "x": 142.0,
+      "y": 815.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15370196813495782,
-      "y": 0.5512295081967213,
-      "w": 0.2849109653233365,
-      "h": 0.02390710382513661
+      "x": 0.1330834114339269,
+      "y": 0.7276785714285714,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1277,6 +1321,7 @@
     "validationEvidence": [
       "choice row 10: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1626",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q24 option A text line."
     ]
   },
@@ -1286,16 +1331,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 166.0,
-      "y": 834.0,
-      "w": 233.0,
-      "h": 31.0
+      "x": 142.0,
+      "y": 840.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15557638238050608,
-      "y": 0.569672131147541,
-      "w": 0.21836925960637302,
-      "h": 0.02117486338797814
+      "x": 0.1330834114339269,
+      "y": 0.75,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1303,6 +1348,7 @@
     "validationEvidence": [
       "choice row 11: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1213",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q24 option B text line."
     ]
   },
@@ -1312,16 +1358,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 862.0,
-      "w": 248.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 867.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.5887978142076503,
-      "w": 0.232427366447985,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.7741071428571429,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1329,6 +1375,7 @@
     "validationEvidence": [
       "choice row 12: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1230",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q24 option C text line."
     ]
   },
@@ -1338,16 +1385,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 164.0,
-      "y": 946.0,
-      "w": 298.0,
-      "h": 31.0
+      "x": 142.0,
+      "y": 952.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15370196813495782,
-      "y": 0.6461748633879781,
-      "w": 0.27928772258669166,
-      "h": 0.02117486338797814
+      "x": 0.1330834114339269,
+      "y": 0.85,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1355,6 +1402,7 @@
     "validationEvidence": [
       "choice row 13: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=1504",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q25 option A text line."
     ]
   },
@@ -1364,16 +1412,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 166.0,
-      "y": 974.0,
-      "w": 365.0,
-      "h": 30.0
+      "x": 142.0,
+      "y": 979.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15557638238050608,
-      "y": 0.6653005464480874,
-      "w": 0.34208059981255856,
-      "h": 0.020491803278688523
+      "x": 0.1330834114339269,
+      "y": 0.8741071428571429,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1381,6 +1429,7 @@
     "validationEvidence": [
       "choice row 14: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=2023",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q25 option B text line."
     ]
   },
@@ -1390,16 +1439,16 @@
     "page": "page-014.png",
     "interactionType": "choice-option",
     "pixel": {
-      "x": 165.0,
-      "y": 1000.0,
-      "w": 393.0,
-      "h": 31.0
+      "x": 142.0,
+      "y": 1006.0,
+      "w": 20.0,
+      "h": 20.0
     },
     "normalized": {
-      "x": 0.15463917525773196,
-      "y": 0.6830601092896175,
-      "w": 0.3683223992502343,
-      "h": 0.02117486338797814
+      "x": 0.1330834114339269,
+      "y": 0.8982142857142857,
+      "w": 0.01874414245548266,
+      "h": 0.017857142857142856
     },
     "deterministicConfidence": 0.99,
     "visionConfidence": 0.97,
@@ -1407,6 +1456,7 @@
     "validationEvidence": [
       "choice row 15: crop=(150, 340, 950, 1050)",
       "text-band dark pixels=2040",
+      "manual visible-control refinement avoids printed prompt text",
       "Box covers the q25 option C text line."
     ]
   }

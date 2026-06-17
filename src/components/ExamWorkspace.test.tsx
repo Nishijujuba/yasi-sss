@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ExamWorkspace, type AudioController } from "./ExamWorkspace";
 import type { LoadedPack, MarkResult, OverlayRegion, Question } from "../types/pack";
@@ -148,11 +148,90 @@ describe("ExamWorkspace", () => {
     expect(submitButton).not.toBeNull();
     fireEvent.click(submitButton!);
     expect(screen.getByText(/Raw score: 0 \/ 2/)).toBeTruthy();
+    expect(screen.getAllByText("正确答案：Ardleigh").length).toBeGreaterThan(0);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "Ardleigh" } });
 
     expect(onAnswerChange).toHaveBeenCalledWith("q1", "Ardleigh");
     expect(screen.queryByText(/Raw score/)).toBeNull();
+    expect(screen.queryByText("正确答案：Ardleigh")).toBeNull();
+  });
+
+  it("shows accepted answer forms after submitting without replacing the user's answer", () => {
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{ q1: "Ardley" }}
+        onAnswerChange={vi.fn()}
+        onSubmit={() => ({
+          ...submittedResult,
+          byQuestion: {
+            ...submittedResult.byQuestion,
+            q1: {
+              questionId: "q1",
+              correct: false,
+              expected: ["Ardleigh"],
+              actual: "Ardley",
+            },
+          },
+        })}
+      />,
+    );
+
+    const submitButton = container.querySelector<HTMLButtonElement>(".primary-submit");
+    expect(submitButton).not.toBeNull();
+    fireEvent.click(submitButton!);
+
+    expect(within(container).getByRole("textbox")).toHaveValue("Ardley");
+    expect(within(container).getAllByText("正确答案：Ardleigh").length).toBeGreaterThan(0);
+  });
+
+  it("shows accepted choice answers after submitting", () => {
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={2}
+        answers={{ q11: "B" }}
+        onAnswerChange={vi.fn()}
+        onSubmit={() => ({
+          ...submittedResult,
+          byQuestion: {
+            ...submittedResult.byQuestion,
+            q11: {
+              questionId: "q11",
+              correct: false,
+              expected: ["A", "C"],
+              actual: "B",
+            },
+          },
+        })}
+      />,
+    );
+
+    const submitButton = container.querySelector<HTMLButtonElement>(".primary-submit");
+    expect(submitButton).not.toBeNull();
+    fireEvent.click(submitButton!);
+
+    expect(within(container).getByText("你的答案：B")).toBeTruthy();
+    expect(within(container).getByText("正确答案：A / C")).toBeTruthy();
+  });
+
+  it("groups feedback and practice actions in a scrollable side panel", () => {
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+      />,
+    );
+
+    const sidePanel = container.querySelector(".workspace-side-panel");
+
+    expect(sidePanel).not.toBeNull();
+    expect(sidePanel?.querySelector(".feedback-card")).not.toBeNull();
+    expect(sidePanel?.querySelector(".action-rail")).not.toBeNull();
   });
 
   it("wires built-in audio controls to the native audio element", () => {

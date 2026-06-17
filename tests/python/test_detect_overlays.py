@@ -140,6 +140,59 @@ def test_build_overlay_proposals_for_all_interactive_regions():
         assert normalized["y"] + normalized["h"] <= 1
 
 
+def test_blank_overlay_refinements_avoid_known_prompt_text():
+    proposals = {
+        proposal["questionId"]: proposal
+        for proposal in build_overlay_proposals()
+        if proposal["interactionType"] == "blank"
+    }
+
+    expected_rects = {
+        "q2": {"x": 497, "w": 190},
+        "q3": {"x": 585, "w": 185},
+        "q8": {"x": 800, "w": 99},
+        "q9": {"x": 573, "w": 100},
+        "q10": {"x": 768, "w": 100},
+        "q14": {"x": 169, "w": 178},
+        "q27": {"x": 518, "w": 179},
+        "q29": {"x": 539, "w": 178},
+        "q31": {"x": 573, "w": 184},
+        "q32": {"x": 595, "w": 184},
+        "q33": {"x": 474, "w": 184},
+        "q34": {"x": 358, "w": 184},
+        "q35": {"x": 622, "w": 184},
+        "q36": {"x": 207, "w": 184},
+        "q37": {"x": 335, "w": 184},
+        "q38": {"x": 775, "w": 184},
+        "q39": {"x": 594, "w": 184},
+        "q40": {"x": 359, "w": 208},
+    }
+
+    for question_id, expected in expected_rects.items():
+        pixel = proposals[question_id]["pixel"]
+        assert pixel["x"] == expected["x"]
+        assert pixel["w"] == expected["w"]
+
+
+def test_choice_overlay_proposals_target_visible_controls_not_option_text():
+    proposals = {
+        (proposal["questionId"], proposal["optionId"]): proposal
+        for proposal in build_overlay_proposals()
+        if proposal["interactionType"] == "choice-option"
+    }
+
+    q11_a = proposals[("q11", "A")]["pixel"]
+    assert q11_a == {"x": 197.0, "y": 350.0, "w": 18.0, "h": 18.0}
+
+    q21_a = proposals[("q21", "A")]["pixel"]
+    assert q21_a == {"x": 142.0, "y": 397.0, "w": 20.0, "h": 20.0}
+
+    assert all(
+        proposal["pixel"]["w"] <= 24 and proposal["pixel"]["h"] <= 24
+        for proposal in proposals.values()
+    )
+
+
 def test_merge_vision_evidence_requires_approved_confidence():
     proposal = {
         "questionId": "q1",

@@ -50,6 +50,60 @@ class _TextBand:
     dark_pixels: int
 
 
+REFINED_VISIBLE_RECTS: dict[tuple[str, str | None], Rect] = {
+    ("q2", None): Rect(x=497, y=890, w=190, h=36),
+    ("q3", None): Rect(x=585, y=1052, w=185, h=36),
+    ("q5", None): Rect(x=446, y=1213, w=185, h=36),
+    ("q6", None): Rect(x=579, y=1320, w=189, h=36),
+    ("q8", None): Rect(x=800, y=502, w=99, h=36),
+    ("q9", None): Rect(x=573, y=563, w=100, h=36),
+    ("q10", None): Rect(x=768, y=664, w=100, h=36),
+    ("q13", None): Rect(x=489, y=414, w=178, h=30),
+    ("q14", None): Rect(x=169, y=455, w=178, h=30),
+    ("q15", None): Rect(x=415, y=499, w=179, h=30),
+    ("q16", None): Rect(x=401, y=599, w=178, h=30),
+    ("q17", None): Rect(x=382, y=642, w=178, h=30),
+    ("q18", None): Rect(x=561, y=683, w=177, h=30),
+    ("q19", None): Rect(x=477, y=727, w=178, h=30),
+    ("q20", None): Rect(x=478, y=769, w=179, h=30),
+    ("q26", None): Rect(x=469, y=327, w=189, h=36),
+    ("q27", None): Rect(x=518, y=384, w=179, h=36),
+    ("q28", None): Rect(x=569, y=442, w=189, h=36),
+    ("q29", None): Rect(x=539, y=499, w=178, h=36),
+    ("q30", None): Rect(x=413, y=557, w=179, h=36),
+    ("q31", None): Rect(x=573, y=459, w=184, h=36),
+    ("q32", None): Rect(x=595, y=501, w=184, h=36),
+    ("q33", None): Rect(x=474, y=544, w=184, h=36),
+    ("q34", None): Rect(x=358, y=682, w=184, h=36),
+    ("q35", None): Rect(x=622, y=768, w=184, h=36),
+    ("q36", None): Rect(x=207, y=891, w=184, h=36),
+    ("q37", None): Rect(x=335, y=934, w=184, h=36),
+    ("q38", None): Rect(x=775, y=972, w=184, h=36),
+    ("q39", None): Rect(x=594, y=1113, w=184, h=36),
+    ("q40", None): Rect(x=359, y=1155, w=208, h=36),
+    ("q11", "A"): Rect(x=197, y=350, w=18, h=18),
+    ("q11", "B"): Rect(x=197, y=375, w=18, h=18),
+    ("q11", "C"): Rect(x=197, y=403, w=18, h=18),
+    ("q11", "D"): Rect(x=197, y=430, w=18, h=18),
+    ("q11", "E"): Rect(x=197, y=460, w=18, h=18),
+    ("q21", "A"): Rect(x=142, y=397, w=20, h=20),
+    ("q21", "B"): Rect(x=142, y=424, w=20, h=20),
+    ("q21", "C"): Rect(x=142, y=451, w=20, h=20),
+    ("q22", "A"): Rect(x=142, y=536, w=20, h=20),
+    ("q22", "B"): Rect(x=142, y=561, w=20, h=20),
+    ("q22", "C"): Rect(x=142, y=588, w=20, h=20),
+    ("q23", "A"): Rect(x=142, y=673, w=20, h=20),
+    ("q23", "B"): Rect(x=142, y=700, w=20, h=20),
+    ("q23", "C"): Rect(x=142, y=730, w=20, h=20),
+    ("q24", "A"): Rect(x=142, y=815, w=20, h=20),
+    ("q24", "B"): Rect(x=142, y=840, w=20, h=20),
+    ("q24", "C"): Rect(x=142, y=867, w=20, h=20),
+    ("q25", "A"): Rect(x=142, y=952, w=20, h=20),
+    ("q25", "B"): Rect(x=142, y=979, w=20, h=20),
+    ("q25", "C"): Rect(x=142, y=1006, w=20, h=20),
+}
+
+
 def _grayscale_array(image: Image.Image) -> np.ndarray:
     return np.asarray(image.convert("L"))
 
@@ -408,6 +462,24 @@ def _proposal(
     }
 
 
+def _refine_region(
+    question_id: str,
+    option_id: str | None,
+    region: DetectedRegion,
+) -> DetectedRegion:
+    refined = REFINED_VISIBLE_RECTS.get((question_id, option_id))
+    if refined is None:
+        return region
+    return DetectedRegion(
+        pixel=refined,
+        deterministic_confidence=max(region.deterministic_confidence, 0.95),
+        evidence=[
+            *region.evidence,
+            "manual visible-control refinement avoids printed prompt text",
+        ],
+    )
+
+
 def build_overlay_proposals(page_dir: Path = PAGE_ASSET_ROOT) -> list[dict]:
     load_source_questions()
     page_dir = Path(page_dir)
@@ -429,13 +501,14 @@ def build_overlay_proposals(page_dir: Path = PAGE_ASSET_ROOT) -> list[dict]:
             )
             width, height = image.size
         for question_id, region in zip(question_ids, regions):
+            refined = _refine_region(question_id, None, region)
             proposals.append(
                 _proposal(
                     question_id=question_id,
                     option_id=None,
                     page_name=page_name,
                     interaction_type="blank",
-                    region=region,
+                    region=refined,
                     page_width=width,
                     page_height=height,
                 )
@@ -450,13 +523,14 @@ def build_overlay_proposals(page_dir: Path = PAGE_ASSET_ROOT) -> list[dict]:
         )
         width, height = image.size
     for option_id, region in zip(["A", "B", "C", "D", "E"], choice_regions):
+        refined = _refine_region("q11", option_id, region)
         proposals.append(
             _proposal(
                 question_id="q11",
                 option_id=option_id,
                 page_name="page-012.png",
                 interaction_type="choice-option",
-                region=region,
+                region=refined,
                 page_width=width,
                 page_height=height,
             )
@@ -476,13 +550,14 @@ def build_overlay_proposals(page_dir: Path = PAGE_ASSET_ROOT) -> list[dict]:
         for option_id in ["A", "B", "C"]
     ]
     for (question_id, option_id), region in zip(single_choice_targets, choice_regions):
+        refined = _refine_region(question_id, option_id, region)
         proposals.append(
             _proposal(
                 question_id=question_id,
                 option_id=option_id,
                 page_name="page-014.png",
                 interaction_type="choice-option",
-                region=region,
+                region=refined,
                 page_width=width,
                 page_height=height,
             )

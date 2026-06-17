@@ -23,6 +23,14 @@ function resultStatus(questionId: string, value: string, result?: MarkResult | n
   return result.byQuestion[questionId]?.correct ? ("correct" as const) : ("incorrect" as const);
 }
 
+function expectedAnswer(questionId: string, result?: MarkResult | null): string | undefined {
+  const questionResult = result?.byQuestion[questionId];
+  if (questionResult === undefined || questionResult.correct || questionResult.expected.length === 0) {
+    return undefined;
+  }
+  return questionResult.expected.join(" / ");
+}
+
 function multiValue(question: Question, answers: AnswerMap, companionQuestionId?: string): string[] {
   const first = answers[question.id];
   const second = companionQuestionId === undefined ? undefined : answers[companionQuestionId];
@@ -51,6 +59,7 @@ export function InteractionOverlay({
     return (
       <div className="interaction-overlay" data-question-id={question.id} style={style}>
         <BlankResponse
+          expectedAnswer={expectedAnswer(question.id, result)}
           questionId={question.id}
           questionNumber={question.number}
           status={resultStatus(question.id, value, result)}

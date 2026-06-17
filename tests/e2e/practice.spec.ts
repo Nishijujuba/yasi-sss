@@ -40,4 +40,32 @@ test.describe('practice workflow', () => {
     await page.getByRole('button', { name: /^\u786e\u8ba4\u91cd\u7f6e$/ }).click()
     await expect(questionInput(page, 1)).toHaveValue('')
   })
+
+  test('keeps the feedback and action rail scrollable on a short viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 1365, height: 768 })
+    await page.goto('/')
+
+    await startOrContinuePractice(page)
+    await questionInput(page, 1).fill('Ardleigh')
+    await page.getByRole('button', { name: /^\u63d0\u4ea4\u7b54\u6848$/ }).click()
+
+    const sidePanel = page.locator('.workspace-side-panel')
+    await expect(sidePanel).toHaveCSS('overflow-y', /auto|scroll/)
+
+    const metrics = await sidePanel.evaluate((element) => ({
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    }))
+    expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight)
+
+    await sidePanel.evaluate((element) => {
+      element.scrollTop = element.scrollHeight
+    })
+
+    const sideBox = await sidePanel.boundingBox()
+    const followButtonBox = await page.getByRole('button', { name: /^\u539f\u6587\u8ddf\u8bfb$/ }).boundingBox()
+    expect(sideBox).not.toBeNull()
+    expect(followButtonBox).not.toBeNull()
+    expect(followButtonBox!.y + followButtonBox!.height).toBeLessThanOrEqual(sideBox!.y + sideBox!.height + 1)
+  })
 })

@@ -36,8 +36,14 @@ export function AudioPlayer({
   function play(): void {
     const audio = audioRef?.current ?? null;
     if (audio !== null) {
-      void audio.play();
-      onPlayStateChange?.(true);
+      void audio
+        .play()
+        .then(() => {
+          onPlayStateChange?.(true);
+          audioController?.play?.(section);
+        })
+        .catch(() => onPlayStateChange?.(false));
+      return;
     }
     audioController?.play?.(section);
   }
@@ -67,7 +73,7 @@ export function AudioPlayer({
     if (audio !== null) {
       restorePosition(audio);
     }
-  }, [audioRef, initialPosition, src]);
+  }, [audioRef, src]);
 
   return (
     <section aria-label={`Section ${label} 音频`} className="audio-player">

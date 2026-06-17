@@ -34,4 +34,20 @@ describe("ChoiceResponse", () => {
 
     expect(onChange).toHaveBeenLastCalledWith(["A", "C"]);
   });
+
+  it("renders an overlay-only option without duplicating printed option text", () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <ChoiceResponse
+        optionId="A"
+        question={multiChoiceQuestion}
+        value={[]}
+        onChange={onChange}
+      />,
+    );
+
+    const label = container.querySelector(".choice-option");
+    expect(label?.textContent).toBe("");
+    expect(container.querySelector("input")?.getAttribute("aria-label")).toContain("A the gym");
+  });
 });

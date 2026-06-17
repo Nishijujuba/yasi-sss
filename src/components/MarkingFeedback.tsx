@@ -26,9 +26,16 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
     );
   }
 
-  const unanswered = questions.filter((question) => (answers[question.id] ?? "").trim() === "").length;
-  const incorrect = Math.max(result.incorrectIds.length - unanswered, 0);
   const questionsById = new Map(questions.map((question) => [question.id, question]));
+  const submittedQuestions = questions.filter((question) => result.byQuestion[question.id] !== undefined);
+  const unanswered = submittedQuestions.filter((question) => {
+    const questionResult = result.byQuestion[question.id];
+    return questionResult !== undefined && questionResult.actual.trim() === "";
+  }).length;
+  const incorrect = submittedQuestions.filter((question) => {
+    const questionResult = result.byQuestion[question.id];
+    return questionResult !== undefined && !questionResult.correct && questionResult.actual.trim() !== "";
+  }).length;
   const incorrectAnswers = result.incorrectIds
     .map((questionId) => {
       const question = questionsById.get(questionId);
@@ -39,6 +46,13 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
       return { question, questionResult };
     })
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+  const groupedAnswers = new Map<number, typeof incorrectAnswers>();
+  for (const entry of incorrectAnswers) {
+    const current = groupedAnswers.get(entry.question.section) ?? [];
+    current.push(entry);
+    groupedAnswers.set(entry.question.section, current);
+  }
+  const sectionGroups = [...groupedAnswers.entries()].sort(([left], [right]) => left - right);
 
   return (
     <section aria-label="判分反馈" className="feedback-card">
@@ -51,20 +65,25 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
       <button disabled={result.incorrectIds.length === 0} onClick={onNextIncorrect} type="button">
         下一错误题
       </button>
-      {incorrectAnswers.length === 0 ? null : (
+      {sectionGroups.length === 0 ? null : (
         <div aria-label="正确答案" className="feedback-answers">
           <h3>正确答案</h3>
-          <ol>
-            {incorrectAnswers.map(({ question, questionResult }) => (
-              <li key={question.id}>
-                <strong>Q{question.number}</strong>
-                <span className="feedback-answer__actual">{formatActual(questionResult.actual)}</span>
-                <span className="feedback-answer__expected">
-                  正确答案：{formatExpected(questionResult.expected)}
-                </span>
-              </li>
-            ))}
-          </ol>
+          {sectionGroups.map(([section, entries]) => (
+            <section className="feedback-section" key={section}>
+              <h4>Section {String(section).padStart(2, "0")}</h4>
+              <ol>
+                {entries.map(({ question, questionResult }) => (
+                  <li key={question.id}>
+                    <strong>Q{question.number}</strong>
+                    <span className="feedback-answer__actual">{formatActual(questionResult.actual)}</span>
+                    <span className="feedback-answer__expected">
+                      正确答案：{formatExpected(questionResult.expected)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ))}
         </div>
       )}
     </section>

@@ -1,0 +1,47 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "term": {
+      "minLength": 1,
+      "title": "Term",
+      "type": "string"
+    },
+    "normalizedTerm": {
+      "minLength": 1,
+      "title": "Normalizedterm",
+      "type": "string"
+    },
+    "acceptedVariants": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Acceptedvariants",
+      "type": "array"
+    },
+    "meaningZh": {
+      "minLength": 1,
+      "title": "Meaningzh",
+      "type": "string"
+    },
+    "audio": {
+      "minLength": 1,
+      "title": "Audio",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "term",
+    "normalizedTerm",
+    "acceptedVariants",
+    "meaningZh",
+    "audio"
+  ],
+  "title": "VocabularyItem",
+  "type": "object"
+}

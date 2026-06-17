@@ -10,7 +10,8 @@ from builder.detect_overlays import write_overlay_proposals
 from builder.models import BuildMetadata, Manifest, ManifestAssets, SectionManifest
 from builder.overlay_review import draw_review_images, finalize_overlays
 from builder.render_pages import render_question_pages
-from builder.validate_pack import export_answers_and_transcript, validate_pack
+from builder.validate_pack import export_answers_and_transcript, export_vocabulary, validate_pack
+from builder.vocabulary_audio import build_vocabulary_audio_clips
 
 
 def _source_commit() -> str:
@@ -69,6 +70,7 @@ def _manifest() -> Manifest:
             answers="answers.json",
             overlays="overlays.json",
             transcript="transcript.json",
+            vocabulary="vocabulary.json",
         ),
         build=BuildMetadata(
             sourceCommit=_source_commit(),
@@ -93,8 +95,10 @@ def build_pack():
     write_overlay_proposals()
     draw_review_images()
     finalize_overlays()
-    export_answers_and_transcript()
     convert_audio_sections()
+    export_answers_and_transcript()
+    export_vocabulary()
+    build_vocabulary_audio_clips()
     write_manifest()
     report = validate_pack(PACK_ROOT)
     REVIEW_ROOT.mkdir(parents=True, exist_ok=True)

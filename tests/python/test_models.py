@@ -1,6 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
+import builder.models as model_module
 from builder.models import (
     Answer,
     ChoiceOption,
@@ -44,6 +45,107 @@ def minimal_manifest(status: str = "released") -> dict:
 def test_manifest_rejects_non_released_status_for_runtime():
     with pytest.raises(ValidationError):
         ReleasedManifest.model_validate(minimal_manifest(status="building"))
+
+
+def test_vocabulary_item_model_accepts_pack_shape_and_rejects_extra_fields():
+    assert hasattr(model_module, "VocabularyItem")
+    item = model_module.VocabularyItem.model_validate(
+        {
+            "id": "photo-card",
+            "term": "photo card",
+            "normalizedTerm": "photo card",
+            "acceptedVariants": ["photo cards"],
+            "meaningZh": "照片卡",
+            "audio": "assets/audio/vocabulary/photo-card.mp3",
+        }
+    )
+
+    assert item.term == "photo card"
+    assert item.acceptedVariants == ["photo cards"]
+
+    with pytest.raises(ValidationError):
+        model_module.VocabularyItem.model_validate(
+            {
+                "id": "photo-card",
+                "term": "photo card",
+                "normalizedTerm": "photo card",
+                "acceptedVariants": [],
+                "meaningZh": "照片卡",
+                "audio": "assets/audio/vocabulary/photo-card.mp3",
+                "unexpected": True,
+            }
+        )
+
+
+def test_answer_audio_window_model_requires_valid_positive_window():
+    assert hasattr(model_module, "AnswerAudioWindow")
+    window = model_module.AnswerAudioWindow.model_validate(
+        {
+            "vocabularyId": "photo-card",
+            "questionId": "q1",
+            "section": 1,
+            "startTime": 35.2,
+            "endTime": 36.4,
+            "paddingBefore": 0.15,
+            "paddingAfter": 0.25,
+        }
+    )
+
+    assert window.vocabularyId == "photo-card"
+    assert window.endTime > window.startTime
+
+    with pytest.raises(ValidationError, match="endTime"):
+        model_module.AnswerAudioWindow.model_validate(
+            {
+                "vocabularyId": "photo-card",
+                "questionId": "q1",
+                "section": 1,
+                "startTime": 36.4,
+                "endTime": 35.2,
+                "paddingBefore": 0.15,
+                "paddingAfter": 0.25,
+            }
+        )
+
+
+def test_manifest_assets_requires_vocabulary_asset():
+    payload = minimal_manifest()
+    payload["assets"]["vocabulary"] = "vocabulary.json"
+
+    manifest = ReleasedManifest.model_validate(payload)
+
+    assert manifest.assets.vocabulary == "vocabulary.json"
+
+    del payload["assets"]["vocabulary"]
+    with pytest.raises(ValidationError):
+        ReleasedManifest.model_validate(payload)
+
+
+def test_release_report_requires_vocabulary_window_and_clip_counts():
+    payload = {
+        "status": "released",
+        "questionCoverage": list(range(1, 41)),
+        "overlayCount": 53,
+        "answerCount": 40,
+        "transcriptSections": [1, 2, 3, 4],
+        "audioSections": [1, 2, 3, 4],
+        "pageAssets": ["assets/pages/page-010.png"],
+        "pendingAnswerCandidates": 0,
+        "vocabularyCount": 33,
+        "windowCount": 33,
+        "clipCount": 33,
+        "errors": [],
+    }
+
+    report = model_module.ReleaseReport.model_validate(payload)
+
+    assert report.vocabularyCount == 33
+    assert report.windowCount == 33
+    assert report.clipCount == 33
+
+    del payload["clipCount"]
+    with pytest.raises(ValidationError):
+        model_module.ReleaseReport.model_validate(payload)
 
 
 def test_overlay_rejects_confidence_below_gate():

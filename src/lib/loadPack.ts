@@ -8,6 +8,7 @@ import type {
   Question,
   Rect,
   TranscriptSection,
+  VocabularyItem,
 } from "../types/pack";
 
 const OVERLAY_CONFIDENCE_GATE = 0.85;
@@ -76,7 +77,7 @@ function assertManifest(value: unknown): asserts value is PackManifest {
   value.sections.forEach(assertPackSection);
   if (!isRecord(value.assets)) throw new Error("manifest.assets is required");
 
-  for (const key of ["questions", "answers", "overlays", "transcript"] as const) {
+  for (const key of ["questions", "answers", "overlays", "transcript", "vocabulary"] as const) {
     if (typeof value.assets[key] !== "string") {
       throw new Error(`manifest.assets.${key} is required`);
     }
@@ -147,6 +148,38 @@ function assertTranscriptSection(value: unknown, index: number): asserts value i
   if (!Array.isArray(value.segments)) throw new Error(`transcript[${index}].segments is required`);
 }
 
+function assertVocabularyItem(value: unknown, index: number): asserts value is VocabularyItem {
+  if (!isRecord(value)) throw new Error(`vocabulary[${index}] must be an object`);
+  if (typeof value.id !== "string" || value.id.trim() === "") {
+    throw new Error(`vocabulary[${index}].id is required`);
+  }
+  if (typeof value.term !== "string" || value.term.trim() === "") {
+    throw new Error(`vocabulary[${index}].term is required`);
+  }
+  if (typeof value.normalizedTerm !== "string" || value.normalizedTerm.trim() === "") {
+    throw new Error(`vocabulary[${index}].normalizedTerm is required`);
+  }
+  if (!isStringArray(value.acceptedVariants)) {
+    throw new Error(`vocabulary[${index}].acceptedVariants is required`);
+  }
+  if (typeof value.meaningZh !== "string" || value.meaningZh.trim() === "") {
+    throw new Error(`vocabulary[${index}].meaningZh is required`);
+  }
+  if (typeof value.audio !== "string" || value.audio.trim() === "") {
+    throw new Error(`vocabulary[${index}].audio is required`);
+  }
+}
+
+function assertUniqueVocabularyIds(vocabulary: VocabularyItem[]): void {
+  const seen = new Set<string>();
+  for (const item of vocabulary) {
+    if (seen.has(item.id)) {
+      throw new Error(`duplicate vocabulary id: ${item.id}`);
+    }
+    seen.add(item.id);
+  }
+}
+
 async function fetchJson(url: string): Promise<unknown> {
   const response = await fetch(url);
   if (!response.ok) {
@@ -164,11 +197,12 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   const manifestJson = await fetchJson(joinUrl(normalizedBaseUrl, "manifest.json"));
   assertManifest(manifestJson);
 
-  const [questionsJson, answersJson, overlaysJson, transcriptJson] = await Promise.all([
+  const [questionsJson, answersJson, overlaysJson, transcriptJson, vocabularyJson] = await Promise.all([
     fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.questions)),
     fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.answers)),
     fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.overlays)),
     fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.transcript)),
+    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.vocabulary)),
   ]);
 
   if (!Array.isArray(questionsJson)) throw new Error("questions asset must be an array");
@@ -179,6 +213,9 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   overlaysJson.forEach(assertOverlayRegion);
   if (!Array.isArray(transcriptJson)) throw new Error("transcript asset must be an array");
   transcriptJson.forEach(assertTranscriptSection);
+  if (!Array.isArray(vocabularyJson)) throw new Error("vocabulary asset must be an array");
+  vocabularyJson.forEach(assertVocabularyItem);
+  assertUniqueVocabularyIds(vocabularyJson);
 
   const questionsById = new Map(questionsJson.map((question) => [question.id, question]));
   const answersByQuestionId = new Map<string, AnswerRule>();
@@ -193,6 +230,7 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
     current.push(overlay);
     overlaysByQuestionId.set(overlay.questionId, current);
   }
+  const vocabularyById = new Map(vocabularyJson.map((item) => [item.id, item]));
 
   return {
     baseUrl: normalizedBaseUrl,
@@ -201,8 +239,10 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
     answers: answersJson,
     overlays: overlaysJson,
     transcript: transcriptJson,
+    vocabulary: vocabularyJson,
     questionsById,
     answersByQuestionId,
     overlaysByQuestionId,
+    vocabularyById,
   };
 }

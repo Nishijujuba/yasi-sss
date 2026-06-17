@@ -7,6 +7,7 @@ export interface PracticeActionsProps {
   onNextIncorrect?: () => void;
   hasResult?: boolean;
   hasIncorrect?: boolean;
+  canSubmit?: boolean;
 }
 
 export function PracticeActions({
@@ -16,6 +17,7 @@ export function PracticeActions({
   onNextIncorrect,
   hasResult = false,
   hasIncorrect = false,
+  canSubmit = true,
 }: PracticeActionsProps) {
   const [confirmingReset, setConfirmingReset] = useState(false);
 
@@ -27,9 +29,10 @@ export function PracticeActions({
         <p>Alt + ← / →：跳转 5 秒</p>
       </section>
 
-      <button className="primary-submit" onClick={onSubmit} type="button">
+      <button className="primary-submit" disabled={!canSubmit} onClick={onSubmit} type="button">
         提交答案
       </button>
+      {canSubmit ? null : <p className="action-hint">先完成至少一个答案</p>}
       <button
         className="secondary-action"
         disabled={!hasResult || !hasIncorrect}

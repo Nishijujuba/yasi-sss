@@ -38,13 +38,18 @@
         "transcript": {
           "title": "Transcript",
           "type": "string"
+        },
+        "vocabulary": {
+          "title": "Vocabulary",
+          "type": "string"
         }
       },
       "required": [
         "questions",
         "answers",
         "overlays",
-        "transcript"
+        "transcript",
+        "vocabulary"
       ],
       "title": "ManifestAssets",
       "type": "object"

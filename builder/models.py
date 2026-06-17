@@ -102,6 +102,31 @@ class Answer(PackModel):
         return self
 
 
+class VocabularyItem(PackModel):
+    id: str = Field(min_length=1)
+    term: str = Field(min_length=1)
+    normalizedTerm: str = Field(min_length=1)
+    acceptedVariants: list[str]
+    meaningZh: str = Field(min_length=1)
+    audio: str = Field(min_length=1)
+
+
+class AnswerAudioWindow(PackModel):
+    vocabularyId: str = Field(min_length=1)
+    questionId: str = Field(min_length=1)
+    section: int = Field(ge=1, le=4)
+    startTime: float = Field(ge=0)
+    endTime: float = Field(gt=0)
+    paddingBefore: float = Field(ge=0)
+    paddingAfter: float = Field(ge=0)
+
+    @model_validator(mode="after")
+    def validate_positive_window(self) -> AnswerAudioWindow:
+        if self.endTime <= self.startTime:
+            raise ValueError("endTime must be greater than startTime")
+        return self
+
+
 Confidence = Annotated[float, Field(ge=OVERLAY_CONFIDENCE_GATE, le=1)]
 DetectionConfidence = Annotated[float, Field(ge=0, le=1)]
 
@@ -163,6 +188,7 @@ class ManifestAssets(PackModel):
     answers: str
     overlays: str
     transcript: str
+    vocabulary: str
 
 
 class BuildMetadata(PackModel):
@@ -201,6 +227,9 @@ class ReleaseReport(PackModel):
     questionCoverage: list[int]
     overlayCount: int = Field(ge=0)
     answerCount: int = Field(ge=0)
+    vocabularyCount: int = Field(ge=0)
+    windowCount: int = Field(ge=0)
+    clipCount: int = Field(ge=0)
     transcriptSections: list[int]
     audioSections: list[int]
     pageAssets: list[str]
@@ -259,6 +288,7 @@ def export_json_schemas(output_dir: Path = SCHEMA_ROOT) -> None:
         "released-manifest": ReleasedManifest,
         "questions": Question,
         "answers": Answer,
+        "vocabulary": VocabularyItem,
         "overlays": Overlay,
         "transcript-section": TranscriptSection,
         "answer-review": PendingAnswerCandidate,

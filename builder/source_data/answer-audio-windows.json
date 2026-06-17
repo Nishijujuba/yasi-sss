@@ -1,0 +1,299 @@
+[
+  {
+    "vocabularyId": "ardleigh",
+    "questionId": "q1",
+    "section": 1,
+    "startTime": 10.0,
+    "endTime": 11.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "newspaper",
+    "questionId": "q2",
+    "section": 1,
+    "startTime": 20.0,
+    "endTime": 21.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "theme",
+    "questionId": "q3",
+    "section": 1,
+    "startTime": 30.0,
+    "endTime": 31.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "tent",
+    "questionId": "q4",
+    "section": 1,
+    "startTime": 40.0,
+    "endTime": 41.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "castle",
+    "questionId": "q5",
+    "section": 1,
+    "startTime": 50.0,
+    "endTime": 51.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "beach",
+    "questionId": "q6",
+    "section": 1,
+    "startTime": 60.0,
+    "endTime": 61.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "2020",
+    "questionId": "q7",
+    "section": 1,
+    "startTime": 70.0,
+    "endTime": 71.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "flight",
+    "questionId": "q8",
+    "section": 1,
+    "startTime": 80.0,
+    "endTime": 81.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "429",
+    "questionId": "q9",
+    "section": 1,
+    "startTime": 90.0,
+    "endTime": 91.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "dinner",
+    "questionId": "q10",
+    "section": 1,
+    "startTime": 100.0,
+    "endTime": 101.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "health-problems",
+    "questionId": "q13",
+    "section": 2,
+    "startTime": 10.0,
+    "endTime": 11.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "safety-rules",
+    "questionId": "q14",
+    "section": 2,
+    "startTime": 20.0,
+    "endTime": 21.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "plan",
+    "questionId": "q15",
+    "section": 2,
+    "startTime": 30.0,
+    "endTime": 31.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "joining",
+    "questionId": "q16",
+    "section": 2,
+    "startTime": 40.0,
+    "endTime": 41.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "free-entry",
+    "questionId": "q17",
+    "section": 2,
+    "startTime": 50.0,
+    "endTime": 51.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "peak",
+    "questionId": "q18",
+    "section": 2,
+    "startTime": 60.0,
+    "endTime": 61.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "guests",
+    "questionId": "q19",
+    "section": 2,
+    "startTime": 70.0,
+    "endTime": 71.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "photo-card",
+    "questionId": "q20",
+    "section": 2,
+    "startTime": 80.0,
+    "endTime": 81.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "presentation",
+    "questionId": "q26",
+    "section": 3,
+    "startTime": 10.0,
+    "endTime": 11.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "model",
+    "questionId": "q27",
+    "section": 3,
+    "startTime": 20.0,
+    "endTime": 21.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "material",
+    "questionId": "q28",
+    "section": 3,
+    "startTime": 30.0,
+    "endTime": 31.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "grant",
+    "questionId": "q29",
+    "section": 3,
+    "startTime": 40.0,
+    "endTime": 41.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "technical",
+    "questionId": "q30",
+    "section": 3,
+    "startTime": 50.0,
+    "endTime": 51.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "gene",
+    "questionId": "q31",
+    "section": 4,
+    "startTime": 10.0,
+    "endTime": 11.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "power",
+    "questionId": "q32",
+    "section": 4,
+    "startTime": 20.0,
+    "endTime": 21.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "strangers",
+    "questionId": "q33",
+    "section": 4,
+    "startTime": 30.0,
+    "endTime": 31.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "erosion",
+    "questionId": "q34",
+    "section": 4,
+    "startTime": 40.0,
+    "endTime": 41.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "islands",
+    "questionId": "q35",
+    "section": 4,
+    "startTime": 50.0,
+    "endTime": 51.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "roads",
+    "questionId": "q36",
+    "section": 4,
+    "startTime": 60.0,
+    "endTime": 61.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "fishing",
+    "questionId": "q37",
+    "section": 4,
+    "startTime": 70.0,
+    "endTime": 71.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "reproduction",
+    "questionId": "q38",
+    "section": 4,
+    "startTime": 80.0,
+    "endTime": 81.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "method",
+    "questionId": "q39",
+    "section": 4,
+    "startTime": 90.0,
+    "endTime": 91.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  },
+  {
+    "vocabularyId": "expansion",
+    "questionId": "q40",
+    "section": 4,
+    "startTime": 100.0,
+    "endTime": 101.0,
+    "paddingBefore": 0.1,
+    "paddingAfter": 0.1
+  }
+]

@@ -21,6 +21,7 @@ export interface PackManifest {
     answers: string;
     overlays: string;
     transcript: string;
+    vocabulary: string;
   };
   build?: {
     sourceCommit?: string;
@@ -104,6 +105,15 @@ export interface TranscriptSection {
   };
 }
 
+export interface VocabularyItem {
+  id: string;
+  term: string;
+  normalizedTerm: string;
+  acceptedVariants: string[];
+  meaningZh: string;
+  audio: string;
+}
+
 export interface LoadedPack {
   baseUrl: string;
   manifest: PackManifest;
@@ -111,9 +121,11 @@ export interface LoadedPack {
   answers: AnswerRule[];
   overlays: OverlayRegion[];
   transcript: TranscriptSection[];
+  vocabulary: VocabularyItem[];
   questionsById: Map<string, Question>;
   answersByQuestionId: Map<string, AnswerRule>;
   overlaysByQuestionId: Map<string, OverlayRegion[]>;
+  vocabularyById: Map<string, VocabularyItem>;
 }
 
 export type AnswerMap = Record<string, string>;

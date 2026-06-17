@@ -1,4 +1,5 @@
 import { ExamWorkspace } from "./components/ExamWorkspace";
+import { MistakeVocabularyView } from "./components/MistakeVocabularyView";
 import { PackErrorScreen } from "./components/PackErrorScreen";
 import { PracticePackHome } from "./components/PracticePackHome";
 import { PracticeSessionProvider, usePracticeSession } from "./context/PracticeSessionContext";
@@ -25,6 +26,7 @@ function AppContent() {
         activeSection={session.activeSection}
         answers={session.answers}
         audioPositions={session.audioPositions}
+        canSubmit={session.canSubmit}
         nextIncorrectId={session.nextIncorrectId}
         onAnswerChange={session.setAnswer}
         onAnswersChange={session.setAnswers}
@@ -39,10 +41,23 @@ function AppContent() {
     );
   }
 
+  if (session.view === "mistakes") {
+    return (
+      <MistakeVocabularyView
+        notebook={session.notebook}
+        onGoHome={session.goHome}
+        onRemoveCard={session.removeMistakeCard}
+        onSubmitPractice={session.submitMistakePractice}
+        pack={session.pack}
+      />
+    );
+  }
+
   return (
     <PracticePackHome
       activeSection={session.activeSection}
       answers={session.answers}
+      onOpenMistakes={session.openMistakeVocabulary}
       onStart={session.startPractice}
       pack={session.pack}
       result={session.result}

@@ -1,17 +1,20 @@
 import type { AnswerMap, MarkResult } from "../types/pack";
 
-export const SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v1";
-export const SESSION_VERSION = 1;
+const LEGACY_SESSION_KEY_V1 = "yasi:cambridge-10:test-1:listening:session:v1";
+
+export const SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v2";
+export const SESSION_VERSION = 2;
 export const SESSION_PACK_ID = "cambridge-10-test-1-listening";
 
 export interface PracticeSession {
-  version: 1;
+  version: 2;
   packId: typeof SESSION_PACK_ID;
   answers: AnswerMap;
   activeSection: number;
   submitted: boolean;
   results: MarkResult | null;
   audioPositions: Record<string, number>;
+  capturedMistakes: Record<string, string>;
 }
 
 export function createEmptySession(activeSection = 1): PracticeSession {
@@ -23,6 +26,7 @@ export function createEmptySession(activeSection = 1): PracticeSession {
     submitted: false,
     results: null,
     audioPositions: {},
+    capturedMistakes: {},
   };
 }
 
@@ -77,32 +81,37 @@ function isPracticeSession(value: unknown): value is PracticeSession {
     value.activeSection >= 1 &&
     typeof value.submitted === "boolean" &&
     (value.results === null || isMarkResult(value.results)) &&
-    isNumberRecord(value.audioPositions)
+    isNumberRecord(value.audioPositions) &&
+    isStringRecord(value.capturedMistakes)
   );
 }
 
-function archiveCurrentSession(raw: string): void {
-  const archiveKey = `${SESSION_KEY}:archived:${new Date().toISOString()}`;
+function archiveSession(key: string, raw: string): void {
+  const archiveKey = `${key}:archived:${new Date().toISOString()}`;
   localStorage.setItem(archiveKey, raw);
-  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(key);
 }
 
 export function loadSession(): PracticeSession | null {
   const raw = localStorage.getItem(SESSION_KEY);
-  if (raw === null) {
+  if (raw !== null) {
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (isPracticeSession(parsed)) {
+        return parsed;
+      }
+    } catch {
+      // Invalid JSON is still user state, so it is archived instead of discarded.
+    }
+
+    archiveSession(SESSION_KEY, raw);
     return null;
   }
 
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (isPracticeSession(parsed)) {
-      return parsed;
-    }
-  } catch {
-    // Invalid JSON is still user state, so it is archived instead of discarded.
+  const legacyRaw = localStorage.getItem(LEGACY_SESSION_KEY_V1);
+  if (legacyRaw !== null) {
+    archiveSession(LEGACY_SESSION_KEY_V1, legacyRaw);
   }
-
-  archiveCurrentSession(raw);
   return null;
 }
 

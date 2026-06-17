@@ -29,6 +29,7 @@ export interface ExamWorkspaceProps {
   onGoHome?: () => void;
   onAudioPositionChange?: (section: number, position: number) => void;
   nextIncorrectId?: string | null;
+  canSubmit?: boolean;
 }
 
 const EMPTY_ANSWERS: AnswerMap = {};
@@ -53,7 +54,7 @@ function focusQuestion(questionId: string): void {
   const control = document.querySelector<HTMLElement>(
     `[data-question-id="${questionId}"] input, [data-question-id="${questionId}"] button, [data-question-id="${questionId}"]`,
   );
-  control?.scrollIntoView({ behavior: "smooth", block: "center" });
+  control?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   control?.focus();
 }
 
@@ -72,12 +73,14 @@ export function ExamWorkspace({
   onGoHome,
   onAudioPositionChange,
   nextIncorrectId,
+  canSubmit = true,
 }: ExamWorkspaceProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentSection, setCurrentSection] = useState(activeSection);
   const [localResult, setLocalResult] = useState<MarkResult | null>(null);
   const [localPositions, setLocalPositions] = useState<Record<string, number>>(audioPositions);
   const [playing, setPlaying] = useState(false);
+  const [pendingFocusQuestionId, setPendingFocusQuestionId] = useState<string | null>(null);
 
   useEffect(() => {
     setCurrentSection(activeSection);
@@ -99,6 +102,17 @@ export function ExamWorkspace({
     }
     return pack.manifest.sections.find((section) => section.number === currentSection) ?? pack.manifest.sections[0];
   }, [pack, currentSection]);
+
+  useEffect(() => {
+    if (pendingFocusQuestionId === null || pack === null || pack === undefined) {
+      return;
+    }
+    const question = pack.questionsById.get(pendingFocusQuestionId);
+    if (question !== undefined && question.section === currentSection) {
+      focusQuestion(pendingFocusQuestionId);
+      setPendingFocusQuestionId(null);
+    }
+  }, [currentSection, pack, pendingFocusQuestionId]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
@@ -152,9 +166,10 @@ export function ExamWorkspace({
     return <PackErrorScreen message="练习包缺少 Section 配置。" />;
   }
 
+  const loadedPack = pack;
   const effectiveResult = result ?? localResult;
-  const sectionQuestions = pack.questions.filter((question) => question.section === active.number);
-  const audioSrc = resolveAsset(pack.baseUrl, active.audio);
+  const sectionQuestions = loadedPack.questions.filter((question) => question.section === active.number);
+  const audioSrc = resolveAsset(loadedPack.baseUrl, active.audio);
 
   function pauseAndSave(section: number): void {
     audioController?.pause(section);
@@ -183,6 +198,9 @@ export function ExamWorkspace({
   }
 
   function submit(): void {
+    if (!canSubmit) {
+      return;
+    }
     const next = onSubmit?.();
     if (next !== undefined) {
       setLocalResult(next);
@@ -202,6 +220,12 @@ export function ExamWorkspace({
   function nextIncorrect(): void {
     const id = nextIncorrectId ?? effectiveResult?.incorrectIds[0];
     if (id !== undefined) {
+      const question = loadedPack.questionsById.get(id);
+      if (question !== undefined && question.section !== currentSection) {
+        setPendingFocusQuestionId(id);
+        selectSection(question.section);
+        return;
+      }
       focusQuestion(id);
     }
   }
@@ -228,8 +252,8 @@ export function ExamWorkspace({
       <div className="workspace-body">
         <QuestionScrollArea
           answers={answers}
-          baseUrl={pack.baseUrl}
-          overlays={pack.overlays}
+          baseUrl={loadedPack.baseUrl}
+          overlays={loadedPack.overlays}
           pages={active.pages}
           questions={sectionQuestions}
           result={effectiveResult}
@@ -239,7 +263,7 @@ export function ExamWorkspace({
         <div className="workspace-side-panel">
           <MarkingFeedback
             answers={answers}
-            questions={pack.questions}
+            questions={loadedPack.questions}
             result={effectiveResult}
             onNextIncorrect={nextIncorrect}
           />
@@ -254,6 +278,7 @@ export function ExamWorkspace({
               onReset?.();
             }}
             onSubmit={submit}
+            canSubmit={canSubmit}
           />
         </div>
       </div>

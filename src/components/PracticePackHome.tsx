@@ -6,9 +6,17 @@ export interface PracticePackHomeProps {
   activeSection?: number;
   result?: MarkResult | null;
   onStart: () => void;
+  onOpenMistakes?: () => void;
 }
 
-export function PracticePackHome({ pack, answers, activeSection, result = null, onStart }: PracticePackHomeProps) {
+export function PracticePackHome({
+  pack,
+  answers,
+  activeSection,
+  result = null,
+  onStart,
+  onOpenMistakes,
+}: PracticePackHomeProps) {
   const answered = pack.questions.filter((question) => (answers[question.id] ?? "").trim() !== "").length;
   const total = pack.questions.length;
   const hasProgress = answered > 0 || result !== null;
@@ -32,6 +40,9 @@ export function PracticePackHome({ pack, answers, activeSection, result = null, 
         )}
         <button className="home-start" onClick={onStart} type="button">
           {hasProgress ? "继续练习" : "开始练习"}
+        </button>
+        <button className="secondary-action home-mistakes" onClick={onOpenMistakes} type="button">
+          错题本
         </button>
         <div className="placeholder-actions" aria-label="未来功能入口">
           <button disabled type="button">

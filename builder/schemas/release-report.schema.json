@@ -26,6 +26,21 @@
       "title": "Answercount",
       "type": "integer"
     },
+    "vocabularyCount": {
+      "minimum": 0,
+      "title": "Vocabularycount",
+      "type": "integer"
+    },
+    "windowCount": {
+      "minimum": 0,
+      "title": "Windowcount",
+      "type": "integer"
+    },
+    "clipCount": {
+      "minimum": 0,
+      "title": "Clipcount",
+      "type": "integer"
+    },
     "transcriptSections": {
       "items": {
         "type": "integer"
@@ -65,6 +80,9 @@
     "questionCoverage",
     "overlayCount",
     "answerCount",
+    "vocabularyCount",
+    "windowCount",
+    "clipCount",
     "transcriptSections",
     "audioSections",
     "pageAssets",

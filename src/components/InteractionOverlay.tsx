@@ -17,10 +17,14 @@ function resultStatus(questionId: string, value: string, result?: MarkResult | n
   if (result === null || result === undefined) {
     return undefined;
   }
+  const questionResult = result.byQuestion[questionId];
+  if (questionResult === undefined) {
+    return undefined;
+  }
   if (value.trim() === "") {
     return "unanswered" as const;
   }
-  return result.byQuestion[questionId]?.correct ? ("correct" as const) : ("incorrect" as const);
+  return questionResult.correct ? ("correct" as const) : ("incorrect" as const);
 }
 
 function expectedAnswer(questionId: string, result?: MarkResult | null): string | undefined {

@@ -69,6 +69,11 @@ button:disabled {
   padding: 14px 20px;
 }
 
+.home-mistakes {
+  display: block;
+  margin-top: 12px;
+}
+
 .placeholder-actions {
   display: flex;
   gap: 12px;
@@ -328,6 +333,15 @@ button:disabled {
   margin: 0 0 8px;
 }
 
+.feedback-section {
+  margin-top: 10px;
+}
+
+.feedback-section h4 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
 .feedback-answers ol {
   display: grid;
   gap: 8px;
@@ -385,5 +399,85 @@ button:disabled {
   background: #fff7ed;
   border: 1px solid #fed7aa;
   border-radius: 12px;
+  padding: 10px;
+}
+
+.action-hint {
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 700;
+  margin: -4px 0 0;
+}
+
+.mistake-screen {
+  margin: 32px auto;
+  max-width: 1080px;
+  padding: 0 24px 48px;
+}
+
+.mistake-header,
+.mistake-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.mistake-toolbar {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  justify-content: flex-start;
+  padding: 12px;
+}
+
+.mistake-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mistake-card,
+.mistake-practice {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+}
+
+.mistake-card h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.mistake-card p,
+.mistake-practice p {
+  margin: 0;
+}
+
+.mistake-practice {
+  margin-bottom: 16px;
+}
+
+.mistake-practice label {
+  display: grid;
+  gap: 6px;
+}
+
+.mistake-practice input {
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.practice-reveal {
+  background: #f8fafc;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
   padding: 10px;
 }

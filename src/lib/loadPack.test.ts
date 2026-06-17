@@ -20,6 +20,7 @@ const baseManifest = {
     answers: "answers.json",
     overlays: "overlays.json",
     transcript: "transcript.json",
+    vocabulary: "vocabulary.json",
   },
 };
 
@@ -52,6 +53,16 @@ const assets = {
     },
   ],
   transcript: [{ section: 1, segments: [] }],
+  vocabulary: [
+    {
+      id: "ardleigh",
+      term: "Ardleigh",
+      normalizedTerm: "ardleigh",
+      acceptedVariants: [],
+      meaningZh: "阿德利",
+      audio: "assets/audio/vocabulary/ardleigh.mp3",
+    },
+  ],
 };
 
 function mockJsonFetch(payloads: unknown[]) {
@@ -79,6 +90,7 @@ describe("loadPack", () => {
       assets.answers,
       assets.overlays,
       assets.transcript,
+      assets.vocabulary,
     ]);
 
     const pack = await loadPack("/packs/cambridge-10/test-1/listening");
@@ -88,11 +100,14 @@ describe("loadPack", () => {
     expect(pack.answers).toEqual(assets.answers);
     expect(pack.overlays).toEqual(assets.overlays);
     expect(pack.transcript).toEqual(assets.transcript);
+    expect(pack.vocabulary).toEqual(assets.vocabulary);
     expect(pack.questionsById.get("q1")).toEqual(assets.questions[0]);
     expect(pack.answersByQuestionId.get("q1")).toEqual(assets.answers[0]);
     expect(pack.overlaysByQuestionId.get("q1")).toEqual(assets.overlays);
+    expect(pack.vocabularyById.get("ardleigh")).toEqual(assets.vocabulary[0]);
     expect(fetchMock).toHaveBeenNthCalledWith(1, "/packs/cambridge-10/test-1/listening/manifest.json");
     expect(fetchMock).toHaveBeenNthCalledWith(2, "/packs/cambridge-10/test-1/listening/questions.json");
+    expect(fetchMock).toHaveBeenNthCalledWith(6, "/packs/cambridge-10/test-1/listening/vocabulary.json");
   });
 
   it("rejects non-released manifests", async () => {
@@ -108,6 +123,15 @@ describe("loadPack", () => {
     await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(/assets/i);
   });
 
+  it("rejects manifests without a vocabulary asset declaration", async () => {
+    const { vocabulary: _vocabulary, ...manifestAssets } = baseManifest.assets;
+    mockJsonFetch([{ ...baseManifest, assets: manifestAssets }]);
+
+    await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(
+      /manifest\.assets\.vocabulary/i,
+    );
+  });
+
   it("rejects overlays below the runtime confidence gate", async () => {
     mockJsonFetch([
       baseManifest,
@@ -115,8 +139,46 @@ describe("loadPack", () => {
       assets.answers,
       [{ ...assets.overlays[0], visionConfidence: 0.84 }],
       assets.transcript,
+      assets.vocabulary,
     ]);
 
     await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(/0.85/);
+  });
+
+  it("rejects malformed vocabulary assets with clear diagnostics", async () => {
+    mockJsonFetch([
+      baseManifest,
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      [{ ...assets.vocabulary[0], meaningZh: "" }],
+    ]);
+
+    await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(
+      /vocabulary\[0\]\.meaningZh/i,
+    );
+  });
+
+  it("rejects duplicate vocabulary ids with clear diagnostics", async () => {
+    mockJsonFetch([
+      baseManifest,
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      [
+        assets.vocabulary[0],
+        {
+          ...assets.vocabulary[0],
+          term: "another Ardleigh",
+          normalizedTerm: "another ardleigh",
+        },
+      ],
+    ]);
+
+    await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(
+      /duplicate vocabulary id: ardleigh/i,
+    );
   });
 });

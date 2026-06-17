@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "yasi.transcript-timings.v1",
+  "status": "verified",
+  "generatedAt": "2026-06-17T00:00:00Z",
+  "tool": {
+    "name": "yasi-forced-alignment",
+    "version": "0.2.0",
+    "profile": "quality",
+    "language": "English"
+  },
+  "packRoot": "fixture",
+  "transcript": "sample-transcript.json",
+  "reviewArtifact": "sample-review.json",
+  "generatedFromReview": true,
+  "sections": [
+    {
+      "section": 1,
+      "status": "verified",
+      "audio": "fixture-section-01.mp3",
+      "qwenJson": "fixture.qwen.json",
+      "segmentCount": 2,
+      "wordTimings": [
+        {
+          "section": 1,
+          "segmentOrder": 1,
+          "tokenIndex": 0,
+          "globalTokenIndex": 0,
+          "token": "Good",
+          "normalized": "good",
+          "start": 0.0,
+          "end": 0.2,
+          "sourceIndex": 0,
+          "sourceToken": "Good",
+          "match": "exact",
+          "risks": [],
+          "requiresReview": false
+        },
+        {
+          "section": 1,
+          "segmentOrder": 1,
+          "tokenIndex": 1,
+          "globalTokenIndex": 1,
+          "token": "morning",
+          "normalized": "morning",
+          "start": 0.2,
+          "end": 0.5,
+          "sourceIndex": 1,
+          "sourceToken": "morning",
+          "match": "exact",
+          "risks": [],
+          "requiresReview": false
+        },
+        {
+          "section": 1,
+          "segmentOrder": 1,
+          "tokenIndex": 2,
+          "globalTokenIndex": 2,
+          "token": "World",
+          "normalized": "world",
+          "start": 0.5,
+          "end": 0.8,
+          "sourceIndex": 2,
+          "sourceToken": "World",
+          "match": "exact",
+          "risks": [],
+          "requiresReview": false
+        },
+        {
+          "section": 1,
+          "segmentOrder": 1,
+          "tokenIndex": 3,
+          "globalTokenIndex": 3,
+          "token": "Tours",
+          "normalized": "tours",
+          "start": 0.8,
+          "end": 1.1,
+          "sourceIndex": 3,
+          "sourceToken": "Tours",
+          "match": "exact",
+          "risks": [],
+          "requiresReview": false
+        },
+        {
+          "section": 1,
+          "segmentOrder": 2,
+          "tokenIndex": 0,
+          "globalTokenIndex": 4,
+          "token": "It’s",
+          "normalized": "its",
+          "start": 1.2,
+          "end": 1.45,
+          "sourceIndex": 4,
+          "sourceToken": "It's",
+          "match": "exact",
+          "risks": [
+            "apostrophe"
+          ],
+          "requiresReview": true,
+          "review": {
+            "reviewArtifact": "sample-review.json",
+            "reviewId": "s01-g0004",
+            "decision": "approved",
+            "riskTypes": [
+              "apostrophe"
+            ],
+            "reasons": [
+              "risk:apostrophe"
+            ],
+            "reviewer": "fixture",
+            "reviewedAt": "2026-06-17T00:00:00Z",
+            "notes": "Apostrophe contraction timing approved."
+          }
+        },
+        {
+          "section": 1,
+          "segmentOrder": 2,
+          "tokenIndex": 1,
+          "globalTokenIndex": 5,
+          "token": "£525",
+          "normalized": "525",
+          "start": 1.45,
+          "end": 1.9,
+          "sourceIndex": 5,
+          "sourceToken": "525",
+          "match": "review-corrected",
+          "risks": [
+            "number",
+            "currency"
+          ],
+          "requiresReview": true,
+          "review": {
+            "reviewArtifact": "sample-review.json",
+            "reviewId": "s01-g0005",
+            "decision": "corrected",
+            "riskTypes": [
+              "number",
+              "currency"
+            ],
+            "reasons": [
+              "risk:number",
+              "risk:currency"
+            ],
+            "reviewer": "fixture",
+            "reviewedAt": "2026-06-17T00:00:00Z",
+            "notes": "Currency symbol belongs to the spoken amount."
+          }
+        }
+      ],
+      "reviewItems": [],
+      "diagnostics": {
+        "officialTokenCount": 6,
+        "qwenTokenCount": 6,
+        "timedOfficialTokenCount": 6,
+        "missingOfficialTokenCount": 0,
+        "extraQwenTokenCount": 0,
+        "coverageRatio": 1.0,
+        "timingErrorCount": 0,
+        "reviewPendingCount": 0,
+        "reviewApprovedCount": 1,
+        "reviewCorrectedCount": 1,
+        "reviewRejectedCount": 0,
+        "reviewMissingTraceCount": 0
+      }
+    }
+  ],
+  "reviewItems": [],
+  "reviewSummary": {
+    "artifact": "sample-review.json",
+    "pendingCount": 0,
+    "approvedCount": 1,
+    "correctedCount": 1,
+    "rejectedCount": 0,
+    "missingTraceCount": 0
+  }
+}

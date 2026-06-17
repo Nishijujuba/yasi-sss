@@ -40,6 +40,10 @@ _Avoid_: Band estimate, semantic explanation
 Marking Feedback for all submitted Attempted Listening Sections, grouped by Listening Section and limited to those sections when displaying accepted answers.
 _Avoid_: Current-section-only feedback, all-40 feedback, unattempted-section answer reveal
 
+**Transcript-Viewed Marking Feedback**:
+Marking Feedback shown after a learner has opened Transcript Shadowing during the current Practice Session, where the score remains visible but is labeled as practice reference because official transcript exposure can reveal answers.
+_Avoid_: Exam-equivalent score, hidden transcript exposure, disabled marking after transcript view
+
 **Submission Readiness**:
 The state where at least one answer in the current Practice Session is non-empty, enabling submission and preventing empty `0 / 0` marking.
 _Avoid_: Empty submission, current-section assumption, answer reveal without response
@@ -123,6 +127,42 @@ _Avoid_: Side-panel shortcut, disabled future feature, transcript action
 **Transcript Segment**:
 An ordered portion of the official listening audioscript associated with a listening section, optional speaker identity, currently empty timing fields, and relevant answer references.
 _Avoid_: Raw PDF text, generated transcript
+
+**Transcript Shadowing**:
+A practice surface where official listening audio plays while the official English audioscript is shown beside the question surface, with playback-synchronized highlighting to guide reading along.
+_Avoid_: Recording, microphone capture, speaking score, pronunciation assessment
+
+**Transcript Word Timing**:
+A verified time interval for one displayed word in an official audioscript, used to determine which word is currently being spoken during Transcript Shadowing.
+_Avoid_: Equal-duration text approximation, decorative highlighting, browser-generated transcript
+
+**Transcript Timing Review**:
+An explicit review step for uncertain official-token-to-timing mappings, producing approved corrections or blocking diagnostics before Transcript Word Timings can be treated as verified.
+_Avoid_: Silent auto-correction, unreviewed token merges, hidden timing gaps
+
+**Transcript Alignment**:
+The build-time process that maps the official listening audio and official audioscript onto verified Transcript Word Timings before a practice pack is released.
+_Avoid_: Browser runtime alignment, generated transcript, learner-device audio analysis
+
+**Transcript Alignment Pilot**:
+A development-only validation run that proves Transcript Alignment, Transcript Timing Review, and Transcript Shadowing behavior on one Listening Section before expanding the same release-gated workflow to all four sections.
+_Avoid_: Section-only public release, mixed production availability, weakened full-pack coverage
+
+**Transcript Text Authority**:
+The rule that the displayed Transcript Shadowing text comes from the official audioscript transcript, while alignment tools provide timing evidence only.
+_Avoid_: Model-rewritten transcript display, ASR text substitution, silent official-text edits
+
+**Complete Transcript Shadowing Coverage**:
+The release expectation that Transcript Shadowing is available for all four Listening Sections in a practice pack once the feature is enabled for that pack.
+_Avoid_: Section-only feature preview, mixed shadowing availability inside one listening test
+
+**Transcript Shadowing Release Gate**:
+The acceptance boundary requiring complete, monotonic, verified Transcript Word Timings for every displayed word in all four Listening Sections before Transcript Shadowing can be enabled for a practice pack.
+_Avoid_: Partial timing import, low-confidence silent fallback, approximate word pacing
+
+**Transcript Shadowing Availability**:
+The pack-level state where Transcript Shadowing is visible as a practice action but becomes interactive only when verified Transcript Word Timings are present for the whole practice pack.
+_Avoid_: Hidden future feature, draft timing playback, per-section shadowing toggle
 
 **Bilingual Practice Surface**:
 The language boundary where practice controls and marking states use Simplified Chinese while official questions, choices, answers, and transcripts remain in English.

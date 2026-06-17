@@ -1,0 +1,373 @@
+[
+  {
+    "questionId": "q1",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is centered on the dotted answer line for q1 after 24 1."
+  },
+  {
+    "questionId": "q2",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q2 dotted answer line after Heard about company from."
+  },
+  {
+    "questionId": "q3",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the full q3 dotted answer line in the Los Angeles bullet."
+  },
+  {
+    "questionId": "q4",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is aligned with the q4 dotted answer line after not a."
+  },
+  {
+    "questionId": "q5",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q5 dotted answer line in the Trip Two bullet."
+  },
+  {
+    "questionId": "q6",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q6 dotted answer line after on the."
+  },
+  {
+    "questionId": "q7",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.92,
+    "evidence": "Box is centered on q7 dotted answer line in the Total distance column."
+  },
+  {
+    "questionId": "q8",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.87,
+    "evidence": "Box covers the q8 dotted answer line after one in the Includes column."
+  },
+  {
+    "questionId": "q9",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box is aligned with q9 price answer line after the pound sign."
+  },
+  {
+    "questionId": "q10",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.92,
+    "evidence": "Box is centered on the q10 dotted answer line in the Includes column."
+  },
+  {
+    "questionId": "q13",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q13 dotted answer line after any."
+  },
+  {
+    "questionId": "q14",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q14 dotted answer line before will be explained."
+  },
+  {
+    "questionId": "q15",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q15 dotted answer line after six-week."
+  },
+  {
+    "questionId": "q16",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box covers the q16 dotted answer line before fee for members."
+  },
+  {
+    "questionId": "q17",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q17 dotted answer line before to all the LP clubs."
+  },
+  {
+    "questionId": "q18",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "After detector correction, the box is centered on the q18 dotted answer line after question number 18 and before hours."
+  },
+  {
+    "questionId": "q19",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box is centered on the q19 dotted answer line before every month."
+  },
+  {
+    "questionId": "q20",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box is centered on the q20 dotted answer line before with them."
+  },
+  {
+    "questionId": "q26",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q26 dotted answer line after the question number."
+  },
+  {
+    "questionId": "q27",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.94,
+    "evidence": "Box covers the q27 dotted answer line and stays on the correct row."
+  },
+  {
+    "questionId": "q28",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q28 dotted answer line after the question number."
+  },
+  {
+    "questionId": "q29",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box includes surrounding q29 prompt text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q30",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.95,
+    "evidence": "Box covers the q30 dotted answer line and avoids the adjacent text row."
+  },
+  {
+    "questionId": "q31",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.89,
+    "evidence": "Box includes q31 prompt text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q32",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.89,
+    "evidence": "Box includes q32 prompt text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q33",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.91,
+    "evidence": "Box covers the q33 dotted answer line on the correct row."
+  },
+  {
+    "questionId": "q34",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box covers the q34 dotted answer line and stays within the habitat row."
+  },
+  {
+    "questionId": "q35",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.91,
+    "evidence": "Box covers the q35 dotted answer line after the question number."
+  },
+  {
+    "questionId": "q36",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.92,
+    "evidence": "Box covers the q36 dotted answer line before the phrase by logging companies."
+  },
+  {
+    "questionId": "q37",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box includes q37 row text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q38",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.88,
+    "evidence": "Box is wide on the q38 row but covers the correct dotted answer line without crossing rows."
+  },
+  {
+    "questionId": "q39",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box includes q39 row text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q40",
+    "optionId": null,
+    "status": "approved",
+    "confidence": 0.9,
+    "evidence": "Box includes q40 row text but covers the correct dotted answer line."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.95,
+    "evidence": "Box surrounds option A text line, the gym."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box surrounds option B text line, the tracks."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box surrounds option C text line, the indoor pool."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "D",
+    "status": "approved",
+    "confidence": 0.98,
+    "evidence": "Box surrounds option D text line, the outdoor pool."
+  },
+  {
+    "questionId": "q11",
+    "optionId": "E",
+    "status": "approved",
+    "confidence": 0.99,
+    "evidence": "Box surrounds the full option E text line, the sports training for children."
+  },
+  {
+    "questionId": "q21",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q21 option A text line."
+  },
+  {
+    "questionId": "q21",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q21 option B text line."
+  },
+  {
+    "questionId": "q21",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q21 option C text line."
+  },
+  {
+    "questionId": "q22",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q22 option A text line."
+  },
+  {
+    "questionId": "q22",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q22 option B text line."
+  },
+  {
+    "questionId": "q22",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q22 option C text line."
+  },
+  {
+    "questionId": "q23",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q23 option A text line."
+  },
+  {
+    "questionId": "q23",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.96,
+    "evidence": "Box covers the q23 option B text line."
+  },
+  {
+    "questionId": "q23",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q23 option C text line."
+  },
+  {
+    "questionId": "q24",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q24 option A text line."
+  },
+  {
+    "questionId": "q24",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q24 option B text line."
+  },
+  {
+    "questionId": "q24",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q24 option C text line."
+  },
+  {
+    "questionId": "q25",
+    "optionId": "A",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q25 option A text line."
+  },
+  {
+    "questionId": "q25",
+    "optionId": "B",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q25 option B text line."
+  },
+  {
+    "questionId": "q25",
+    "optionId": "C",
+    "status": "approved",
+    "confidence": 0.97,
+    "evidence": "Box covers the q25 option C text line."
+  }
+]

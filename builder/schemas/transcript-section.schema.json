@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "TranscriptSegment": {
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "speaker": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Speaker"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "answerRefs": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Answerrefs",
+          "type": "array"
+        },
+        "startTime": {
+          "default": null,
+          "title": "Starttime",
+          "type": "null"
+        },
+        "endTime": {
+          "default": null,
+          "title": "Endtime",
+          "type": "null"
+        }
+      },
+      "required": [
+        "order",
+        "text"
+      ],
+      "title": "TranscriptSegment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "section": {
+      "maximum": 4,
+      "minimum": 1,
+      "title": "Section",
+      "type": "integer"
+    },
+    "source": {
+      "additionalProperties": true,
+      "title": "Source",
+      "type": "object"
+    },
+    "segments": {
+      "items": {
+        "$ref": "#/$defs/TranscriptSegment"
+      },
+      "minItems": 1,
+      "title": "Segments",
+      "type": "array"
+    },
+    "review": {
+      "additionalProperties": true,
+      "title": "Review",
+      "type": "object"
+    }
+  },
+  "required": [
+    "section",
+    "source",
+    "segments",
+    "review"
+  ],
+  "title": "TranscriptSection",
+  "type": "object"
+}

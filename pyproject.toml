@@ -1,0 +1,26 @@
+[project]
+name = "yasi-cambridge-listening-builder"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.4.0",
+  "pillow>=12.2.0",
+  "pydantic>=2.13.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=9.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["builder"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
+pythonpath = ["."]
+addopts = "-ra -p no:cacheprovider"

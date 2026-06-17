@@ -1,0 +1,877 @@
+[
+  {
+    "questionIds": [
+      "q1"
+    ],
+    "accepted": [
+      [
+        "Ardleigh"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q2"
+    ],
+    "accepted": [
+      [
+        "newspaper"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q3"
+    ],
+    "accepted": [
+      [
+        "theme"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q4"
+    ],
+    "accepted": [
+      [
+        "tent"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q5"
+    ],
+    "accepted": [
+      [
+        "castle"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q6"
+    ],
+    "accepted": [
+      [
+        "beach"
+      ],
+      [
+        "beaches"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q7"
+    ],
+    "accepted": [
+      [
+        "2020"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q8"
+    ],
+    "accepted": [
+      [
+        "flight"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q9"
+    ],
+    "accepted": [
+      [
+        "429"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q10"
+    ],
+    "accepted": [
+      [
+        "dinner"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q11",
+      "q12"
+    ],
+    "accepted": [
+      [
+        "A",
+        "C"
+      ]
+    ],
+    "orderIndependent": true,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q13"
+    ],
+    "accepted": [
+      [
+        "health problems"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q14"
+    ],
+    "accepted": [
+      [
+        "safety rules"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q15"
+    ],
+    "accepted": [
+      [
+        "plan"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q16"
+    ],
+    "accepted": [
+      [
+        "joining"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q17"
+    ],
+    "accepted": [
+      [
+        "free entry"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q18"
+    ],
+    "accepted": [
+      [
+        "peak"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q19"
+    ],
+    "accepted": [
+      [
+        "guests"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q20"
+    ],
+    "accepted": [
+      [
+        "photo card"
+      ],
+      [
+        "photo cards"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q21"
+    ],
+    "accepted": [
+      [
+        "C"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q22"
+    ],
+    "accepted": [
+      [
+        "A"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q23"
+    ],
+    "accepted": [
+      [
+        "B"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q24"
+    ],
+    "accepted": [
+      [
+        "A"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q25"
+    ],
+    "accepted": [
+      [
+        "C"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q26"
+    ],
+    "accepted": [
+      [
+        "presentation"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q27"
+    ],
+    "accepted": [
+      [
+        "model"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q28"
+    ],
+    "accepted": [
+      [
+        "material"
+      ],
+      [
+        "materials"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q29"
+    ],
+    "accepted": [
+      [
+        "grant"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q30"
+    ],
+    "accepted": [
+      [
+        "technical"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q31"
+    ],
+    "accepted": [
+      [
+        "gene"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q32"
+    ],
+    "accepted": [
+      [
+        "power"
+      ],
+      [
+        "powers"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q33"
+    ],
+    "accepted": [
+      [
+        "strangers"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q34"
+    ],
+    "accepted": [
+      [
+        "erosion"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q35"
+    ],
+    "accepted": [
+      [
+        "islands"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q36"
+    ],
+    "accepted": [
+      [
+        "roads"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q37"
+    ],
+    "accepted": [
+      [
+        "fishing"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q38"
+    ],
+    "accepted": [
+      [
+        "reproduction"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q39"
+    ],
+    "accepted": [
+      [
+        "method"
+      ],
+      [
+        "methods"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  },
+  {
+    "questionIds": [
+      "q40"
+    ],
+    "accepted": [
+      [
+        "expansion"
+      ]
+    ],
+    "orderIndependent": false,
+    "provenance": [
+      {
+        "kind": "official-answer-key",
+        "source": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/09_Listening_and_Reading_Answer_Keys_p151-p160.pdf",
+        "page": 151,
+        "detail": "TEST 1 LISTENING",
+        "sourceUrl": null,
+        "accessedAt": null
+      }
+    ],
+    "reviewStatus": "official"
+  }
+]

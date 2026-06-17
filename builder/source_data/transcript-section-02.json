@@ -1,0 +1,117 @@
+{
+  "section": 2,
+  "source": {
+    "pdf": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/08_Audioscripts_p130-p150.pdf",
+    "pages": [
+      131,
+      132
+    ]
+  },
+  "segments": [
+    {
+      "order": 1,
+      "speaker": null,
+      "text": "On behalf of LP Clubs, I’d like to welcome you all here today. My name’s Sandy Fisher and I’m one of the fitness managers here. Before we start our tour of the club I’ll just run through some basic information about the facilities we have here, including recent improvements, and explain the types of membership available.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 2,
+      "speaker": null,
+      "text": "Our greatest asset is probably our swimming pool which at 25 metres isn’t Olympic-sized, but now we’ve expanded it to eight lanes, it’s much wider. This means there are rarely more than a couple of people at a time in each lane. Unfortunately, there isn’t space for an outdoor pool here but the glass roof on the swimming pool is partly retractable, which means you can enjoy something of the open-air experience on warmer days.",
+      "answerRefs": [
+        11,
+        12
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 3,
+      "speaker": null,
+      "text": "Our recently refurbished fitness suite has all the latest exercise equipment including ten new running machines, and a wide range of weight-training machines. Each member is given full training in how to operate the equipment and there is always a trainer on duty to offer help and advice. Although we do have adult-only times after 6 and at certain times at weekends, children are well catered for. Older children continue to benefit from a wide range of tuition; anything from trampolining to yoga.",
+      "answerRefs": [
+        11,
+        12
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 4,
+      "speaker": null,
+      "text": "One thing all our members appreciate about us is that we take very good care of them. This starts on day one with your personal assessment. You are asked to fill in a questionnaire giving details of any health problems. One of our personal trainers will then go through this with you.",
+      "answerRefs": [
+        13
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 5,
+      "speaker": null,
+      "text": "The trainer will then take you through the safety rules for using the equipment in the fitness suite. During your next exercise session a personal trainer will work with you to make sure you understand these. It’s very important to do this because we really want to avoid having any sports injuries. There’s a lot more to looking after yourself than simply lifting weights!",
+      "answerRefs": [
+        14
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 6,
+      "speaker": null,
+      "text": "At the end of the personal assessment, the trainer will draw up a plan, outlining what you should try to achieve within a six-week period. This will then be reviewed at the end of the six weeks.",
+      "answerRefs": [
+        15
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 7,
+      "speaker": null,
+      "text": "Now, I’ll just quickly run through the types of membership we have available. All members must pay a joining fee of £90 in addition to the rates for the monthly membership fees. Gold membership entitles you to free entry at all LP Clubs. There are now LP clubs in all major cities and towns so if you travel a lot this will be a great advantage. Individual gold membership costs £50 a month and joint membership for you and your partner will cost £75.",
+      "answerRefs": [
+        16,
+        17
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 8,
+      "speaker": null,
+      "text": "Premier membership is for professional people whose work commitments make it difficult for them to use the club during the day and so LP gives booking preference to Premier members at peak times. This means you will find it easier to book the sessions at times that suit you. Reciprocal arrangements with other LP Clubs are available to Premier members. Premier membership is for individuals only, but you will be sent passes for guests every month. The monthly fee is £65.",
+      "answerRefs": [
+        18,
+        19
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 9,
+      "speaker": null,
+      "text": "You don’t have to have any special clothes or equipment when you visit the club. We provide robes and hairdryers in the changing rooms, but it’s very important to remember your photo card because you won’t be able to get in without it.",
+      "answerRefs": [
+        20
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 10,
+      "speaker": null,
+      "text": "For people who aren’t working during the day then …",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    }
+  ],
+  "review": {
+    "method": "visual-transcription",
+    "status": "reviewed",
+    "notes": "Transcribed visually from the supplied official audioscript images for pages 131–132. The paragraph for question 14 continues across the page break."
+  }
+}

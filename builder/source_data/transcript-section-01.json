@@ -1,0 +1,396 @@
+{
+  "section": 1,
+  "source": {
+    "pdf": "resources/剑桥/剑桥雅思10/剑桥雅思真题10分P/08_Audioscripts_p130-p150.pdf",
+    "pages": [
+      130,
+      131
+    ]
+  },
+  "segments": [
+    {
+      "order": 1,
+      "speaker": "TRAVEL AGENT",
+      "text": "Good morning. World Tours. My name is Jamie. How can I help you?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 2,
+      "speaker": "ANDREA",
+      "text": "Good morning. I want some information on self-drive tours in the USA. Could you send me a brochure?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 3,
+      "speaker": "TRAVEL AGENT",
+      "text": "Of course. Could I have your name please?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 4,
+      "speaker": "ANDREA",
+      "text": "Andrea Brown.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 5,
+      "speaker": "TRAVEL AGENT",
+      "text": "Thank you. And your address?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 6,
+      "speaker": "ANDREA",
+      "text": "24, Ardleigh Road.",
+      "answerRefs": [
+        1
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 7,
+      "speaker": "TRAVEL AGENT",
+      "text": "Can you spell that?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 8,
+      "speaker": "ANDREA",
+      "text": "A-R-D-L-E-I-G-H Road.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 9,
+      "speaker": "TRAVEL AGENT",
+      "text": "Postcode?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 10,
+      "speaker": "ANDREA",
+      "text": "BH5 2OP",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 11,
+      "speaker": "TRAVEL AGENT",
+      "text": "Thanks. And can I have your phone number?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 12,
+      "speaker": "ANDREA",
+      "text": "Is a mobile alright?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 13,
+      "speaker": "TRAVEL AGENT",
+      "text": "Fine.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 14,
+      "speaker": "ANDREA",
+      "text": "It’s 07786643091.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 15,
+      "speaker": "TRAVEL AGENT",
+      "text": "Thank you. And can I ask you where you heard about World Tours? From a friend? Or did you see an advert somewhere?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 16,
+      "speaker": "ANDREA",
+      "text": "No, I read about you in the newspaper.",
+      "answerRefs": [
+        2
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 17,
+      "speaker": "TRAVEL AGENT",
+      "text": "OK, I’ll get the brochures in the post to you but can I give you some information over the phone. What kinds of things do you want to do on your holiday?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 18,
+      "speaker": "ANDREA",
+      "text": "I’m interested in going to California with my family. I’ve got two children and we want to hire a car.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 19,
+      "speaker": "TRAVEL AGENT",
+      "text": "OK. We have a couple of self-drive tours there visiting different places of interest in California. The first one begins in Los Angeles and there’s plenty of time to visit some of the theme parks there.",
+      "answerRefs": [
+        3
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 20,
+      "speaker": "ANDREA",
+      "text": "That’s something on my children’s list so I’d like to include that.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 21,
+      "speaker": "TRAVEL AGENT",
+      "text": "Good. Then you drive to San Francisco. From San Francisco you can drive to Yosemite Park where you spend a couple of nights. You can choose to stay in a lodge or on the campsite.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 22,
+      "speaker": "ANDREA",
+      "text": "I don’t like the idea of staying in a tent. It’d be too hot.",
+      "answerRefs": [
+        4
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 23,
+      "speaker": "TRAVEL AGENT",
+      "text": "Right. And the tour ends in Las Vegas.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 24,
+      "speaker": "ANDREA",
+      "text": "OK.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 25,
+      "speaker": "TRAVEL AGENT",
+      "text": "The other trip we can arrange is slightly different. It starts in San Francisco. Then you drive south to Cambria.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 26,
+      "speaker": "ANDREA",
+      "text": "Someone told me there’s a really nice castle near Cambria. Will we go near that?",
+      "answerRefs": [
+        5
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 27,
+      "speaker": "TRAVEL AGENT",
+      "text": "Hearst Castle is on that road so you could stop there.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 28,
+      "speaker": "ANDREA",
+      "text": "Good. I’d like to do that. Does this trip also go into the desert?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 29,
+      "speaker": "TRAVEL AGENT",
+      "text": "No, it continues to Santa Monica where most people like to stop and do some shopping.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 30,
+      "speaker": "ANDREA",
+      "text": "We have enough of that at home so that doesn’t interest us.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 31,
+      "speaker": "TRAVEL AGENT",
+      "text": "OK. Well you could go straight on to San Diego.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 32,
+      "speaker": "ANDREA",
+      "text": "That’s good for beaches isn’t it?",
+      "answerRefs": [
+        6
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 33,
+      "speaker": "TRAVEL AGENT",
+      "text": "That’s right, that’s a good place to relax and your children might like to visit the zoo before flying home.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 34,
+      "speaker": "ANDREA",
+      "text": "I don’t think so. We want some time for sunbathing and swimming.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 35,
+      "speaker": "ANDREA",
+      "text": "So how many days are the trips and how much do they cost?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 36,
+      "speaker": "TRAVEL AGENT",
+      "text": "The first one I told you about is a self-drive tour through California which lasts twelve days and covers 2,020 kilometres. The shortest journey is 206 km and the longest is 632 kilometres. The cost is £525 per person. That includes accommodation, car rental and a flight but no meals.",
+      "answerRefs": [
+        7,
+        8
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 37,
+      "speaker": "ANDREA",
+      "text": "OK. And the other trip?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 38,
+      "speaker": "TRAVEL AGENT",
+      "text": "That lasts nine days but you spend only three days on the road. You cover about 980 kilometres altogether.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 39,
+      "speaker": "ANDREA",
+      "text": "So is that cheaper then?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 40,
+      "speaker": "TRAVEL AGENT",
+      "text": "Yes, it’s almost a hundred pounds cheaper. It’s £429 per person, which is a good deal.",
+      "answerRefs": [
+        9
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 41,
+      "speaker": "ANDREA",
+      "text": "So that covers accommodation and car hire. What about flights?",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 42,
+      "speaker": "TRAVEL AGENT",
+      "text": "They aren’t included. But these hotels offer dinner in the price.",
+      "answerRefs": [
+        10
+      ],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 43,
+      "speaker": "ANDREA",
+      "text": "OK. Well, thank you very much. I’ll be in touch when I’ve had a chance to look at the brochure.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 44,
+      "speaker": "TRAVEL AGENT",
+      "text": "I’m pleased to help. Goodbye.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    },
+    {
+      "order": 45,
+      "speaker": "ANDREA",
+      "text": "Goodbye.",
+      "answerRefs": [],
+      "startTime": null,
+      "endTime": null
+    }
+  ],
+  "review": {
+    "method": "visual-transcription",
+    "status": "reviewed",
+    "notes": "Visually transcribed and reviewed against official audioscript pages 130-131. Speaker turns and Q1-Q10 margin references were checked; the Example is excluded from answerRefs."
+  }
+}

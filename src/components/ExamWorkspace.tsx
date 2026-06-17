@@ -1,0 +1,264 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { AnswerMap, LoadedPack, MarkResult } from "../types/pack";
+import AudioPlayer from "./AudioPlayer";
+import MarkingFeedback from "./MarkingFeedback";
+import PackErrorScreen from "./PackErrorScreen";
+import PracticeActions from "./PracticeActions";
+import QuestionScrollArea from "./QuestionScrollArea";
+import SectionNavigation from "./SectionNavigation";
+
+export interface AudioController {
+  pause: (section: number) => void;
+  play?: (section: number) => void;
+  seek?: (section: number, deltaSeconds: number) => void;
+  getPosition?: (section: number) => number;
+}
+
+export interface ExamWorkspaceProps {
+  pack?: LoadedPack | null;
+  activeSection?: number;
+  answers?: AnswerMap;
+  result?: MarkResult | null;
+  audioPositions?: Record<string, number>;
+  audioController?: AudioController;
+  onAnswerChange?: (questionId: string, value: string) => void;
+  onAnswersChange?: (updates: AnswerMap) => void;
+  onSectionChange?: (section: number) => void;
+  onSubmit?: () => MarkResult | null | void;
+  onReset?: () => void;
+  onGoHome?: () => void;
+  onAudioPositionChange?: (section: number, position: number) => void;
+  nextIncorrectId?: string | null;
+}
+
+const EMPTY_ANSWERS: AnswerMap = {};
+const EMPTY_AUDIO_POSITIONS: Record<string, number> = {};
+
+function resolveAsset(baseUrl: string, path: string): string {
+  if (/^https?:\/\//.test(path) || path.startsWith("/")) {
+    return path;
+  }
+  return `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+}
+
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+  const tag = target.tagName.toLowerCase();
+  return tag === "input" || tag === "textarea" || tag === "select" || target.isContentEditable;
+}
+
+function focusQuestion(questionId: string): void {
+  const control = document.querySelector<HTMLElement>(
+    `[data-question-id="${questionId}"] input, [data-question-id="${questionId}"] button, [data-question-id="${questionId}"]`,
+  );
+  control?.scrollIntoView({ behavior: "smooth", block: "center" });
+  control?.focus();
+}
+
+export function ExamWorkspace({
+  pack,
+  activeSection = 1,
+  answers = EMPTY_ANSWERS,
+  result = null,
+  audioPositions = EMPTY_AUDIO_POSITIONS,
+  audioController,
+  onAnswerChange,
+  onAnswersChange,
+  onSectionChange,
+  onSubmit,
+  onReset,
+  onGoHome,
+  onAudioPositionChange,
+  nextIncorrectId,
+}: ExamWorkspaceProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentSection, setCurrentSection] = useState(activeSection);
+  const [localResult, setLocalResult] = useState<MarkResult | null>(null);
+  const [localPositions, setLocalPositions] = useState<Record<string, number>>(audioPositions);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    setCurrentSection(activeSection);
+  }, [activeSection]);
+
+  useEffect(() => {
+    setLocalPositions(audioPositions);
+  }, [audioPositions]);
+
+  useEffect(() => {
+    if (result === null) {
+      setLocalResult(null);
+    }
+  }, [result]);
+
+  const active = useMemo(() => {
+    if (pack === null || pack === undefined) {
+      return undefined;
+    }
+    return pack.manifest.sections.find((section) => section.number === currentSection) ?? pack.manifest.sections[0];
+  }, [pack, currentSection]);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent): void {
+      if (isTypingTarget(event.target)) {
+        return;
+      }
+
+      if (event.key === "Enter" && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        event.preventDefault();
+        if (audioRef.current === null) {
+          audioController?.play?.(currentSection);
+          return;
+        }
+        if (playing) {
+          audioRef.current.pause();
+          audioController?.pause(currentSection);
+          setPlaying(false);
+        } else {
+          void audioRef.current.play();
+          audioController?.play?.(currentSection);
+          setPlaying(true);
+        }
+      }
+
+      if (event.altKey && event.key === "ArrowLeft") {
+        event.preventDefault();
+        if (audioRef.current !== null) {
+          audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 5, 0);
+        }
+        audioController?.seek?.(currentSection, -5);
+      }
+
+      if (event.altKey && event.key === "ArrowRight") {
+        event.preventDefault();
+        if (audioRef.current !== null) {
+          audioRef.current.currentTime += 5;
+        }
+        audioController?.seek?.(currentSection, 5);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [audioController, currentSection, playing]);
+
+  if (pack === null || pack === undefined) {
+    return <PackErrorScreen message="没有可用的练习包。" />;
+  }
+
+  if (active === undefined) {
+    return <PackErrorScreen message="练习包缺少 Section 配置。" />;
+  }
+
+  const effectiveResult = result ?? localResult;
+  const sectionQuestions = pack.questions.filter((question) => question.section === active.number);
+  const audioSrc = resolveAsset(pack.baseUrl, active.audio);
+
+  function pauseAndSave(section: number): void {
+    audioController?.pause(section);
+    if (audioRef.current !== null) {
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+      }
+      onAudioPositionChange?.(section, audioRef.current.currentTime);
+      setLocalPositions((current) => ({ ...current, [String(section)]: audioRef.current?.currentTime ?? 0 }));
+    }
+    const externalPosition = audioController?.getPosition?.(section);
+    if (externalPosition !== undefined) {
+      setLocalPositions((current) => ({ ...current, [String(section)]: externalPosition }));
+      onAudioPositionChange?.(section, externalPosition);
+    }
+    setPlaying(false);
+  }
+
+  function selectSection(nextSection: number): void {
+    if (nextSection === currentSection) {
+      return;
+    }
+    pauseAndSave(currentSection);
+    setCurrentSection(nextSection);
+    onSectionChange?.(nextSection);
+  }
+
+  function submit(): void {
+    const next = onSubmit?.();
+    if (next !== undefined) {
+      setLocalResult(next);
+    }
+  }
+
+  function changeAnswer(questionId: string, value: string): void {
+    setLocalResult(null);
+    onAnswerChange?.(questionId, value);
+  }
+
+  function changeAnswers(updates: AnswerMap): void {
+    setLocalResult(null);
+    onAnswersChange?.(updates);
+  }
+
+  function nextIncorrect(): void {
+    const id = nextIncorrectId ?? effectiveResult?.incorrectIds[0];
+    if (id !== undefined) {
+      focusQuestion(id);
+    }
+  }
+
+  return (
+    <main className="workspace-shell" role="main">
+      <header className="workspace-topbar">
+        <div>
+          <div className="eyebrow">{pack.manifest.title}</div>
+          <div>{active.title}</div>
+        </div>
+        <SectionNavigation activeSection={active.number} sections={pack.manifest.sections} onSelect={selectSection} />
+        <AudioPlayer
+          audioController={audioController}
+          audioRef={audioRef}
+          initialPosition={localPositions[String(active.number)] ?? 0}
+          section={active.number}
+          src={audioSrc}
+          onPlayStateChange={setPlaying}
+          onPositionChange={onAudioPositionChange}
+        />
+      </header>
+
+      <div className="workspace-body">
+        <QuestionScrollArea
+          answers={answers}
+          baseUrl={pack.baseUrl}
+          overlays={pack.overlays}
+          pages={active.pages}
+          questions={sectionQuestions}
+          result={effectiveResult}
+          onAnswerChange={changeAnswer}
+          onAnswersChange={changeAnswers}
+        />
+        <div>
+          <MarkingFeedback
+            answers={answers}
+            questions={pack.questions}
+            result={effectiveResult}
+            onNextIncorrect={nextIncorrect}
+          />
+          <PracticeActions
+            hasIncorrect={(effectiveResult?.incorrectIds.length ?? 0) > 0}
+            hasResult={effectiveResult !== null}
+            onGoHome={onGoHome}
+            onNextIncorrect={nextIncorrect}
+            onReset={() => {
+              setLocalResult(null);
+              setLocalPositions({});
+              onReset?.();
+            }}
+            onSubmit={submit}
+          />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default ExamWorkspace;

@@ -1,0 +1,150 @@
+{
+  "$defs": {
+    "NormalizedRect": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Y",
+          "type": "number"
+        },
+        "w": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "W",
+          "type": "number"
+        },
+        "h": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "H",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "title": "NormalizedRect",
+      "type": "object"
+    },
+    "Rect": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "minimum": 0,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "minimum": 0,
+          "title": "Y",
+          "type": "number"
+        },
+        "w": {
+          "exclusiveMinimum": 0,
+          "title": "W",
+          "type": "number"
+        },
+        "h": {
+          "exclusiveMinimum": 0,
+          "title": "H",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "title": "Rect",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "questionId": {
+      "title": "Questionid",
+      "type": "string"
+    },
+    "optionId": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Optionid"
+    },
+    "page": {
+      "title": "Page",
+      "type": "string"
+    },
+    "interactionType": {
+      "enum": [
+        "blank",
+        "choice-option"
+      ],
+      "title": "Interactiontype",
+      "type": "string"
+    },
+    "pixel": {
+      "$ref": "#/$defs/Rect"
+    },
+    "normalized": {
+      "$ref": "#/$defs/NormalizedRect"
+    },
+    "deterministicConfidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Deterministicconfidence",
+      "type": "number"
+    },
+    "visionConfidence": {
+      "maximum": 1,
+      "minimum": 0.85,
+      "title": "Visionconfidence",
+      "type": "number"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0.85,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "validationEvidence": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Validationevidence",
+      "type": "array"
+    }
+  },
+  "required": [
+    "questionId",
+    "page",
+    "interactionType",
+    "pixel",
+    "normalized",
+    "deterministicConfidence",
+    "visionConfidence",
+    "confidence",
+    "validationEvidence"
+  ],
+  "title": "Overlay",
+  "type": "object"
+}

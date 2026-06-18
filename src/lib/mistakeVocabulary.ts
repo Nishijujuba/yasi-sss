@@ -10,6 +10,7 @@ export type PracticeResult = "correct" | "incorrect";
 export interface MistakeVocabularyItem {
   id: string;
   term: string;
+  spokenText: string;
   normalizedTerm: string;
   acceptedVariants: string[];
   meaningZh: string;

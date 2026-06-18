@@ -42,6 +42,11 @@
         "vocabulary": {
           "title": "Vocabulary",
           "type": "string"
+        },
+        "transcriptTimings": {
+          "default": null,
+          "title": "Transcripttimings",
+          "type": "string"
         }
       },
       "required": [

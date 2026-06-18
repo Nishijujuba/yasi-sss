@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import base64
 import json
 import subprocess
 import sys
 import uuid
 from pathlib import Path
+from typing import Callable, Protocol
 
 from pydantic import ValidationError
 
@@ -15,16 +17,103 @@ from builder.convert_audio import (
     _require_existing_file,
     _run_captured,
     _same_file_content,
-    assert_duration_match,
     probe_duration_seconds,
 )
-from builder.models import Answer, AnswerAudioWindow, Question, VocabularyItem
+from builder.models import VocabularyItem
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TRASH_DIR = PROJECT_ROOT / "待删除"
 TEMP_OUTPUT_DIR = TRASH_DIR / "vocabulary-audio"
 DEFAULT_OUTPUT_DIR = AUDIO_ASSET_ROOT / "vocabulary"
+DEFAULT_TTS_VOICE = "Microsoft Zira Desktop"
+CommandRunner = Callable[[list[str]], subprocess.CompletedProcess[str]]
+
+
+class SpeechSynthesizer(Protocol):
+    def synthesize_to_wav(self, text: str, output_path: Path) -> None:
+        """Write synthesized speech to a WAV file."""
+
+
+class WindowsSpeechSynthesizer:
+    def __init__(
+        self,
+        *,
+        voice_name: str = DEFAULT_TTS_VOICE,
+        powershell_path: str = "powershell.exe",
+        command_runner: CommandRunner = _run_captured,
+    ):
+        self.voice_name = voice_name
+        self.powershell_path = powershell_path
+        self.command_runner = command_runner
+
+    def synthesize_to_wav(self, text: str, output_path: Path) -> None:
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "Text": text,
+            "OutputPath": str(output_path),
+            "VoiceName": self.voice_name,
+        }
+        payload_base64 = base64.b64encode(
+            json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        ).decode("ascii")
+        script = r"""
+& {
+    $ErrorActionPreference = 'Stop'
+    $PayloadJson = [System.Text.Encoding]::UTF8.GetString(
+        [System.Convert]::FromBase64String('__PAYLOAD_BASE64__')
+    )
+    $Payload = $PayloadJson | ConvertFrom-Json
+    $Text = [string]$Payload.Text
+    $OutputPath = [string]$Payload.OutputPath
+    $VoiceName = [string]$Payload.VoiceName
+    Add-Type -AssemblyName System.Speech
+    $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer
+    try {
+        $installedVoices = @($synth.GetInstalledVoices() | ForEach-Object { $_.VoiceInfo.Name })
+        if ($installedVoices -notcontains $VoiceName) {
+            $voiceList = if ($installedVoices.Count -gt 0) { $installedVoices -join ', ' } else { '<none>' }
+            throw "Required TTS voice '$VoiceName' is not installed. Installed voices: $voiceList"
+        }
+        $synth.SelectVoice($VoiceName)
+        $synth.SetOutputToWaveFile($OutputPath)
+        [void]$synth.Speak($Text)
+    }
+    finally {
+        if ($null -ne $synth) {
+            $synth.Dispose()
+        }
+    }
+}
+""".strip().replace("__PAYLOAD_BASE64__", payload_base64)
+        encoded_script = base64.b64encode(script.encode("utf-16-le")).decode("ascii")
+        command = [
+            self.powershell_path,
+            "-NoProfile",
+            "-NonInteractive",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-EncodedCommand",
+            encoded_script,
+        ]
+
+        try:
+            self.command_runner(command)
+        except subprocess.CalledProcessError as exc:
+            details = exc.stderr.strip() or exc.stdout.strip() or str(exc)
+            if self.voice_name in details and "not installed" in details:
+                raise AudioValidationError(details) from exc
+            raise AudioValidationError(
+                f"TTS synthesis failed with {self.voice_name}: {details}"
+            ) from exc
+        except OSError as exc:
+            raise AudioValidationError(
+                f"TTS synthesis failed with {self.voice_name}: {exc}"
+            ) from exc
+
+        if not output_path.exists() or output_path.stat().st_size == 0:
+            raise AudioValidationError(f"TTS synthesis produced missing or empty WAV: {output_path}")
 
 
 def _read_json(path: Path) -> object:
@@ -46,13 +135,29 @@ def _load_model_list(model_type, path: Path, label: str):
         raise AudioValidationError(f"{label} failed schema validation: {exc}") from exc
 
 
-def _normalize_term(value: str) -> str:
-    return " ".join(value.strip().lower().split())
-
-
-def _temporary_output_path(output_path: Path) -> Path:
+def _temporary_output_path(output_path: Path, *, suffix: str | None = None) -> Path:
     TEMP_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    return TEMP_OUTPUT_DIR / f".{output_path.stem}.{uuid.uuid4().hex}.tmp{output_path.suffix}"
+    temp_suffix = output_path.suffix if suffix is None else suffix
+    return TEMP_OUTPUT_DIR / f".{output_path.stem}.{uuid.uuid4().hex}.tmp{temp_suffix}"
+
+
+def _expected_audio_path(item: VocabularyItem) -> str:
+    return f"assets/audio/vocabulary/{item.id}.mp3"
+
+
+def _validate_audio_destinations(vocabulary: list[VocabularyItem]) -> None:
+    seen: dict[str, str] = {}
+    for item in vocabulary:
+        expected = _expected_audio_path(item)
+        if item.audio in seen:
+            raise AudioValidationError(
+                f"duplicate vocabulary audio path {item.audio}: {seen[item.audio]}, {item.id}"
+            )
+        if item.audio != expected:
+            raise AudioValidationError(
+                f"vocabulary {item.id} audio path must be {expected}; found {item.audio}"
+            )
+        seen[item.audio] = item.id
 
 
 def _archive_temp_file(path: Path) -> None:
@@ -68,136 +173,54 @@ def _archive_temp_file(path: Path) -> None:
         return
 
 
-def _canonical_by_question(
-    answers: list[Answer],
-    questions: list[Question],
-) -> dict[str, tuple[str, list[str], Question]]:
-    questions_by_id = {question.id: question for question in questions}
-    canonical: dict[str, tuple[str, list[str], Question]] = {}
-    for answer in answers:
-        if len(answer.questionIds) != 1:
-            continue
-        question = questions_by_id.get(answer.questionIds[0])
-        if question is None or question.responseType != "blank":
-            continue
-        canonical[question.id] = (
-            answer.accepted[0][0],
-            [group[0] for group in answer.accepted[1:] if group],
-            question,
-        )
-    return canonical
-
-
-def _window_for_item(
-    item: VocabularyItem,
-    windows_by_vocabulary_id: dict[str, AnswerAudioWindow],
-) -> AnswerAudioWindow:
-    try:
-        return windows_by_vocabulary_id[item.id]
-    except KeyError as exc:
-        raise AudioValidationError(f"missing answer audio window for vocabulary {item.id}") from exc
-
-
-def _validate_item_window(
-    item: VocabularyItem,
-    window: AnswerAudioWindow,
-    canonical_by_question: dict[str, tuple[str, list[str], Question]],
-) -> Question:
-    try:
-        term, variants, question = canonical_by_question[window.questionId]
-    except KeyError as exc:
-        raise AudioValidationError(
-            f"answer audio window {item.id} references unknown blank question {window.questionId}"
-        ) from exc
-
-    if item.term != term or _normalize_term(item.normalizedTerm) != _normalize_term(term):
-        raise AudioValidationError(f"vocabulary {item.id} does not match canonical answer for {question.id}")
-    if item.acceptedVariants != variants:
-        raise AudioValidationError(f"vocabulary {item.id} accepted variants do not match answers")
-    if window.section != question.section:
-        raise AudioValidationError(
-            f"answer audio window {item.id} section mismatch: "
-            f"question {question.id} is section {question.section}, window uses section {window.section}"
-        )
-    return question
-
-
-def _padded_clip_bounds(window: AnswerAudioWindow) -> tuple[float, float, float]:
-    clip_start = window.startTime - window.paddingBefore
-    clip_end = window.endTime + window.paddingAfter
-    clip_duration = clip_end - clip_start
-    if clip_start < 0:
-        raise AudioValidationError(f"answer audio window {window.vocabularyId} starts before section audio")
-    if clip_duration < 0.25 or clip_duration > 6.0:
-        raise AudioValidationError(
-            f"vocabulary clip window for {window.vocabularyId} is {clip_duration:.3f}s; expected 0.25s..6.0s"
-        )
-    return clip_start, clip_end, clip_duration
-
-
 def build_vocabulary_audio_clips(
     *,
-    answers_path: Path = SOURCE_DATA_ROOT / "answers.json",
-    questions_path: Path = SOURCE_DATA_ROOT / "questions.json",
     vocabulary_path: Path = SOURCE_DATA_ROOT / "vocabulary.json",
-    windows_path: Path = SOURCE_DATA_ROOT / "answer-audio-windows.json",
-    section_audio_dir: Path = AUDIO_ASSET_ROOT,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     ffmpeg_path: Path = FFMPEG,
     ffprobe_path: Path = FFPROBE,
-    tolerance_seconds: float = 0.10,
+    synthesizer: SpeechSynthesizer | None = None,
 ) -> list[Path]:
-    answers = _load_model_list(Answer, Path(answers_path), "answers")
-    questions = _load_model_list(Question, Path(questions_path), "questions")
     vocabulary = _load_model_list(VocabularyItem, Path(vocabulary_path), "vocabulary")
-    windows = _load_model_list(AnswerAudioWindow, Path(windows_path), "answer audio windows")
+    _validate_audio_destinations(vocabulary)
 
     ffmpeg_path = Path(ffmpeg_path)
     ffprobe_path = Path(ffprobe_path)
-    section_audio_dir = Path(section_audio_dir)
     output_dir = Path(output_dir)
+    synthesizer = synthesizer or WindowsSpeechSynthesizer()
 
     _require_existing_file(ffmpeg_path, "ffmpeg executable")
     _require_existing_file(ffprobe_path, "ffprobe executable")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    canonical_by_question = _canonical_by_question(answers, questions)
-    windows_by_vocabulary_id: dict[str, AnswerAudioWindow] = {}
-    for window in windows:
-        if window.vocabularyId in windows_by_vocabulary_id:
-            raise AudioValidationError(f"duplicate answer audio window for vocabulary {window.vocabularyId}")
-        windows_by_vocabulary_id[window.vocabularyId] = window
-
     outputs: list[Path] = []
-    section_durations: dict[int, float] = {}
-
     for item in vocabulary:
-        window = _window_for_item(item, windows_by_vocabulary_id)
-        _validate_item_window(item, window, canonical_by_question)
-        clip_start, clip_end, clip_duration = _padded_clip_bounds(window)
-        section_path = section_audio_dir / f"section-{window.section:02d}.mp3"
-        _require_existing_file(section_path, f"section {window.section} audio")
-        if window.section not in section_durations:
-            section_durations[window.section] = probe_duration_seconds(
-                section_path,
-                ffprobe_path=ffprobe_path,
-            )
-        if clip_end > section_durations[window.section]:
-            raise AudioValidationError(
-                f"answer audio window {item.id} exceeds section duration {section_durations[window.section]:.3f}s"
-            )
-
         output_path = output_dir / f"{item.id}.mp3"
+        temp_wav_path = _temporary_output_path(output_path, suffix=".wav")
         temp_output_path = _temporary_output_path(output_path)
+        try:
+            synthesizer.synthesize_to_wav(item.spokenText, temp_wav_path)
+        except AudioValidationError:
+            _archive_temp_file(temp_wav_path)
+            raise
+        except Exception as exc:
+            _archive_temp_file(temp_wav_path)
+            raise AudioValidationError(
+                f"TTS synthesis failed for vocabulary {item.id}: {exc}"
+            ) from exc
+
+        try:
+            if not temp_wav_path.exists() or temp_wav_path.stat().st_size == 0:
+                raise AudioValidationError(f"TTS WAV output is missing or empty: {temp_wav_path}")
+        except AudioValidationError:
+            _archive_temp_file(temp_wav_path)
+            raise
+
         command = [
             str(ffmpeg_path),
             "-y",
-            "-ss",
-            f"{clip_start:.3f}",
             "-i",
-            str(section_path),
-            "-t",
-            f"{clip_duration:.3f}",
+            str(temp_wav_path),
             "-vn",
             "-codec:a",
             "libmp3lame",
@@ -217,13 +240,11 @@ def build_vocabulary_audio_clips(
             if not temp_output_path.exists() or temp_output_path.stat().st_size == 0:
                 raise AudioValidationError(f"Vocabulary clip output is missing or empty: {temp_output_path}")
             output_duration = probe_duration_seconds(temp_output_path, ffprobe_path=ffprobe_path)
-            assert_duration_match(
-                section_path,
-                clip_duration,
-                temp_output_path,
-                output_duration,
-                tolerance_seconds=tolerance_seconds,
-            )
+            if output_duration < 0.25 or output_duration > 6.0:
+                raise AudioValidationError(
+                    f"vocabulary clip duration for {item.id} is {output_duration:.3f}s; "
+                    "expected 0.25s..6.0s"
+                )
         except AudioValidationError:
             _archive_temp_file(temp_output_path)
             raise

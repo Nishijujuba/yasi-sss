@@ -8,8 +8,12 @@ import type {
   Question,
   Rect,
   TranscriptSection,
+  TranscriptSegment,
+  TranscriptTimingArtifact,
+  TranscriptWordTiming,
   VocabularyItem,
 } from "../types/pack";
+import { tokenizeTranscriptText } from "./transcriptTokens";
 
 const OVERLAY_CONFIDENCE_GATE = 0.85;
 
@@ -23,6 +27,10 @@ function isStringArray(value: unknown): value is string[] {
 
 function isNumberArray(value: unknown): value is number[] {
   return Array.isArray(value) && value.every((entry) => typeof entry === "number");
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
 }
 
 function assertChoiceOption(value: unknown, index: number, optionIndex: number): asserts value is ChoiceOption {
@@ -81,6 +89,9 @@ function assertManifest(value: unknown): asserts value is PackManifest {
     if (typeof value.assets[key] !== "string") {
       throw new Error(`manifest.assets.${key} is required`);
     }
+  }
+  if (value.assets.transcriptTimings !== undefined && typeof value.assets.transcriptTimings !== "string") {
+    throw new Error("manifest.assets.transcriptTimings must be a string");
   }
 }
 
@@ -142,10 +153,99 @@ function assertOverlayRegion(value: unknown, index: number): asserts value is Ov
   }
 }
 
+function assertTranscriptSegment(
+  value: unknown,
+  sectionIndex: number,
+  segmentIndex: number,
+): asserts value is TranscriptSegment {
+  if (!isRecord(value)) {
+    throw new Error(`transcript[${sectionIndex}].segments[${segmentIndex}] must be an object`);
+  }
+  if (typeof value.order !== "number") {
+    throw new Error(`transcript[${sectionIndex}].segments[${segmentIndex}].order is required`);
+  }
+  if (typeof value.text !== "string") {
+    throw new Error(`transcript[${sectionIndex}].segments[${segmentIndex}].text is required`);
+  }
+}
+
 function assertTranscriptSection(value: unknown, index: number): asserts value is TranscriptSection {
   if (!isRecord(value)) throw new Error(`transcript[${index}] must be an object`);
   if (typeof value.section !== "number") throw new Error(`transcript[${index}].section is required`);
   if (!Array.isArray(value.segments)) throw new Error(`transcript[${index}].segments is required`);
+  value.segments.forEach((segment, segmentIndex) => assertTranscriptSegment(segment, index, segmentIndex));
+}
+
+function buildTranscriptTokenCounts(transcript: TranscriptSection[]): Map<string, number> {
+  const tokenCounts = new Map<string, number>();
+  for (const section of transcript) {
+    for (const segment of section.segments) {
+      const tokenCount = tokenizeTranscriptText(segment.text).filter((part) => part.kind === "word").length;
+      tokenCounts.set(`${section.section}:${segment.order}`, tokenCount);
+    }
+  }
+  return tokenCounts;
+}
+
+function assertTranscriptWordTiming(value: unknown, path: string): asserts value is TranscriptWordTiming {
+  if (!isRecord(value)) throw new Error(`${path} must be an object`);
+  if (!Number.isInteger(value.section)) throw new Error(`${path}.section is required`);
+  if (!Number.isInteger(value.segmentOrder)) throw new Error(`${path}.segmentOrder is required`);
+  if (!Number.isInteger(value.tokenIndex)) throw new Error(`${path}.tokenIndex is required`);
+  if (!isFiniteNumber(value.start) || !isFiniteNumber(value.end)) {
+    throw new Error(`${path} must include numeric start and end`);
+  }
+  if (value.start < 0 || value.end <= value.start) {
+    throw new Error(`${path} must have a positive interval`);
+  }
+}
+
+function assertTranscriptTimingArtifact(
+  value: unknown,
+  transcript: TranscriptSection[],
+): asserts value is TranscriptTimingArtifact {
+  if (!isRecord(value)) throw new Error("transcriptTimings must be an object");
+  if (value.schemaVersion !== "yasi.transcript-timings.v1") {
+    throw new Error("transcriptTimings.schemaVersion must be yasi.transcript-timings.v1");
+  }
+  if (value.status !== "verified") {
+    throw new Error("transcriptTimings.status must be verified");
+  }
+  if (!Array.isArray(value.sections)) {
+    throw new Error("transcriptTimings.sections is required");
+  }
+
+  const tokenCounts = buildTranscriptTokenCounts(transcript);
+  value.sections.forEach((sectionTiming, sectionIndex) => {
+    const sectionPath = `transcriptTimings.sections[${sectionIndex}]`;
+    if (!isRecord(sectionTiming)) throw new Error(`${sectionPath} must be an object`);
+    if (!Number.isInteger(sectionTiming.section)) throw new Error(`${sectionPath}.section is required`);
+    if (sectionTiming.status !== "verified") throw new Error(`${sectionPath}.status must be verified`);
+    if (!Array.isArray(sectionTiming.wordTimings)) throw new Error(`${sectionPath}.wordTimings must be an array`);
+
+    const seenIdentities = new Set<string>();
+    sectionTiming.wordTimings.forEach((timing, timingIndex) => {
+      const timingPath = `${sectionPath}.wordTimings[${timingIndex}]`;
+      assertTranscriptWordTiming(timing, timingPath);
+      if (timing.section !== sectionTiming.section) {
+        throw new Error(`${timingPath} section mismatch`);
+      }
+
+      const identity = `${timing.section}:${timing.segmentOrder}:${timing.tokenIndex}`;
+      if (seenIdentities.has(identity)) {
+        throw new Error(`${timingPath} duplicate timing identity ${identity}`);
+      }
+      seenIdentities.add(identity);
+
+      const tokenCount = tokenCounts.get(`${timing.section}:${timing.segmentOrder}`);
+      if (tokenCount === undefined) {
+        throw new Error(`${timingPath}.segmentOrder must map to an existing transcript segment`);
+      }
+      if (timing.tokenIndex < 0 || timing.tokenIndex >= tokenCount) {
+        throw new Error(`${timingPath}.tokenIndex must map to a frontend transcript token`);
+      }
+    });
+  });
 }
 
 function assertVocabularyItem(value: unknown, index: number): asserts value is VocabularyItem {
@@ -155,6 +255,9 @@ function assertVocabularyItem(value: unknown, index: number): asserts value is V
   }
   if (typeof value.term !== "string" || value.term.trim() === "") {
     throw new Error(`vocabulary[${index}].term is required`);
+  }
+  if (typeof value.spokenText !== "string" || value.spokenText.trim() === "") {
+    throw new Error(`vocabulary[${index}].spokenText is required`);
   }
   if (typeof value.normalizedTerm !== "string" || value.normalizedTerm.trim() === "") {
     throw new Error(`vocabulary[${index}].normalizedTerm is required`);
@@ -197,13 +300,17 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   const manifestJson = await fetchJson(joinUrl(normalizedBaseUrl, "manifest.json"));
   assertManifest(manifestJson);
 
-  const [questionsJson, answersJson, overlaysJson, transcriptJson, vocabularyJson] = await Promise.all([
-    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.questions)),
-    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.answers)),
-    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.overlays)),
-    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.transcript)),
-    fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.vocabulary)),
-  ]);
+  const [questionsJson, answersJson, overlaysJson, transcriptJson, vocabularyJson, transcriptTimingsJson] =
+    await Promise.all([
+      fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.questions)),
+      fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.answers)),
+      fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.overlays)),
+      fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.transcript)),
+      fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.vocabulary)),
+      manifestJson.assets.transcriptTimings === undefined
+        ? Promise.resolve(null)
+        : fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.transcriptTimings)),
+    ]);
 
   if (!Array.isArray(questionsJson)) throw new Error("questions asset must be an array");
   questionsJson.forEach(assertQuestion);
@@ -216,6 +323,9 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   if (!Array.isArray(vocabularyJson)) throw new Error("vocabulary asset must be an array");
   vocabularyJson.forEach(assertVocabularyItem);
   assertUniqueVocabularyIds(vocabularyJson);
+  if (transcriptTimingsJson !== null) {
+    assertTranscriptTimingArtifact(transcriptTimingsJson, transcriptJson);
+  }
 
   const questionsById = new Map(questionsJson.map((question) => [question.id, question]));
   const answersByQuestionId = new Map<string, AnswerRule>();
@@ -239,6 +349,7 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
     answers: answersJson,
     overlays: overlaysJson,
     transcript: transcriptJson,
+    transcriptTimings: transcriptTimingsJson,
     vocabulary: vocabularyJson,
     questionsById,
     answersByQuestionId,

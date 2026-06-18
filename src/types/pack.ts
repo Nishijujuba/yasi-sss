@@ -21,6 +21,7 @@ export interface PackManifest {
     answers: string;
     overlays: string;
     transcript: string;
+    transcriptTimings?: string;
     vocabulary: string;
   };
   build?: {
@@ -105,9 +106,34 @@ export interface TranscriptSection {
   };
 }
 
+export interface TranscriptWordTiming {
+  section: number;
+  segmentOrder: number;
+  tokenIndex: number;
+  text?: string;
+  token?: string;
+  normalized?: string;
+  start: number;
+  end: number;
+  review?: Record<string, unknown>;
+}
+
+export interface TranscriptTimingSection {
+  section: number;
+  status: "verified";
+  wordTimings: TranscriptWordTiming[];
+}
+
+export interface TranscriptTimingArtifact {
+  schemaVersion: "yasi.transcript-timings.v1";
+  status: "verified";
+  sections: TranscriptTimingSection[];
+}
+
 export interface VocabularyItem {
   id: string;
   term: string;
+  spokenText: string;
   normalizedTerm: string;
   acceptedVariants: string[];
   meaningZh: string;
@@ -121,6 +147,7 @@ export interface LoadedPack {
   answers: AnswerRule[];
   overlays: OverlayRegion[];
   transcript: TranscriptSection[];
+  transcriptTimings: TranscriptTimingArtifact | null;
   vocabulary: VocabularyItem[];
   questionsById: Map<string, Question>;
   answersByQuestionId: Map<string, AnswerRule>;

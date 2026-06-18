@@ -50,6 +50,7 @@ const pack: LoadedPack = {
   answers: rules,
   overlays: [],
   transcript: [],
+  transcriptTimings: null,
   vocabulary: [],
   questionsById: new Map(questions.map((question) => [question.id, question])),
   answersByQuestionId: new Map(rules.map((rule) => [rule.questionIds[0], rule])),

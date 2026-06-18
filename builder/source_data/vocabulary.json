@@ -5,7 +5,8 @@
     "normalizedTerm": "ardleigh",
     "acceptedVariants": [],
     "meaningZh": "阿德利，地名",
-    "audio": "assets/audio/vocabulary/ardleigh.mp3"
+    "audio": "assets/audio/vocabulary/ardleigh.mp3",
+    "spokenText": "Ardleigh"
   },
   {
     "id": "newspaper",
@@ -13,7 +14,8 @@
     "normalizedTerm": "newspaper",
     "acceptedVariants": [],
     "meaningZh": "报纸",
-    "audio": "assets/audio/vocabulary/newspaper.mp3"
+    "audio": "assets/audio/vocabulary/newspaper.mp3",
+    "spokenText": "newspaper"
   },
   {
     "id": "theme",
@@ -21,7 +23,8 @@
     "normalizedTerm": "theme",
     "acceptedVariants": [],
     "meaningZh": "主题",
-    "audio": "assets/audio/vocabulary/theme.mp3"
+    "audio": "assets/audio/vocabulary/theme.mp3",
+    "spokenText": "theme"
   },
   {
     "id": "tent",
@@ -29,7 +32,8 @@
     "normalizedTerm": "tent",
     "acceptedVariants": [],
     "meaningZh": "帐篷",
-    "audio": "assets/audio/vocabulary/tent.mp3"
+    "audio": "assets/audio/vocabulary/tent.mp3",
+    "spokenText": "tent"
   },
   {
     "id": "castle",
@@ -37,15 +41,19 @@
     "normalizedTerm": "castle",
     "acceptedVariants": [],
     "meaningZh": "城堡",
-    "audio": "assets/audio/vocabulary/castle.mp3"
+    "audio": "assets/audio/vocabulary/castle.mp3",
+    "spokenText": "castle"
   },
   {
     "id": "beach",
     "term": "beach",
     "normalizedTerm": "beach",
-    "acceptedVariants": ["beaches"],
+    "acceptedVariants": [
+      "beaches"
+    ],
     "meaningZh": "海滩",
-    "audio": "assets/audio/vocabulary/beach.mp3"
+    "audio": "assets/audio/vocabulary/beach.mp3",
+    "spokenText": "beach"
   },
   {
     "id": "2020",
@@ -53,7 +61,8 @@
     "normalizedTerm": "2020",
     "acceptedVariants": [],
     "meaningZh": "二零二零年",
-    "audio": "assets/audio/vocabulary/2020.mp3"
+    "audio": "assets/audio/vocabulary/2020.mp3",
+    "spokenText": "two thousand twenty"
   },
   {
     "id": "flight",
@@ -61,7 +70,8 @@
     "normalizedTerm": "flight",
     "acceptedVariants": [],
     "meaningZh": "航班",
-    "audio": "assets/audio/vocabulary/flight.mp3"
+    "audio": "assets/audio/vocabulary/flight.mp3",
+    "spokenText": "flight"
   },
   {
     "id": "429",
@@ -69,7 +79,8 @@
     "normalizedTerm": "429",
     "acceptedVariants": [],
     "meaningZh": "四二九，号码",
-    "audio": "assets/audio/vocabulary/429.mp3"
+    "audio": "assets/audio/vocabulary/429.mp3",
+    "spokenText": "four hundred twenty-nine"
   },
   {
     "id": "dinner",
@@ -77,7 +88,8 @@
     "normalizedTerm": "dinner",
     "acceptedVariants": [],
     "meaningZh": "晚餐",
-    "audio": "assets/audio/vocabulary/dinner.mp3"
+    "audio": "assets/audio/vocabulary/dinner.mp3",
+    "spokenText": "dinner"
   },
   {
     "id": "health-problems",
@@ -85,7 +97,8 @@
     "normalizedTerm": "health problems",
     "acceptedVariants": [],
     "meaningZh": "健康问题",
-    "audio": "assets/audio/vocabulary/health-problems.mp3"
+    "audio": "assets/audio/vocabulary/health-problems.mp3",
+    "spokenText": "health problems"
   },
   {
     "id": "safety-rules",
@@ -93,7 +106,8 @@
     "normalizedTerm": "safety rules",
     "acceptedVariants": [],
     "meaningZh": "安全规则",
-    "audio": "assets/audio/vocabulary/safety-rules.mp3"
+    "audio": "assets/audio/vocabulary/safety-rules.mp3",
+    "spokenText": "safety rules"
   },
   {
     "id": "plan",
@@ -101,7 +115,8 @@
     "normalizedTerm": "plan",
     "acceptedVariants": [],
     "meaningZh": "计划",
-    "audio": "assets/audio/vocabulary/plan.mp3"
+    "audio": "assets/audio/vocabulary/plan.mp3",
+    "spokenText": "plan"
   },
   {
     "id": "joining",
@@ -109,7 +124,8 @@
     "normalizedTerm": "joining",
     "acceptedVariants": [],
     "meaningZh": "加入",
-    "audio": "assets/audio/vocabulary/joining.mp3"
+    "audio": "assets/audio/vocabulary/joining.mp3",
+    "spokenText": "joining"
   },
   {
     "id": "free-entry",
@@ -117,7 +133,8 @@
     "normalizedTerm": "free entry",
     "acceptedVariants": [],
     "meaningZh": "免费入场",
-    "audio": "assets/audio/vocabulary/free-entry.mp3"
+    "audio": "assets/audio/vocabulary/free-entry.mp3",
+    "spokenText": "free entry"
   },
   {
     "id": "peak",
@@ -125,7 +142,8 @@
     "normalizedTerm": "peak",
     "acceptedVariants": [],
     "meaningZh": "高峰",
-    "audio": "assets/audio/vocabulary/peak.mp3"
+    "audio": "assets/audio/vocabulary/peak.mp3",
+    "spokenText": "peak"
   },
   {
     "id": "guests",
@@ -133,15 +151,19 @@
     "normalizedTerm": "guests",
     "acceptedVariants": [],
     "meaningZh": "客人",
-    "audio": "assets/audio/vocabulary/guests.mp3"
+    "audio": "assets/audio/vocabulary/guests.mp3",
+    "spokenText": "guests"
   },
   {
     "id": "photo-card",
     "term": "photo card",
     "normalizedTerm": "photo card",
-    "acceptedVariants": ["photo cards"],
+    "acceptedVariants": [
+      "photo cards"
+    ],
     "meaningZh": "照片卡",
-    "audio": "assets/audio/vocabulary/photo-card.mp3"
+    "audio": "assets/audio/vocabulary/photo-card.mp3",
+    "spokenText": "photo card"
   },
   {
     "id": "presentation",
@@ -149,7 +171,8 @@
     "normalizedTerm": "presentation",
     "acceptedVariants": [],
     "meaningZh": "展示",
-    "audio": "assets/audio/vocabulary/presentation.mp3"
+    "audio": "assets/audio/vocabulary/presentation.mp3",
+    "spokenText": "presentation"
   },
   {
     "id": "model",
@@ -157,15 +180,19 @@
     "normalizedTerm": "model",
     "acceptedVariants": [],
     "meaningZh": "模型",
-    "audio": "assets/audio/vocabulary/model.mp3"
+    "audio": "assets/audio/vocabulary/model.mp3",
+    "spokenText": "model"
   },
   {
     "id": "material",
     "term": "material",
     "normalizedTerm": "material",
-    "acceptedVariants": ["materials"],
+    "acceptedVariants": [
+      "materials"
+    ],
     "meaningZh": "材料",
-    "audio": "assets/audio/vocabulary/material.mp3"
+    "audio": "assets/audio/vocabulary/material.mp3",
+    "spokenText": "material"
   },
   {
     "id": "grant",
@@ -173,7 +200,8 @@
     "normalizedTerm": "grant",
     "acceptedVariants": [],
     "meaningZh": "补助金",
-    "audio": "assets/audio/vocabulary/grant.mp3"
+    "audio": "assets/audio/vocabulary/grant.mp3",
+    "spokenText": "grant"
   },
   {
     "id": "technical",
@@ -181,7 +209,8 @@
     "normalizedTerm": "technical",
     "acceptedVariants": [],
     "meaningZh": "技术的",
-    "audio": "assets/audio/vocabulary/technical.mp3"
+    "audio": "assets/audio/vocabulary/technical.mp3",
+    "spokenText": "technical"
   },
   {
     "id": "gene",
@@ -189,15 +218,19 @@
     "normalizedTerm": "gene",
     "acceptedVariants": [],
     "meaningZh": "基因",
-    "audio": "assets/audio/vocabulary/gene.mp3"
+    "audio": "assets/audio/vocabulary/gene.mp3",
+    "spokenText": "gene"
   },
   {
     "id": "power",
     "term": "power",
     "normalizedTerm": "power",
-    "acceptedVariants": ["powers"],
+    "acceptedVariants": [
+      "powers"
+    ],
     "meaningZh": "能力",
-    "audio": "assets/audio/vocabulary/power.mp3"
+    "audio": "assets/audio/vocabulary/power.mp3",
+    "spokenText": "power"
   },
   {
     "id": "strangers",
@@ -205,7 +238,8 @@
     "normalizedTerm": "strangers",
     "acceptedVariants": [],
     "meaningZh": "陌生人",
-    "audio": "assets/audio/vocabulary/strangers.mp3"
+    "audio": "assets/audio/vocabulary/strangers.mp3",
+    "spokenText": "strangers"
   },
   {
     "id": "erosion",
@@ -213,7 +247,8 @@
     "normalizedTerm": "erosion",
     "acceptedVariants": [],
     "meaningZh": "侵蚀",
-    "audio": "assets/audio/vocabulary/erosion.mp3"
+    "audio": "assets/audio/vocabulary/erosion.mp3",
+    "spokenText": "erosion"
   },
   {
     "id": "islands",
@@ -221,7 +256,8 @@
     "normalizedTerm": "islands",
     "acceptedVariants": [],
     "meaningZh": "岛屿",
-    "audio": "assets/audio/vocabulary/islands.mp3"
+    "audio": "assets/audio/vocabulary/islands.mp3",
+    "spokenText": "islands"
   },
   {
     "id": "roads",
@@ -229,7 +265,8 @@
     "normalizedTerm": "roads",
     "acceptedVariants": [],
     "meaningZh": "道路",
-    "audio": "assets/audio/vocabulary/roads.mp3"
+    "audio": "assets/audio/vocabulary/roads.mp3",
+    "spokenText": "roads"
   },
   {
     "id": "fishing",
@@ -237,7 +274,8 @@
     "normalizedTerm": "fishing",
     "acceptedVariants": [],
     "meaningZh": "捕鱼",
-    "audio": "assets/audio/vocabulary/fishing.mp3"
+    "audio": "assets/audio/vocabulary/fishing.mp3",
+    "spokenText": "fishing"
   },
   {
     "id": "reproduction",
@@ -245,15 +283,19 @@
     "normalizedTerm": "reproduction",
     "acceptedVariants": [],
     "meaningZh": "繁殖",
-    "audio": "assets/audio/vocabulary/reproduction.mp3"
+    "audio": "assets/audio/vocabulary/reproduction.mp3",
+    "spokenText": "reproduction"
   },
   {
     "id": "method",
     "term": "method",
     "normalizedTerm": "method",
-    "acceptedVariants": ["methods"],
+    "acceptedVariants": [
+      "methods"
+    ],
     "meaningZh": "方法",
-    "audio": "assets/audio/vocabulary/method.mp3"
+    "audio": "assets/audio/vocabulary/method.mp3",
+    "spokenText": "method"
   },
   {
     "id": "expansion",
@@ -261,6 +303,7 @@
     "normalizedTerm": "expansion",
     "acceptedVariants": [],
     "meaningZh": "扩张",
-    "audio": "assets/audio/vocabulary/expansion.mp3"
+    "audio": "assets/audio/vocabulary/expansion.mp3",
+    "spokenText": "expansion"
   }
 ]

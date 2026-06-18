@@ -1,0 +1,70 @@
+sequenceDiagram
+    autonumber
+    actor Op as Operator / Codex
+    participant Job as launch_alignment_job.py
+    participant Align as align_transcript.py
+    participant T as transcript.json
+    participant Media as section audio + ffprobe
+    participant Loc as Whisper / localization JSON
+    participant Work as artifact workspace
+    participant Ffm as ffmpeg slicer
+    participant Qwen as qwen_direct_align.py
+    participant Rev as alignment-review.json
+    participant Val as finalize + validate
+    participant Mon as monitor_alignment_job.py
+
+    rect rgb(232, 241, 250)
+        Op->>Align: dry-run --section N
+        Align->>T: load official section text
+        Align->>Media: probe section audio duration
+        alt short audio
+            Align-->>Op: full-section direct alignment plan
+        else long audio or explicit localization
+            Align->>Loc: load or generate ASR localization
+            Align->>Loc: locate content start and token-time anchors
+            Align->>Work: write localized slice plan preview
+            Align-->>Op: report slice ranges and worker commands
+        end
+    end
+
+    rect rgb(244, 238, 226)
+        Op->>Job: launch background GPU job
+        Job->>Work: write job JSON, stdout, stderr paths
+        Job->>Align: run align_transcript.py with alignment args
+        par monitoring lane
+            Op->>Mon: --latest
+            Mon->>Work: read job, logs, localization, slice artifacts
+            Mon-->>Op: status snapshot
+        and alignment lane
+            Align->>Media: verify paths, duration, GPU preflight
+            Align->>T: write official section or slice text
+            alt localized slicing required
+                Align->>Loc: validate sourceAudio and confidence score
+                Align->>Loc: enrich localization metadata
+                Align->>Work: persist localization artifact and plan hash
+                loop each localized slice
+                    Align->>Ffm: cut WAV by localized audio range
+                    Ffm-->>Work: section-NN.slice-MMM.wav
+                    Align->>Work: write slice official text from transcript.json
+                    Align->>Qwen: align slice audio with slice official text
+                    Qwen-->>Work: slice Qwen JSON and wrapper logs
+                end
+                Align->>Work: merge slices, offset times, dedupe overlaps
+            else full-section direct alignment
+                Align->>Qwen: align full section audio with official text
+                Qwen-->>Work: section-NN.qwen.json and wrapper logs
+            end
+            Align->>Rev: map Qwen timings to official token identities
+            Rev-->>Work: draft timings plus review artifact
+        end
+    end
+
+    rect rgb(232, 246, 236)
+        Op->>Rev: subagent or human reviews uncertain mappings
+        Rev-->>Op: decisions become approved or corrected in JSON
+        Op->>Val: finalize-review with alignment-review.json
+        Val->>T: verify official token identity
+        Val->>Work: write transcript-timings.json
+        Op->>Val: validate_timings with review trace and all sections
+        Val-->>Op: release gate result
+    end

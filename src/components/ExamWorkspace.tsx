@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { AnswerMap, LoadedPack, MarkResult } from "../types/pack";
+import { useOptionalPracticeSession } from "../context/PracticeSessionContext";
 import AudioPlayer from "./AudioPlayer";
 import MarkingFeedback from "./MarkingFeedback";
 import PackErrorScreen from "./PackErrorScreen";
 import PracticeActions from "./PracticeActions";
 import QuestionScrollArea from "./QuestionScrollArea";
 import SectionNavigation from "./SectionNavigation";
+import TranscriptShadowingPanel, {
+  type TranscriptTimingSection as PanelTimingSection,
+} from "./TranscriptShadowingPanel";
+import type { TranscriptTimingSection as PackTimingSection } from "../types/pack";
 
 export interface AudioController {
   pause: (section: number) => void;
@@ -28,6 +33,8 @@ export interface ExamWorkspaceProps {
   onReset?: () => void;
   onGoHome?: () => void;
   onAudioPositionChange?: (section: number, position: number) => void;
+  transcriptViewed?: boolean;
+  onMarkTranscriptViewed?: () => void;
   nextIncorrectId?: string | null;
   canSubmit?: boolean;
 }
@@ -58,6 +65,32 @@ function focusQuestion(questionId: string): void {
   control?.focus();
 }
 
+function timingSectionFor(pack: LoadedPack, section: number): PackTimingSection | null {
+  const timings = pack.transcriptTimings;
+  if (timings?.status !== "verified" || !Array.isArray(timings.sections)) {
+    return null;
+  }
+  return (
+    timings.sections.find(
+      (entry) => entry.section === section && entry.status === "verified" && entry.wordTimings.length > 0,
+    ) ?? null
+  );
+}
+
+function toPanelTimingSection(timingSection: PackTimingSection): PanelTimingSection {
+  return {
+    section: timingSection.section,
+    wordTimings: Object.values(timingSection.wordTimings).map((timing) => ({
+      section: timing.section,
+      segmentOrder: timing.segmentOrder,
+      tokenIndex: timing.tokenIndex,
+      token: "",
+      start: timing.start,
+      end: timing.end,
+    })),
+  };
+}
+
 export function ExamWorkspace({
   pack,
   activeSection = 1,
@@ -72,15 +105,20 @@ export function ExamWorkspace({
   onReset,
   onGoHome,
   onAudioPositionChange,
+  transcriptViewed,
+  onMarkTranscriptViewed,
   nextIncorrectId,
   canSubmit = true,
 }: ExamWorkspaceProps) {
+  const practiceSession = useOptionalPracticeSession();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentSection, setCurrentSection] = useState(activeSection);
   const [localResult, setLocalResult] = useState<MarkResult | null>(null);
   const [localPositions, setLocalPositions] = useState<Record<string, number>>(audioPositions);
   const [playing, setPlaying] = useState(false);
   const [pendingFocusQuestionId, setPendingFocusQuestionId] = useState<string | null>(null);
+  const [transcriptPanelOpen, setTranscriptPanelOpen] = useState(false);
+  const [currentAudioTime, setCurrentAudioTime] = useState(localPositions[String(activeSection)] ?? 0);
 
   useEffect(() => {
     setCurrentSection(activeSection);
@@ -89,6 +127,10 @@ export function ExamWorkspace({
   useEffect(() => {
     setLocalPositions(audioPositions);
   }, [audioPositions]);
+
+  useEffect(() => {
+    setCurrentAudioTime(localPositions[String(currentSection)] ?? 0);
+  }, [currentSection, localPositions]);
 
   useEffect(() => {
     if (result === null) {
@@ -168,8 +210,21 @@ export function ExamWorkspace({
 
   const loadedPack = pack;
   const effectiveResult = result ?? localResult;
+  const effectiveTranscriptViewed = transcriptViewed ?? practiceSession?.transcriptViewed ?? false;
+  const markTranscriptViewed = onMarkTranscriptViewed ?? practiceSession?.markTranscriptViewed;
   const sectionQuestions = loadedPack.questions.filter((question) => question.section === active.number);
   const audioSrc = resolveAsset(loadedPack.baseUrl, active.audio);
+  const activeTranscriptSection = loadedPack.transcript.find((section) => section.section === active.number) ?? null;
+  const activeTimingSection = timingSectionFor(loadedPack, active.number);
+  const canOpenTranscriptPanel = activeTimingSection !== null && activeTranscriptSection !== null;
+  const showTranscriptPanel = transcriptPanelOpen && activeTimingSection !== null && activeTranscriptSection !== null;
+
+  function recordAudioPosition(section: number, position: number): void {
+    if (section === currentSection) {
+      setCurrentAudioTime(position);
+    }
+    onAudioPositionChange?.(section, position);
+  }
 
   function pauseAndSave(section: number): void {
     audioController?.pause(section);
@@ -177,13 +232,13 @@ export function ExamWorkspace({
       if (!audioRef.current.paused) {
         audioRef.current.pause();
       }
-      onAudioPositionChange?.(section, audioRef.current.currentTime);
+      recordAudioPosition(section, audioRef.current.currentTime);
       setLocalPositions((current) => ({ ...current, [String(section)]: audioRef.current?.currentTime ?? 0 }));
     }
     const externalPosition = audioController?.getPosition?.(section);
     if (externalPosition !== undefined) {
       setLocalPositions((current) => ({ ...current, [String(section)]: externalPosition }));
-      onAudioPositionChange?.(section, externalPosition);
+      recordAudioPosition(section, externalPosition);
     }
     setPlaying(false);
   }
@@ -230,6 +285,27 @@ export function ExamWorkspace({
     }
   }
 
+  function toggleTranscriptPanel(): void {
+    if (!canOpenTranscriptPanel) {
+      return;
+    }
+    setTranscriptPanelOpen((open) => !open);
+    if (!transcriptPanelOpen && !effectiveTranscriptViewed) {
+      markTranscriptViewed?.();
+    }
+  }
+
+  function seekToTranscriptPosition(position: number): void {
+    const currentPosition =
+      audioRef.current?.currentTime ?? audioController?.getPosition?.(currentSection) ?? localPositions[String(currentSection)] ?? 0;
+    if (audioRef.current !== null) {
+      audioRef.current.currentTime = position;
+    }
+    audioController?.seek?.(currentSection, position - currentPosition);
+    setLocalPositions((current) => ({ ...current, [String(currentSection)]: position }));
+    recordAudioPosition(currentSection, position);
+  }
+
   return (
     <main className="workspace-shell" role="main">
       <header className="workspace-topbar">
@@ -245,11 +321,11 @@ export function ExamWorkspace({
           section={active.number}
           src={audioSrc}
           onPlayStateChange={setPlaying}
-          onPositionChange={onAudioPositionChange}
+          onPositionChange={recordAudioPosition}
         />
       </header>
 
-      <div className="workspace-body">
+      <div className={showTranscriptPanel ? "workspace-body workspace-body--with-transcript" : "workspace-body"}>
         <QuestionScrollArea
           answers={answers}
           baseUrl={loadedPack.baseUrl}
@@ -260,11 +336,20 @@ export function ExamWorkspace({
           onAnswerChange={changeAnswer}
           onAnswersChange={changeAnswers}
         />
+        {showTranscriptPanel && activeTimingSection !== null && activeTranscriptSection !== null ? (
+          <TranscriptShadowingPanel
+            currentTime={currentAudioTime}
+            timingSection={toPanelTimingSection(activeTimingSection)}
+            transcriptSection={activeTranscriptSection}
+            onSeek={seekToTranscriptPosition}
+          />
+        ) : null}
         <div className="workspace-side-panel">
           <MarkingFeedback
             answers={answers}
             questions={loadedPack.questions}
             result={effectiveResult}
+            transcriptViewed={effectiveTranscriptViewed}
             onNextIncorrect={nextIncorrect}
           />
           <PracticeActions
@@ -279,6 +364,9 @@ export function ExamWorkspace({
             }}
             onSubmit={submit}
             canSubmit={canSubmit}
+            transcriptShadowingAvailable={canOpenTranscriptPanel}
+            transcriptShadowingOpen={showTranscriptPanel}
+            onToggleTranscriptShadowing={toggleTranscriptPanel}
           />
         </div>
       </div>

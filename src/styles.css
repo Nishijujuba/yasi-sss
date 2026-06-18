@@ -107,6 +107,10 @@ button:disabled {
   padding: 18px;
 }
 
+.workspace-body--with-transcript {
+  grid-template-columns: minmax(560px, 1fr) minmax(300px, 420px) 260px;
+}
+
 .workspace-side-panel {
   min-height: 0;
   max-height: 100%;
@@ -322,6 +326,18 @@ button:disabled {
   margin: 0 0 8px;
 }
 
+.feedback-note {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  margin: 0 0 8px;
+  padding: 8px;
+}
+
 .feedback-answers {
   border-top: 1px solid #e2e8f0;
   margin-top: 12px;
@@ -407,6 +423,87 @@ button:disabled {
   font-size: 13px;
   font-weight: 700;
   margin: -4px 0 0;
+}
+
+.transcript-shadowing-panel {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+}
+
+.transcript-shadowing-panel__toolbar {
+  border-bottom: 1px solid #dbeafe;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+}
+
+.transcript-shadowing-panel__follow {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  color: #1e3a8a;
+  font-weight: 800;
+  padding: 7px 10px;
+}
+
+.transcript-shadowing-panel__segments {
+  display: grid;
+  gap: 10px;
+}
+
+.transcript-segment {
+  line-height: 1.7;
+  margin: 0;
+  padding: 8px;
+}
+
+.transcript-segment--active {
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.transcript-word {
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 1px 2px;
+}
+
+.transcript-word--active {
+  background: #fef08a;
+  font-weight: 800;
+}
+
+.transcript-word--untimed {
+  cursor: default;
+}
+
+@media (max-width: 1280px) {
+  body {
+    min-width: 0;
+  }
+
+  .workspace-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .workspace-topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-body,
+  .workspace-body--with-transcript {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-side-panel {
+    max-height: none;
+    overflow: visible;
+  }
 }
 
 .mistake-screen {

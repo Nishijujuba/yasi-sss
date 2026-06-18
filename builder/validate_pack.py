@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
+import sys
+from functools import lru_cache
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable, Literal
 
 from builder.config import FFPROBE, PACK_ROOT, SOURCE_DATA_ROOT
 from builder.convert_audio import AudioValidationError, probe_duration_seconds
@@ -11,7 +14,6 @@ from pydantic import ValidationError
 
 from builder.models import (
     Answer,
-    AnswerAudioWindow,
     Overlay,
     PendingAnswerCandidate,
     Question,
@@ -26,6 +28,9 @@ from builder.models import (
 
 class ReleaseBlocked(RuntimeError):
     """Raised when source data is insufficient for a released practice pack."""
+
+
+TranscriptTimingGate = Literal["optional", "section-01-pilot", "release"]
 
 
 def _question_number(question_id: str) -> int:
@@ -52,13 +57,6 @@ def load_source_transcript(source_dir: Path = SOURCE_DATA_ROOT) -> list[Transcri
 def load_source_vocabulary(path: Path = SOURCE_DATA_ROOT / "vocabulary.json") -> list[VocabularyItem]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     return [VocabularyItem.model_validate(item) for item in payload]
-
-
-def load_answer_audio_windows(
-    path: Path = SOURCE_DATA_ROOT / "answer-audio-windows.json",
-) -> list[AnswerAudioWindow]:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    return [AnswerAudioWindow.model_validate(item) for item in payload]
 
 
 def covered_numbers(answers: Iterable[Answer]) -> set[int]:
@@ -257,6 +255,21 @@ def _validate_unique_vocabulary_items(vocabulary: list[VocabularyItem]) -> None:
             "duplicate vocabulary normalized terms: " + ", ".join(duplicates)
         )
 
+    audio_paths: dict[str, str] = {}
+    for item in vocabulary:
+        expected_audio = f"assets/audio/vocabulary/{item.id}.mp3"
+        if item.audio in audio_paths:
+            raise ReleaseBlocked(
+                f"duplicate vocabulary audio path {item.audio}: "
+                f"{audio_paths[item.audio]}, {item.id}"
+            )
+        if item.audio != expected_audio:
+            raise ReleaseBlocked(
+                f"vocabulary item {item.id} audio path must be "
+                f"{expected_audio}; found {item.audio}"
+            )
+        audio_paths[item.audio] = item.id
+
 
 def _probe_required_duration(path: Path, description: str) -> float:
     try:
@@ -271,18 +284,11 @@ def _validate_vocabulary_release_gate(
     manifest: ReleasedManifest,
     questions: list[Question],
     answers: list[Answer],
-    section_durations: dict[int, float],
-    answer_audio_windows_path: Path,
-) -> tuple[list[VocabularyItem], list[AnswerAudioWindow], int]:
+) -> tuple[list[VocabularyItem], int]:
     vocabulary = _validate_model_list(
         VocabularyItem,
         _read_json(pack_root / manifest.assets.vocabulary),
         "vocabulary",
-    )
-    windows = _validate_model_list(
-        AnswerAudioWindow,
-        _read_json(answer_audio_windows_path),
-        "answer audio windows",
     )
 
     _validate_unique_vocabulary_items(vocabulary)
@@ -318,79 +324,118 @@ def _validate_vocabulary_release_gate(
             )
         if not item.meaningZh.strip():
             raise ReleaseBlocked(f"vocabulary item {item.id} meaningZh is empty")
+        if not item.spokenText.strip():
+            raise ReleaseBlocked(f"vocabulary item {item.id} spokenText is empty")
 
-    vocabulary_by_id = {item.id: item for item in vocabulary}
-    windows_by_vocabulary_id: dict[str, AnswerAudioWindow] = {}
-    for window in windows:
-        if window.vocabularyId in windows_by_vocabulary_id:
-            raise ReleaseBlocked(
-                f"duplicate answer audio window for vocabulary: {window.vocabularyId}"
-            )
-        windows_by_vocabulary_id[window.vocabularyId] = window
-
-    missing_windows = sorted(set(vocabulary_by_id) - set(windows_by_vocabulary_id))
-    if missing_windows:
-        raise ReleaseBlocked(
-            "vocabulary audio windows missing: " + ", ".join(missing_windows)
-        )
-
-    extra_windows = sorted(set(windows_by_vocabulary_id) - set(vocabulary_by_id))
-    if extra_windows:
-        raise ReleaseBlocked(
-            "extra vocabulary audio windows: " + ", ".join(extra_windows)
-        )
-
-    questions_by_id = {question.id: question for question in questions}
     clip_count = 0
     for item in vocabulary:
-        normalized = _normalize_term(item.normalizedTerm)
-        _, _, canonical_question = canonical[normalized]
-        window = windows_by_vocabulary_id[item.id]
-        question = questions_by_id.get(window.questionId)
-        if question is None:
-            raise ReleaseBlocked(
-                f"answer audio window {item.id} references unknown question {window.questionId}"
-            )
-        if question.id != canonical_question.id:
-            raise ReleaseBlocked(
-                f"answer audio window {item.id} question mismatch: "
-                f"expected {canonical_question.id}, found {question.id}"
-            )
-        if window.section != question.section:
-            raise ReleaseBlocked(
-                f"answer audio window {item.id} section mismatch: "
-                f"question {question.id} is section {question.section}, "
-                f"window uses section {window.section}"
-            )
-
-        section_duration = section_durations[window.section]
-        padded_start = window.startTime - window.paddingBefore
-        padded_end = window.endTime + window.paddingAfter
-        if padded_start < 0 or padded_end > section_duration:
-            raise ReleaseBlocked(
-                f"answer audio window {item.id} exceeds section duration "
-                f"{section_duration:.3f}s"
-            )
-
         clip_path = _require_asset(pack_root, item.audio)
         clip_duration = _probe_required_duration(clip_path, f"vocabulary clip {item.id}")
         if clip_duration < 0.25 or clip_duration > 6.0:
             raise ReleaseBlocked(
                 f"vocabulary clip duration for {item.id} is {clip_duration:.3f}s; "
                 "expected 0.25s..6.0s"
-            )
+        )
         clip_count += 1
 
-    return vocabulary, windows, clip_count
+    return vocabulary, clip_count
+
+
+@lru_cache(maxsize=1)
+def _load_timing_validator():
+    script_dir = Path(__file__).resolve().parents[1] / ".agents" / "skills" / "yasi-forced-alignment" / "scripts"
+    validator_path = script_dir / "validate_timings.py"
+    if not validator_path.is_file():
+        raise ReleaseBlocked(f"transcript timing validator is missing: {validator_path}")
+    script_dir_string = str(script_dir)
+    if script_dir_string not in sys.path:
+        sys.path.insert(0, script_dir_string)
+    spec = importlib.util.spec_from_file_location("yasi_validate_timings", validator_path)
+    if spec is None or spec.loader is None:
+        raise ReleaseBlocked(f"unable to load transcript timing validator: {validator_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _resolve_review_artifact(pack_root: Path, timing_payload: dict[str, Any]) -> Path | None:
+    raw_path = timing_payload.get("reviewArtifact")
+    if not isinstance(raw_path, str) or not raw_path.strip():
+        fallback = pack_root / "alignment-review.json"
+        return fallback if fallback.is_file() else None
+    review_path = Path(raw_path)
+    if not review_path.is_absolute():
+        review_path = pack_root / review_path
+    return review_path
+
+
+def _validate_transcript_timing_asset(
+    *,
+    pack_root: Path,
+    manifest: ReleasedManifest,
+    gate: TranscriptTimingGate,
+) -> None:
+    if gate not in {"optional", "section-01-pilot", "release"}:
+        raise ReleaseBlocked(f"unknown transcript timing gate: {gate}")
+
+    relative_path = manifest.assets.transcriptTimings
+    if relative_path is None:
+        if gate == "optional":
+            return
+        raise ReleaseBlocked(f"transcript timings asset is required for {gate} gate")
+
+    timing_path = _require_asset(pack_root, relative_path)
+    timing_payload = _read_json(timing_path)
+    if not isinstance(timing_payload, dict):
+        raise ReleaseBlocked("transcript timings must be a JSON object")
+
+    timing_validator = _load_timing_validator()
+    transcript_sections = timing_validator.load_official_sections(
+        pack_root / manifest.assets.transcript
+    )
+
+    require_release_gate = gate == "release"
+    review_payload = None
+    if require_release_gate:
+        review_path = _resolve_review_artifact(pack_root, timing_payload)
+        if review_path is None:
+            review_payload = None
+        else:
+            if not review_path.is_file():
+                raise ReleaseBlocked(f"transcript timing review artifact is missing: {review_path}")
+            review_payload = _read_json(review_path)
+            if not isinstance(review_payload, dict):
+                raise ReleaseBlocked("transcript timing review artifact must be a JSON object")
+
+    errors = timing_validator.validate(
+        timing_payload,
+        transcript_sections,
+        require_release_gate,
+        True,
+        require_release_gate,
+        review_payload,
+    )
+    sections = {
+        section.get("section")
+        for section in timing_payload.get("sections") or []
+        if isinstance(section, dict)
+    }
+    if gate == "section-01-pilot" and 1 not in sections:
+        errors.append("section-01-pilot gate requires transcript timings for Section 01.")
+
+    if errors:
+        raise ReleaseBlocked(
+            "transcript timings failed validation: " + "; ".join(errors)
+        )
 
 
 def validate_pack(
     pack_root: Path = PACK_ROOT,
     *,
-    answer_audio_windows_path: Path = SOURCE_DATA_ROOT / "answer-audio-windows.json",
+    transcript_timing_gate: TranscriptTimingGate = "optional",
 ) -> ReleaseReport:
     pack_root = Path(pack_root)
-    answer_audio_windows_path = Path(answer_audio_windows_path)
     try:
         manifest = ReleasedManifest.model_validate(_read_json(pack_root / "manifest.json"))
     except ValidationError as exc:
@@ -422,6 +467,11 @@ def validate_pack(
         "transcript",
     )
     validate_transcript_sections(transcript, answers)
+    _validate_transcript_timing_asset(
+        pack_root=pack_root,
+        manifest=manifest,
+        gate=transcript_timing_gate,
+    )
 
     question_ids = {question.id for question in questions}
     overlay_question_ids = {overlay.questionId for overlay in overlays}
@@ -434,10 +484,9 @@ def validate_pack(
 
     page_assets: list[str] = []
     audio_sections: list[int] = []
-    section_durations: dict[int, float] = {}
     for section in manifest.sections:
         section_audio_path = _require_asset(pack_root, section.audio)
-        section_durations[section.number] = _probe_required_duration(
+        _probe_required_duration(
             section_audio_path,
             f"section {section.number} audio",
         )
@@ -451,13 +500,11 @@ def validate_pack(
     if question_numbers != list(range(1, 41)) or answer_numbers != list(range(1, 41)):
         raise ReleaseBlocked("questions and answers must cover 1 through 40")
 
-    vocabulary, windows, clip_count = _validate_vocabulary_release_gate(
+    vocabulary, clip_count = _validate_vocabulary_release_gate(
         pack_root=pack_root,
         manifest=manifest,
         questions=questions,
         answers=answers,
-        section_durations=section_durations,
-        answer_audio_windows_path=answer_audio_windows_path,
     )
 
     return ReleaseReport(
@@ -466,7 +513,6 @@ def validate_pack(
         overlayCount=len(overlays),
         answerCount=len(answer_numbers),
         vocabularyCount=len(vocabulary),
-        windowCount=len(windows),
         clipCount=clip_count,
         transcriptSections=sorted(section.section for section in transcript),
         audioSections=sorted(audio_sections),

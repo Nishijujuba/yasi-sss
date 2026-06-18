@@ -28,6 +28,7 @@ const pack: MistakeVocabularyPack = {
     {
       id: "ardleigh",
       term: "Ardleigh",
+      spokenText: "Ardleigh",
       normalizedTerm: "ardleigh",
       acceptedVariants: [],
       meaningZh: "阿德利",
@@ -36,6 +37,7 @@ const pack: MistakeVocabularyPack = {
     {
       id: "photo-card",
       term: "photo card",
+      spokenText: "photo card",
       normalizedTerm: "photo card",
       acceptedVariants: ["photo cards"],
       meaningZh: "照片卡",

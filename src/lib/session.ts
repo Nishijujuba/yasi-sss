@@ -1,12 +1,13 @@
 import type { AnswerMap, MarkResult } from "../types/pack";
 
 const LEGACY_SESSION_KEY_V1 = "yasi:cambridge-10:test-1:listening:session:v1";
+const LEGACY_SESSION_KEY_V2 = "yasi:cambridge-10:test-1:listening:session:v2";
 
-export const SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v2";
-export const SESSION_VERSION = 2;
+export const SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v3";
+export const SESSION_VERSION = 3;
 export const SESSION_PACK_ID = "cambridge-10-test-1-listening";
 
-export interface PracticeSession {
+interface PracticeSessionV2 {
   version: 2;
   packId: typeof SESSION_PACK_ID;
   answers: AnswerMap;
@@ -15,6 +16,18 @@ export interface PracticeSession {
   results: MarkResult | null;
   audioPositions: Record<string, number>;
   capturedMistakes: Record<string, string>;
+}
+
+export interface PracticeSession {
+  version: 3;
+  packId: typeof SESSION_PACK_ID;
+  answers: AnswerMap;
+  activeSection: number;
+  submitted: boolean;
+  results: MarkResult | null;
+  audioPositions: Record<string, number>;
+  capturedMistakes: Record<string, string>;
+  transcriptViewed: boolean;
 }
 
 export function createEmptySession(activeSection = 1): PracticeSession {
@@ -27,6 +40,7 @@ export function createEmptySession(activeSection = 1): PracticeSession {
     results: null,
     audioPositions: {},
     capturedMistakes: {},
+    transcriptViewed: false,
   };
 }
 
@@ -67,13 +81,8 @@ function isMarkResult(value: unknown): value is MarkResult {
   );
 }
 
-function isPracticeSession(value: unknown): value is PracticeSession {
-  if (!isRecord(value)) {
-    return false;
-  }
-
+function hasPracticeSessionFields(value: Record<string, unknown>): boolean {
   return (
-    value.version === SESSION_VERSION &&
     value.packId === SESSION_PACK_ID &&
     isStringRecord(value.answers) &&
     typeof value.activeSection === "number" &&
@@ -83,6 +92,26 @@ function isPracticeSession(value: unknown): value is PracticeSession {
     (value.results === null || isMarkResult(value.results)) &&
     isNumberRecord(value.audioPositions) &&
     isStringRecord(value.capturedMistakes)
+  );
+}
+
+function isPracticeSessionV2(value: unknown): value is PracticeSessionV2 {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return value.version === 2 && hasPracticeSessionFields(value);
+}
+
+function isPracticeSession(value: unknown): value is PracticeSession {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return (
+    value.version === SESSION_VERSION &&
+    hasPracticeSessionFields(value) &&
+    typeof value.transcriptViewed === "boolean"
   );
 }
 
@@ -105,6 +134,28 @@ export function loadSession(): PracticeSession | null {
     }
 
     archiveSession(SESSION_KEY, raw);
+    return null;
+  }
+
+  const legacyRawV2 = localStorage.getItem(LEGACY_SESSION_KEY_V2);
+  if (legacyRawV2 !== null) {
+    try {
+      const parsed: unknown = JSON.parse(legacyRawV2);
+      if (isPracticeSessionV2(parsed)) {
+        const migrated: PracticeSession = {
+          ...parsed,
+          version: SESSION_VERSION,
+          transcriptViewed: false,
+        };
+        saveSession(migrated);
+        localStorage.removeItem(LEGACY_SESSION_KEY_V2);
+        return migrated;
+      }
+    } catch {
+      // Invalid JSON is still user state, so it is archived instead of discarded.
+    }
+
+    archiveSession(LEGACY_SESSION_KEY_V2, legacyRawV2);
     return null;
   }
 

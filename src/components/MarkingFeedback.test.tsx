@@ -63,4 +63,18 @@ describe("MarkingFeedback", () => {
     expect(within(answers).getByText("Q2")).toBeTruthy();
     expect(within(answers).getByText("正确答案：newspaper")).toBeTruthy();
   });
+
+  it("labels submitted feedback as practice reference after transcript viewing", () => {
+    render(
+      <MarkingFeedback
+        answers={{ q1: "Ardleigh" }}
+        questions={questions}
+        result={sectionOneResult}
+        transcriptViewed
+        onNextIncorrect={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText("已查看原文，本次分数仅作练习参考")).toBeTruthy();
+  });
 });

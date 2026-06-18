@@ -5,6 +5,7 @@ export interface MarkingFeedbackProps {
   questions: Question[];
   answers: AnswerMap;
   onNextIncorrect?: () => void;
+  transcriptViewed?: boolean;
 }
 
 function formatExpected(expected: string[]): string {
@@ -16,7 +17,13 @@ function formatActual(actual: string): string {
   return trimmed === "" ? "未答" : `你的答案：${trimmed}`;
 }
 
-export function MarkingFeedback({ result, questions, answers, onNextIncorrect }: MarkingFeedbackProps) {
+export function MarkingFeedback({
+  result,
+  questions,
+  answers,
+  onNextIncorrect,
+  transcriptViewed = false,
+}: MarkingFeedbackProps) {
   if (result === null) {
     const answered = questions.filter((question) => (answers[question.id] ?? "").trim() !== "").length;
     return (
@@ -59,6 +66,7 @@ export function MarkingFeedback({ result, questions, answers, onNextIncorrect }:
       <h2>
         Raw score: {result.score} / {result.total}
       </h2>
+      {transcriptViewed ? <p className="feedback-note">已查看原文，本次分数仅作练习参考</p> : null}
       <p>正确：{result.score}</p>
       <p>错误：{incorrect}</p>
       <p>未答：{unanswered}</p>

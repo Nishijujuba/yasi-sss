@@ -140,9 +140,33 @@ _Avoid_: Equal-duration text approximation, decorative highlighting, browser-gen
 An explicit review step for uncertain official-token-to-timing mappings, producing approved corrections or blocking diagnostics before Transcript Word Timings can be treated as verified.
 _Avoid_: Silent auto-correction, unreviewed token merges, hidden timing gaps
 
+**Transcript Timing Release Audit**:
+The durable review trace retained when verified Transcript Word Timings are released, preserving the approved or corrected evidence behind non-trivial timing mappings.
+_Avoid_: Benchmark scratch review, chat approval, temporary ASR evidence
+
+**Reconciliation Report**:
+A run-level summary of ASR Timing Reconciliation quality, provenance, match statistics, review burden, and gate outcome for one generated timing attempt.
+_Avoid_: Token review list, frontend timing asset, chat summary
+
+**Reconciliation Gate Outcome**:
+The run-level decision that says whether a reconciliation attempt can be finalized, needs human timing review, or should rerun ASR before review.
+_Avoid_: Review decision, frontend status, score label
+
+**Transcript Timing Match Type**:
+A classification of how an official audioscript token received timing evidence during Transcript Alignment, such as direct ASR agreement, fuzzy agreement, interpolation, token split, token merge, or no reliable match.
+_Avoid_: Confidence score, review decision, frontend timing status
+
 **Transcript Alignment**:
 The build-time process that maps the official listening audio and official audioscript onto verified Transcript Word Timings before a practice pack is released.
 _Avoid_: Browser runtime alignment, generated transcript, learner-device audio analysis
+
+**ASR Timing Reconciliation**:
+A build-time Transcript Alignment strategy that treats ASR word times as timing evidence and maps them onto official audioscript token identities before Transcript Word Timings can be verified.
+_Avoid_: ASR transcript display, Qwen forced alignment, model-authored audioscript
+
+**ASR Timing Evidence**:
+Timestamped ASR word output used as evidence for when speech occurred in the official listening audio, without becoming the displayed transcript text or answer evidence.
+_Avoid_: Display transcript, answer source, official audioscript
 
 **Transcript Alignment Pilot**:
 A development-only validation run that proves Transcript Alignment, Transcript Timing Review, and Transcript Shadowing behavior on one Listening Section before expanding the same release-gated workflow to all four sections.

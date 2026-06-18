@@ -8,9 +8,10 @@ import {
 } from "./session";
 
 const OLD_SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v1";
+const V2_SESSION_KEY = "yasi:cambridge-10:test-1:listening:session:v2";
 
 const session: PracticeSession = {
-  version: 2,
+  version: 3,
   packId: "cambridge-10-test-1-listening",
   answers: { q1: "Ardleigh" },
   activeSection: 2,
@@ -30,6 +31,7 @@ const session: PracticeSession = {
   },
   audioPositions: { "1": 12.5 },
   capturedMistakes: { q2: "ardley" },
+  transcriptViewed: true,
 };
 
 describe("session storage lifecycle", () => {
@@ -38,12 +40,32 @@ describe("session storage lifecycle", () => {
     vi.useRealTimers();
   });
 
-  it("saves and restores the v2 practice session key", () => {
+  it("saves and restores the v3 practice session key with transcriptViewed", () => {
     saveSession(session);
 
-    expect(SESSION_KEY).toBe("yasi:cambridge-10:test-1:listening:session:v2");
+    expect(SESSION_KEY).toBe("yasi:cambridge-10:test-1:listening:session:v3");
     expect(localStorage.getItem(SESSION_KEY)).not.toBeNull();
     expect(loadSession()).toEqual(session);
+  });
+
+  it("migrates valid v2 sessions to v3 with transcriptViewed false", () => {
+    const v2Session = {
+      version: 2,
+      packId: "cambridge-10-test-1-listening",
+      answers: { q1: "Ardleigh" },
+      activeSection: 2,
+      submitted: false,
+      results: null,
+      audioPositions: { "1": 14 },
+      capturedMistakes: { q2: "ardley" },
+    };
+    localStorage.setItem(V2_SESSION_KEY, JSON.stringify(v2Session));
+
+    const migrated = loadSession();
+
+    expect(migrated).toEqual({ ...v2Session, version: 3, transcriptViewed: false });
+    expect(localStorage.getItem(V2_SESSION_KEY)).toBeNull();
+    expect(localStorage.getItem(SESSION_KEY)).toBe(JSON.stringify(migrated));
   });
 
   it("archives v1 sessions to a timestamp key", () => {
@@ -66,14 +88,14 @@ describe("session storage lifecycle", () => {
     );
   });
 
-  it("archives schema-incompatible v2 values to a timestamp key", () => {
+  it("archives schema-incompatible v3 values to a timestamp key", () => {
     vi.setSystemTime(new Date("2026-06-16T04:03:00.000Z"));
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ version: 99, activeSection: 1 }));
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ version: 3, activeSection: 1 }));
 
     expect(loadSession()).toBeNull();
     expect(localStorage.getItem(SESSION_KEY)).toBeNull();
     expect(localStorage.getItem(`${SESSION_KEY}:archived:2026-06-16T04:03:00.000Z`)).toBe(
-      JSON.stringify({ version: 99, activeSection: 1 }),
+      JSON.stringify({ version: 3, activeSection: 1 }),
     );
   });
 
@@ -95,7 +117,7 @@ describe("session storage lifecycle", () => {
     const reset = resetSession();
 
     expect(reset).toEqual({
-      version: 2,
+      version: 3,
       packId: "cambridge-10-test-1-listening",
       answers: {},
       activeSection: 2,
@@ -103,6 +125,7 @@ describe("session storage lifecycle", () => {
       results: null,
       audioPositions: {},
       capturedMistakes: {},
+      transcriptViewed: false,
     });
     expect(loadSession()).toEqual(reset);
   });

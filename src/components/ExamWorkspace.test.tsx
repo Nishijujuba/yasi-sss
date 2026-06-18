@@ -4,6 +4,18 @@ import { ExamWorkspace, type AudioController } from "./ExamWorkspace";
 import type { LoadedPack, MarkResult, OverlayRegion, Question } from "../types/pack";
 
 function fakePack(): LoadedPack {
+  const vocabulary = [
+    {
+      id: "ardleigh",
+      term: "Ardleigh",
+      normalizedTerm: "ardleigh",
+      acceptedVariants: [],
+      meaningZh: "阿德利",
+      spokenText: "Ardleigh",
+      audio: "assets/audio/vocabulary/ardleigh.mp3",
+    },
+  ];
+
   const questions: Question[] = [
     {
       id: "q1",
@@ -113,20 +125,54 @@ function fakePack(): LoadedPack {
     answers: [],
     overlays,
     transcript: [],
-    vocabulary: [
-      {
-        id: "ardleigh",
-        term: "Ardleigh",
-        normalizedTerm: "ardleigh",
-        acceptedVariants: [],
-        meaningZh: "阿德利",
-        audio: "assets/audio/vocabulary/ardleigh.mp3",
-      },
-    ],
+    transcriptTimings: null,
+    vocabulary,
     questionsById: new Map(questions.map((question) => [question.id, question])),
     answersByQuestionId: new Map(),
     overlaysByQuestionId: new Map([["q1", overlays]]),
-    vocabularyById: new Map(),
+    vocabularyById: new Map(vocabulary.map((item) => [item.id, item])),
+  };
+}
+
+function packWithSectionOneTimings(): LoadedPack {
+  return {
+    ...fakePack(),
+    transcript: [
+      {
+        section: 1,
+        segments: [
+          {
+            order: 1,
+            speaker: "MAN",
+            text: "Good morning.",
+            answerRefs: [],
+            startTime: null,
+            endTime: null,
+          },
+        ],
+      },
+    ],
+    transcriptTimings: {
+      schemaVersion: "yasi.transcript-timings.v1",
+      status: "verified",
+      sections: [
+        {
+          section: 1,
+          status: "verified",
+          wordTimings: [
+            {
+              section: 1,
+              segmentOrder: 1,
+              tokenIndex: 0,
+              token: "Good",
+              normalized: "good",
+              start: 42.5,
+              end: 42.9,
+            },
+          ],
+        },
+      ],
+    },
   };
 }
 
@@ -278,6 +324,86 @@ describe("ExamWorkspace", () => {
     const submitButton = screen.getByRole("button", { name: "提交答案" });
     expect(submitButton).toBeDisabled();
     expect(screen.getByText("先完成至少一个答案")).toBeTruthy();
+  });
+
+  it("disables transcript shadowing when the active section has no verified timings", () => {
+    render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+      />,
+    );
+
+    const shadowingButton = screen.getByRole("button", { name: "原文跟读" });
+
+    expect(shadowingButton).toBeDisabled();
+    expect(screen.getByText("等待逐词时间轴")).toBeTruthy();
+  });
+
+  it("opens the Section 01 transcript panel and records transcript viewing", () => {
+    const onMarkTranscriptViewed = vi.fn();
+    const { container } = render(
+      <ExamWorkspace
+        pack={packWithSectionOneTimings()}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+        onMarkTranscriptViewed={onMarkTranscriptViewed}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "打开原文" }));
+
+    expect(onMarkTranscriptViewed).toHaveBeenCalledTimes(1);
+    expect(screen.getByLabelText("Section 01 原文跟读")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "收起原文" })).toBeTruthy();
+    expect(container.querySelector(".workspace-body")).toHaveClass("workspace-body--with-transcript");
+  });
+
+  it("opens the transcript panel without changing native audio time or play state", () => {
+    const playSpy = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
+    const pauseSpy = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => undefined);
+    const { container } = render(
+      <ExamWorkspace
+        pack={packWithSectionOneTimings()}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+      />,
+    );
+    const audio = container.querySelector<HTMLAudioElement>("audio");
+    expect(audio).not.toBeNull();
+    audio!.currentTime = 37;
+    Object.defineProperty(audio!, "paused", { configurable: true, value: false });
+
+    fireEvent.click(screen.getByRole("button", { name: "打开原文" }));
+
+    expect(audio!.currentTime).toBe(37);
+    expect(playSpy).not.toHaveBeenCalled();
+    expect(pauseSpy).not.toHaveBeenCalled();
+  });
+
+  it("seeks native audio and records position when a transcript token is clicked", () => {
+    const onAudioPositionChange = vi.fn();
+    const { container } = render(
+      <ExamWorkspace
+        pack={packWithSectionOneTimings()}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+        onAudioPositionChange={onAudioPositionChange}
+      />,
+    );
+    const audio = container.querySelector<HTMLAudioElement>("audio");
+    expect(audio).not.toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: "打开原文" }));
+    fireEvent.click(screen.getByRole("button", { name: "Good" }));
+
+    expect(audio!.currentTime).toBe(42.5);
+    expect(onAudioPositionChange).toHaveBeenLastCalledWith(1, 42.5);
   });
 
   it("does not reveal answers for an unsubmitted section after section-scoped submit", () => {

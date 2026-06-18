@@ -6,7 +6,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
+from pydantic.json_schema import SkipJsonSchema
 
 from builder.config import (
     OVERLAY_CONFIDENCE_GATE,
@@ -108,7 +116,15 @@ class VocabularyItem(PackModel):
     normalizedTerm: str = Field(min_length=1)
     acceptedVariants: list[str]
     meaningZh: str = Field(min_length=1)
+    spokenText: str = Field(min_length=1)
     audio: str = Field(min_length=1)
+
+    @field_validator("spokenText")
+    @classmethod
+    def validate_spoken_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("spokenText must not be blank")
+        return value
 
 
 class AnswerAudioWindow(PackModel):
@@ -189,6 +205,14 @@ class ManifestAssets(PackModel):
     overlays: str
     transcript: str
     vocabulary: str
+    transcriptTimings: str | SkipJsonSchema[None] = None
+
+    @model_serializer(mode="wrap")
+    def serialize_optional_assets(self, handler):
+        data = handler(self)
+        if data.get("transcriptTimings") is None:
+            data.pop("transcriptTimings", None)
+        return data
 
 
 class BuildMetadata(PackModel):
@@ -228,7 +252,6 @@ class ReleaseReport(PackModel):
     overlayCount: int = Field(ge=0)
     answerCount: int = Field(ge=0)
     vocabularyCount: int = Field(ge=0)
-    windowCount: int = Field(ge=0)
     clipCount: int = Field(ge=0)
     transcriptSections: list[int]
     audioSections: list[int]

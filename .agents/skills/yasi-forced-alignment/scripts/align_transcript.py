@@ -4,12 +4,16 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import copy
 import difflib
 import json
+import math
+import os
 import re
 import subprocess
 import sys
+import threading
 import unicodedata
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -27,15 +31,20 @@ DEFAULT_OUTPUT = DEFAULT_PACK_ROOT / "transcript-timings.json"
 DEFAULT_DRAFT_OUTPUT = DEFAULT_PACK_ROOT / "transcript-timings.draft.json"
 DEFAULT_REVIEW_OUTPUT = DEFAULT_PACK_ROOT / "alignment-review.json"
 DEFAULT_QWEN_PYTHON = Path(r"D:\Project\video2pdf\newskill-kimi\.venvs\qwen3-asr\Scripts\python.exe")
-DEFAULT_QWEN_WRAPPER = Path(
-    r"D:\Project\video2pdf\newskill-kimi\.agents\skills\qwen-bilibili-render-pdf\scripts\qwen_asr_transcribe.py"
-)
+DEFAULT_DIRECT_ALIGN_WORKER = Path(__file__).with_name("qwen_direct_align.py")
 DEFAULT_MODEL_ROOT = Path(r"D:\model-repo")
 DEFAULT_ALIGNER = DEFAULT_MODEL_ROOT / "Qwen3-ForcedAligner-0.6B"
-DEFAULT_FAST_ASR = DEFAULT_MODEL_ROOT / "Qwen3-ASR-0.6B"
-DEFAULT_QUALITY_ASR = DEFAULT_MODEL_ROOT / "Qwen3-ASR-1.7B"
 DEFAULT_FFMPEG = Path(r"D:\Project\video2pdf\kimi\tools\ffmpeg\bin\ffmpeg.exe")
 DEFAULT_FFPROBE = Path(r"D:\Project\video2pdf\kimi\tools\ffmpeg\bin\ffprobe.exe")
+DEFAULT_WHISPER = Path(r"D:\Project\video2pdf\kimi\.venv\Scripts\whisper.exe")
+DEFAULT_SLICE_THRESHOLD_SECONDS = 180.0
+DEFAULT_SLICE_SECONDS = 180.0
+DEFAULT_LOCALIZATION_SCORE = 0.82
+DEFAULT_SLICE_OVERLAP_SECONDS = 3.0
+DEFAULT_TEXT_OVERLAP_TOKENS = 20
+DEFAULT_CONTENT_START_SAFETY_SECONDS = 0.5
+LOCALIZATION_SCHEMA_VERSION = "yasi.localization-transcript.v1"
+LOCALIZED_SLICE_PLAN_SCHEMA_VERSION = "yasi.localized-slices.v1"
 
 TOKEN_RE = re.compile(
     r"[£$€]?\d+(?:[,.]\d+)*(?:-[A-Za-z0-9]+)?|[A-Za-z0-9]+(?:[’'][A-Za-z0-9]+)?(?:-[A-Za-z0-9]+)*"
@@ -62,11 +71,72 @@ class TimedToken:
     start: float
     end: float
     source_index: int
+    slice_index: int | None = None
+    slice_audio_start: float | None = None
+    official_token_start: int | None = None
+    official_token_end: int | None = None
+    slice_qwen_json: str | None = None
+    official_token_index: int | None = None
+
+
+@dataclass(frozen=True)
+class AudioSlice:
+    index: int
+    start: float
+    end: float
+    audio: Path
+    basename: str
+
+
+@dataclass(frozen=True)
+class LocalizedSlice:
+    index: int
+    audio_start: float
+    audio_end: float
+    official_token_start: int
+    official_token_end: int
+    audio: Path
+    text_path: Path
+    basename: str
+    text_preview: str
+
+
+class LocalizationError(RuntimeError):
+    pass
+
+
+class LocalizationArgumentParser(argparse.ArgumentParser):
+    def parse_args(self, args: list[str] | None = None, namespace: argparse.Namespace | None = None) -> argparse.Namespace:
+        parsed = super().parse_args(args, namespace)
+        if getattr(parsed, "localization_input", None):
+            parsed.localizer = "existing"
+        return parsed
+
+
+def non_negative_float(value: str) -> float:
+    parsed = float(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("value must be non-negative")
+    return parsed
+
+
+def localization_score(value: str) -> float:
+    parsed = float(value)
+    if parsed < 0 or parsed > 1:
+        raise argparse.ArgumentTypeError("value must be in [0, 1]")
+    return parsed
+
+
+def non_negative_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("value must be non-negative")
+    return parsed
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Create yasi IELTS listening timing artifacts through Qwen raw timings, auto mapping, alignment review, and final frontend timings.",
+    parser = LocalizationArgumentParser(
+        description="Create yasi IELTS listening timing artifacts through Qwen direct transcript alignment, auto mapping, alignment review, and final frontend timings.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     section_group = parser.add_mutually_exclusive_group()
@@ -80,15 +150,43 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--draft-output", default=str(DEFAULT_DRAFT_OUTPUT), help="Auto-mapping draft timing JSON output path.")
     parser.add_argument("--review-output", default=str(DEFAULT_REVIEW_OUTPUT), help="Alignment review JSON path generated from uncertain mappings.")
     parser.add_argument("--review-input", default=None, help="Alignment review JSON path to finalize. Defaults to --review-output.")
-    parser.add_argument("--qwen-python", default=str(DEFAULT_QWEN_PYTHON), help="Python executable for the Qwen ASR venv.")
-    parser.add_argument("--qwen-wrapper", default=str(DEFAULT_QWEN_WRAPPER), help="Reference Qwen ASR wrapper script.")
-    parser.add_argument("--profile", choices=("fast", "quality"), default="quality", help="Qwen model profile.")
-    parser.add_argument("--language", default="English", help="Language passed to Qwen wrapper, or auto.")
-    parser.add_argument("--context", default="Preserve IELTS listening wording, names, numbers, currency, postcodes, and discourse markers.", help="ASR context prompt.")
+    parser.add_argument("--qwen-python", default=str(DEFAULT_QWEN_PYTHON), help="Python executable for the Qwen model runtime venv.")
+    parser.add_argument("--direct-align-worker", default=str(DEFAULT_DIRECT_ALIGN_WORKER), help="Qwen direct forced-align worker script.")
+    parser.add_argument("--qwen-device-map", default="cuda:0", help="Transformers device_map passed to the Qwen worker.")
+    parser.add_argument("--qwen-dtype", choices=("bfloat16", "float16", "float32"), default="float16", help="Torch dtype passed to the Qwen worker.")
+    parser.add_argument("--qwen-timeout-seconds", type=float, default=1800.0, help="Timeout for each Qwen worker process. Use 0 to disable.")
+    parser.add_argument("--min-free-gpu-memory-mib", type=int, default=0, help="Require this much free GPU memory before running Qwen. Use 0 to disable.")
+    parser.add_argument("--ffmpeg", default=str(DEFAULT_FFMPEG), help="ffmpeg executable used to create three-minute audio slices.")
+    parser.add_argument("--ffprobe", default=str(DEFAULT_FFPROBE), help="ffprobe executable used to measure section audio duration.")
+    parser.add_argument("--whisper", default=str(DEFAULT_WHISPER), help="Whisper CLI executable used to create localization timestamps.")
+    parser.add_argument("--localize-content-start", action="store_true", help="Use localization timestamps to find official content start and text-aware slice ranges.")
+    parser.add_argument("--localizer", choices=("whisper", "qwen-asr", "existing"), default="whisper", help="Localization timestamp source.")
+    parser.add_argument("--content-start-seconds", type=non_negative_float, default=None, help="Manual content-start timestamp override.")
+    parser.add_argument("--localization-input", default=None, help="Existing localization transcript JSON to load instead of generating one.")
+    parser.add_argument("--localization-output", default=None, help="Path for normalized localization transcript JSON.")
+    parser.add_argument(
+        "--min-localization-score",
+        type=localization_score,
+        default=DEFAULT_LOCALIZATION_SCORE,
+        help="Minimum fuzzy content-start localization score.",
+    )
+    parser.add_argument(
+        "--slice-threshold-seconds",
+        type=float,
+        default=DEFAULT_SLICE_THRESHOLD_SECONDS,
+        help="Slice audio only when duration is greater than this threshold.",
+    )
+    parser.add_argument(
+        "--slice-seconds",
+        type=float,
+        default=DEFAULT_SLICE_SECONDS,
+        help="Maximum duration of each generated audio slice.",
+    )
+    parser.add_argument("--slice-overlap-seconds", type=non_negative_float, default=DEFAULT_SLICE_OVERLAP_SECONDS, help="Audio overlap applied to localized slices.")
+    parser.add_argument("--text-overlap-tokens", type=non_negative_int, default=DEFAULT_TEXT_OVERLAP_TOKENS, help="Official token overlap applied to localized slices.")
+    parser.add_argument("--language", default="English", help="Language passed to Qwen worker.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing generated artifacts.")
     parser.add_argument("--model-root", default=str(DEFAULT_MODEL_ROOT), help="Root containing local Qwen model directories.")
-    parser.add_argument("--ffmpeg", default=str(DEFAULT_FFMPEG), help="ffmpeg executable passed to the wrapper.")
-    parser.add_argument("--ffprobe", default=str(DEFAULT_FFPROBE), help="Documented ffprobe path for environment diagnostics.")
     return parser
 
 
@@ -121,6 +219,99 @@ def find_project_root(pack_root: Path) -> Path:
 
 def work_dir_for(pack_root: Path) -> Path:
     return find_project_root(pack_root) / "待删除" / "yasi-forced-alignment"
+
+
+def probe_audio_duration(args: argparse.Namespace, audio: Path) -> float:
+    cmd = [
+        str(Path(args.ffprobe)),
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        str(audio),
+    ]
+    completed = subprocess.run(cmd, check=True, text=True, capture_output=True)
+    for line in completed.stdout.splitlines():
+        value = line.strip()
+        if value:
+            duration = float(value)
+            if duration < 0:
+                raise ValueError(f"ffprobe returned a negative duration for {audio}: {duration}")
+            return duration
+    raise RuntimeError(f"ffprobe returned no duration for {audio}")
+
+
+def audio_slices_for(args: argparse.Namespace, audio: Path, work_dir: Path, section: int, duration: float) -> list[AudioSlice]:
+    threshold = float(args.slice_threshold_seconds)
+    slice_seconds = float(args.slice_seconds)
+    if duration <= threshold:
+        return []
+    count = math.ceil(duration / slice_seconds)
+    slices = []
+    for index in range(count):
+        start = round(index * slice_seconds, 3)
+        end = round(min(duration, start + slice_seconds), 3)
+        basename = f"section-{section:02d}.slice-{index + 1:03d}"
+        slices.append(
+            AudioSlice(
+                index=index + 1,
+                start=start,
+                end=end,
+                audio=work_dir / "slices" / f"{basename}.wav",
+                basename=basename,
+            )
+        )
+    return slices
+
+
+def slice_summary(args: argparse.Namespace, slices: list[AudioSlice]) -> dict[str, Any]:
+    return {
+        "required": bool(slices),
+        "thresholdSeconds": float(args.slice_threshold_seconds),
+        "sliceSeconds": float(args.slice_seconds),
+        "slices": [
+            {
+                "index": item.index,
+                "start": item.start,
+                "end": item.end,
+                "duration": round(item.end - item.start, 3),
+                "audio": str(item.audio),
+                "basename": item.basename,
+            }
+            for item in slices
+        ],
+    }
+
+
+def create_audio_slice(args: argparse.Namespace, source_audio: Path, audio_slice: AudioSlice) -> None:
+    if audio_slice.audio.exists() and not args.overwrite:
+        return
+    audio_slice.audio.parent.mkdir(parents=True, exist_ok=True)
+    duration = max(0.001, audio_slice.end - audio_slice.start)
+    cmd = [
+        str(Path(args.ffmpeg)),
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-y" if args.overwrite else "-n",
+        "-ss",
+        f"{audio_slice.start:.3f}",
+        "-t",
+        f"{duration:.3f}",
+        "-i",
+        str(source_audio),
+        "-ac",
+        "1",
+        "-ar",
+        "16000",
+        "-c:a",
+        "pcm_s16le",
+        str(audio_slice.audio),
+    ]
+    subprocess.run(cmd, check=True, text=True, capture_output=True)
 
 
 def normalize_token(text: str) -> str:
@@ -194,6 +385,189 @@ def official_tokens(section_payload: dict[str, Any]) -> list[Token]:
     return out
 
 
+def official_token_records(section_payload: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {
+            "globalTokenIndex": token.global_index,
+            "segmentOrder": token.segment_order,
+            "tokenIndex": token.token_index,
+            "text": token.text,
+            "normalized": token.normalized,
+        }
+        for token in official_tokens(section_payload)
+    ]
+
+
+def localization_token_records(tokens: list[TimedToken]) -> list[dict[str, Any]]:
+    return [
+        {
+            "text": token.text,
+            "normalized": token.normalized,
+            "start": round(token.start, 3),
+            "end": round(token.end, 3),
+            "sourceIndex": token.source_index,
+        }
+        for token in tokens
+    ]
+
+
+def localization_tokens_from_payload(payload: dict[str, Any]) -> list[TimedToken]:
+    timed: list[TimedToken] = []
+    source_index = 0
+
+    def append_text(text: str, start: float | None, end: float | None, explicit_index: int | None = None) -> None:
+        nonlocal source_index
+        if start is None or end is None:
+            return
+        local_index = explicit_index if explicit_index is not None else source_index
+        parts = split_timed_item(text, float(start), float(end), local_index)
+        timed.extend(parts)
+        source_index = max(source_index + 1, local_index + 1)
+
+    for item in payload.get("tokens") or []:
+        if not isinstance(item, dict):
+            continue
+        append_text(
+            str(item.get("text") or item.get("word") or item.get("token") or ""),
+            scalar_time(item, "start", "start_time", "startTime"),
+            scalar_time(item, "end", "end_time", "endTime"),
+            int(item["sourceIndex"]) if item.get("sourceIndex") is not None else None,
+        )
+
+    if timed:
+        return timed
+
+    raw_items = payload.get("timestamps") or payload.get("words") or payload.get("word_timestamps") or []
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+        append_text(
+            str(item.get("text") or item.get("word") or item.get("token") or ""),
+            scalar_time(item, "start", "start_time", "startTime"),
+            scalar_time(item, "end", "end_time", "endTime"),
+            int(item["sourceIndex"]) if item.get("sourceIndex") is not None else None,
+        )
+
+    if timed:
+        return timed
+
+    for segment in payload.get("segments") or []:
+        if not isinstance(segment, dict):
+            continue
+        words = segment.get("words") or []
+        if words:
+            for word in words:
+                if not isinstance(word, dict):
+                    continue
+                append_text(
+                    str(word.get("word") or word.get("text") or word.get("token") or ""),
+                    scalar_time(word, "start", "start_time", "startTime"),
+                    scalar_time(word, "end", "end_time", "endTime"),
+                    int(word["sourceIndex"]) if word.get("sourceIndex") is not None else None,
+                )
+            continue
+        append_text(
+            str(segment.get("text") or ""),
+            scalar_time(segment, "start", "start_time", "startTime"),
+            scalar_time(segment, "end", "end_time", "endTime"),
+        )
+
+    return timed
+
+
+def normalize_localization_payload(payload: dict[str, Any], *, source_audio: Path | None = None, engine: str = "existing") -> dict[str, Any]:
+    tokens = localization_tokens_from_payload(payload)
+    normalized = {
+        "schemaVersion": LOCALIZATION_SCHEMA_VERSION,
+        "sourceAudio": str(source_audio) if source_audio else str(payload.get("sourceAudio") or ""),
+        "engine": str(payload.get("engine") or engine),
+        "generatedAt": str(payload.get("generatedAt") or utc_now()),
+        "tokens": localization_token_records(tokens),
+        "segments": payload.get("segments") or [],
+    }
+    for key in ("sourceAudioDurationSeconds", "officialTranscript", "transcriptHash", "cliParameters", "planHash"):
+        if payload.get(key) is not None:
+            normalized[key] = payload[key]
+    return normalized
+
+
+def enrich_localization_payload(
+    payload: dict[str, Any],
+    *,
+    audio: Path,
+    duration: float,
+    transcript: Path,
+    args: argparse.Namespace,
+    plan_hash: str | None = None,
+) -> dict[str, Any]:
+    enriched = dict(payload)
+    enriched["sourceAudio"] = str(audio)
+    enriched["sourceAudioDurationSeconds"] = round(duration, 3)
+    enriched["officialTranscript"] = str(transcript)
+    enriched["transcriptHash"] = file_sha256(transcript)
+    enriched["cliParameters"] = localization_cli_parameters(args)
+    if plan_hash:
+        enriched["planHash"] = plan_hash
+    return normalize_localization_payload(enriched, source_audio=audio, engine=str(enriched.get("engine") or args.localizer))
+
+
+def load_localization_transcript(path: Path) -> dict[str, Any]:
+    return normalize_localization_payload(load_json(path), engine="existing")
+
+
+def localization_output_path(args: argparse.Namespace, work_dir: Path, section: int) -> Path:
+    if args.localization_output:
+        return Path(args.localization_output)
+    return work_dir / "localization" / f"section-{section:02d}.localization.json"
+
+
+def localized_slice_plan_path(work_dir: Path, section: int) -> Path:
+    return work_dir / "plans" / f"section-{section:02d}.localized-slices.json"
+
+
+def generate_whisper_localization(args: argparse.Namespace, audio: Path, work_dir: Path, section: int) -> dict[str, Any]:
+    whisper = Path(args.whisper)
+    if not whisper.exists():
+        raise LocalizationError(f"Whisper executable not found: {whisper}")
+    output = localization_output_path(args, work_dir, section)
+    output_dir = output.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        str(whisper),
+        str(audio),
+        "--model",
+        "medium",
+        "--language",
+        "en",
+        "--word_timestamps",
+        "True",
+        "--output_format",
+        "json",
+        "--output_dir",
+        str(output_dir),
+    ]
+    completed = subprocess.run(cmd, check=True, text=True, capture_output=True)
+    (output_dir / f"section-{section:02d}.whisper.stdout.log").write_text(output_text(completed.stdout), encoding="utf-8")
+    (output_dir / f"section-{section:02d}.whisper.stderr.log").write_text(output_text(completed.stderr), encoding="utf-8")
+    raw_output = output_dir / f"{audio.stem}.json"
+    if not raw_output.exists():
+        raise LocalizationError(f"Whisper completed but did not write expected JSON: {raw_output}")
+    normalized = normalize_localization_payload(load_json(raw_output), source_audio=audio, engine="whisper")
+    write_json(output, normalized, args.overwrite)
+    return normalized
+
+
+def generate_or_load_localization(args: argparse.Namespace, audio: Path, work_dir: Path, section: int) -> dict[str, Any]:
+    if args.localization_input:
+        normalized = load_localization_transcript(Path(args.localization_input))
+        return normalized
+    if args.localizer == "existing":
+        raise LocalizationError("--localizer existing requires --localization-input.")
+    if args.localizer == "qwen-asr":
+        raise LocalizationError("qwen-asr localization generation is not configured; provide --localization-input.")
+    return generate_whisper_localization(args, audio, work_dir, section)
+
+
 def make_review_item(
     *,
     section: int,
@@ -230,7 +604,19 @@ def scalar_time(item: dict[str, Any], *names: str) -> float | None:
     return None
 
 
-def split_timed_item(text: str, start: float, end: float, source_index: int) -> list[TimedToken]:
+def split_timed_item(
+    text: str,
+    start: float,
+    end: float,
+    source_index: int,
+    *,
+    slice_index: int | None = None,
+    slice_audio_start: float | None = None,
+    official_token_start: int | None = None,
+    official_token_end: int | None = None,
+    slice_qwen_json: str | None = None,
+    official_token_index: int | None = None,
+) -> list[TimedToken]:
     parts = tokenize_text(text)
     if not parts:
         return []
@@ -240,7 +626,21 @@ def split_timed_item(text: str, start: float, end: float, source_index: int) -> 
     for idx, (raw, normalized, _risks) in enumerate(parts):
         token_start = start + step * idx
         token_end = end if idx == len(parts) - 1 else start + step * (idx + 1)
-        out.append(TimedToken(raw, normalized, token_start, token_end, source_index))
+        out.append(
+            TimedToken(
+                raw,
+                normalized,
+                token_start,
+                token_end,
+                source_index,
+                slice_index=slice_index,
+                slice_audio_start=slice_audio_start,
+                official_token_start=official_token_start,
+                official_token_end=official_token_end,
+                slice_qwen_json=slice_qwen_json,
+                official_token_index=official_token_index,
+            )
+        )
     return out
 
 
@@ -265,7 +665,20 @@ def timed_tokens_from_qwen(payload: dict[str, Any], section: int, review_items: 
                 )
             )
             continue
-        timed.extend(split_timed_item(text, start, end, source_index))
+        timed.extend(
+            split_timed_item(
+                text,
+                start,
+                end,
+                source_index,
+                slice_index=item.get("sliceIndex"),
+                slice_audio_start=item.get("sliceAudioStart"),
+                official_token_start=item.get("officialTokenStart"),
+                official_token_end=item.get("officialTokenEnd"),
+                slice_qwen_json=item.get("sliceQwenJson"),
+                official_token_index=item.get("officialTokenIndex"),
+            )
+        )
 
     if timed:
         return timed
@@ -300,36 +713,910 @@ def timed_tokens_from_qwen(payload: dict[str, Any], section: int, review_items: 
     return timed
 
 
-def build_wrapper_command(args: argparse.Namespace, audio: Path, work_dir: Path, section: int) -> tuple[list[str], Path]:
-    basename = f"section-{section:02d}"
-    qwen_json = work_dir / f"{basename}.qwen.json"
+def locate_content_start(
+    official: list[Token],
+    localization: list[TimedToken],
+    *,
+    min_score: float,
+    manual_seconds: float | None = None,
+    prefix_token_count: int = 40,
+    safety_margin_seconds: float = DEFAULT_CONTENT_START_SAFETY_SECONDS,
+) -> dict[str, Any]:
+    if manual_seconds is not None:
+        return {"source": "manual", "contentStartSeconds": round(float(manual_seconds), 3), "score": 1.0}
+    prefix = official[: max(1, min(prefix_token_count, len(official)))]
+    if not prefix or not localization:
+        raise LocalizationError("Cannot locate content start without official and localization tokens.")
+    official_norms = [token.normalized for token in prefix]
+    best: dict[str, Any] | None = None
+    for start_index in range(len(localization)):
+        min_window = min(20, len(official_norms), len(localization) - start_index)
+        max_window = min(70, len(localization) - start_index)
+        if min_window <= 0:
+            continue
+        for window_len in range(max(1, min_window), max_window + 1):
+            window = localization[start_index : start_index + window_len]
+            matcher = difflib.SequenceMatcher(a=official_norms, b=[token.normalized for token in window], autojunk=False)
+            score = matcher.ratio()
+            if best is None or score > best["score"]:
+                blocks = [block for block in matcher.get_matching_blocks() if block.size > 0]
+                if blocks:
+                    first_block = blocks[0]
+                    first_loc_index = start_index + first_block.b
+                    raw_start = localization[first_loc_index].start
+                else:
+                    first_loc_index = start_index
+                    raw_start = window[0].start
+                best = {
+                    "score": score,
+                    "rawContentStartSeconds": raw_start,
+                    "matchedOfficialTokenRange": [0, len(prefix)],
+                    "matchedLocalizationTokenRange": [first_loc_index, start_index + window_len],
+                    "officialPreview": " ".join(token.text for token in prefix[:12]),
+                    "localizationPreview": " ".join(token.text for token in window[:12]),
+                }
+    if best is None or best["score"] < min_score:
+        score = 0.0 if best is None else best["score"]
+        raise LocalizationError(f"Localization content-start score {score:.3f} is below required {min_score:.3f}.")
+    raw_start = float(best["rawContentStartSeconds"])
+    best["source"] = "fuzzy"
+    best["rawContentStartSeconds"] = round(raw_start, 3)
+    best["safetyMarginSeconds"] = safety_margin_seconds
+    best["contentStartSeconds"] = round(max(0.0, raw_start - safety_margin_seconds), 3)
+    best["score"] = round(float(best["score"]), 6)
+    return best
+
+
+def build_coarse_token_time_map(
+    official: list[Token],
+    localization: list[TimedToken],
+    *,
+    content_start_seconds: float,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    usable = [token for token in localization if token.start >= content_start_seconds - 1e-6]
+    ignored = len(localization) - len(usable)
+    matcher = difflib.SequenceMatcher(
+        a=[token.normalized for token in official],
+        b=[token.normalized for token in usable],
+        autojunk=False,
+    )
+    anchors: list[dict[str, Any]] = []
+    diagnostics: dict[str, Any] = {"ignoredLocalizationTokenCount": ignored, "sequenceDiagnostics": []}
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == "equal":
+            for offset in range(i2 - i1):
+                loc = usable[j1 + offset]
+                anchors.append(
+                    {
+                        "officialTokenIndex": i1 + offset,
+                        "time": round(loc.start, 3),
+                        "localizationTokenIndex": loc.source_index,
+                    }
+                )
+            continue
+        diagnostics["sequenceDiagnostics"].append(
+            {
+                "tag": tag,
+                "officialRange": [i1, i2],
+                "localizationRange": [j1, j2],
+                "officialSample": [token.text for token in official[i1 : min(i2, i1 + 6)]],
+                "localizationSample": [token.text for token in usable[j1 : min(j2, j1 + 6)]],
+            }
+        )
+    minimum = min(len(official), max(1, max(10, math.ceil(len(official) * 0.20))))
+    diagnostics["anchorCount"] = len(anchors)
+    diagnostics["minimumAnchorCount"] = minimum
+    if len(anchors) < minimum:
+        raise LocalizationError(f"Localization produced {len(anchors)} anchor(s), below required {minimum}.")
+    if anchors and official:
+        first_anchor = int(anchors[0]["officialTokenIndex"])
+        last_anchor = int(anchors[-1]["officialTokenIndex"])
+        head_margin = max(2, math.ceil(len(official) * 0.05))
+        tail_margin = max(3, math.ceil(len(official) * 0.10))
+        required_last = max(0, len(official) - tail_margin)
+        diagnostics["coverage"] = {
+            "firstOfficialTokenIndex": first_anchor,
+            "lastOfficialTokenIndex": last_anchor,
+            "headMargin": head_margin,
+            "requiredLastOfficialTokenIndex": required_last,
+        }
+        if first_anchor > head_margin or last_anchor < required_last:
+            raise LocalizationError(
+                f"Localization anchor coverage is insufficient: first={first_anchor}, last={last_anchor}, required last>={required_last}."
+            )
+        max_gap = max(5, math.ceil(len(official) * 0.15))
+        gaps = [
+            int(current["officialTokenIndex"]) - int(previous["officialTokenIndex"])
+            for previous, current in zip(anchors, anchors[1:])
+        ]
+        largest_gap = max(gaps) if gaps else 0
+        diagnostics["coverage"]["maxAllowedOfficialTokenGap"] = max_gap
+        diagnostics["coverage"]["largestOfficialTokenGap"] = largest_gap
+        if largest_gap > max_gap:
+            raise LocalizationError(
+                f"Localization anchor coverage has a middle gap of {largest_gap} official tokens, above allowed {max_gap}."
+            )
+    return anchors, diagnostics
+
+
+def official_token_at_or_before(time_seconds: float, anchors: list[dict[str, Any]]) -> int:
+    before = [anchor for anchor in anchors if float(anchor["time"]) <= time_seconds]
+    if before:
+        return int(before[-1]["officialTokenIndex"])
+    return int(anchors[0]["officialTokenIndex"]) if anchors else 0
+
+
+def official_token_at_or_after(time_seconds: float, anchors: list[dict[str, Any]]) -> int:
+    for anchor in anchors:
+        if float(anchor["time"]) >= time_seconds:
+            return int(anchor["officialTokenIndex"])
+    return int(anchors[-1]["officialTokenIndex"]) if anchors else 0
+
+
+def official_slice_text(official: list[Token], start: int, end: int) -> str:
+    return " ".join(token.text for token in official[start:end])
+
+
+def stable_plan_hash(payload: dict[str, Any]) -> str:
+    data = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(data.encode("utf-8")).hexdigest()
+
+
+def file_sha256(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def localization_cli_parameters(args: argparse.Namespace) -> dict[str, Any]:
+    return {
+        "localizer": args.localizer,
+        "localizeContentStart": bool(args.localize_content_start),
+        "contentStartSeconds": args.content_start_seconds,
+        "minLocalizationScore": float(args.min_localization_score),
+        "sliceThresholdSeconds": float(args.slice_threshold_seconds),
+        "sliceSeconds": float(args.slice_seconds),
+        "sliceOverlapSeconds": float(args.slice_overlap_seconds),
+        "textOverlapTokens": int(args.text_overlap_tokens),
+        "whisper": str(Path(args.whisper)),
+        "localizationInput": args.localization_input,
+        "localizationOutput": args.localization_output,
+    }
+
+
+def validate_localization_source(localization_payload: dict[str, Any], audio: Path) -> None:
+    source = str(localization_payload.get("sourceAudio") or "")
+    if not source:
+        return
+    source_path = Path(source)
+    if source_path.name and source_path.name != audio.name:
+        raise LocalizationError(f"Localization sourceAudio {source!r} does not match source audio {str(audio)!r}.")
+    if source_path.parent != Path(".") and source_path.resolve() != audio.resolve():
+        raise LocalizationError(f"Localization sourceAudio {source!r} does not match source audio {str(audio)!r}.")
+
+
+def localized_slice_to_record(item: LocalizedSlice) -> dict[str, Any]:
+    return {
+        "index": item.index,
+        "audioStart": item.audio_start,
+        "audioEnd": item.audio_end,
+        "start": item.audio_start,
+        "end": item.audio_end,
+        "duration": round(item.audio_end - item.audio_start, 3),
+        "officialTokenStart": item.official_token_start,
+        "officialTokenEnd": item.official_token_end,
+        "audio": str(item.audio),
+        "officialText": str(item.text_path),
+        "basename": item.basename,
+        "textPreview": item.text_preview,
+    }
+
+
+def build_localized_slice_plan(
+    args: argparse.Namespace,
+    *,
+    audio: Path,
+    work_dir: Path,
+    section: int,
+    duration: float,
+    section_payload: dict[str, Any],
+    transcript: Path,
+    localization_payload: dict[str, Any],
+    localization_artifact: Path,
+    write_plan: bool,
+) -> tuple[dict[str, Any], list[LocalizedSlice]]:
+    official = official_tokens(section_payload)
+    localization = localization_tokens_from_payload(localization_payload)
+    validate_localization_source(localization_payload, audio)
+    content_start = locate_content_start(
+        official,
+        localization,
+        min_score=float(args.min_localization_score),
+        manual_seconds=args.content_start_seconds,
+    )
+    anchors, diagnostics = build_coarse_token_time_map(
+        official,
+        localization,
+        content_start_seconds=float(content_start["contentStartSeconds"]),
+    )
+    slice_seconds = float(args.slice_seconds)
+    overlap = float(args.slice_overlap_seconds)
+    text_overlap = int(args.text_overlap_tokens)
+    start_at = float(content_start["contentStartSeconds"])
+    if duration <= start_at:
+        raise LocalizationError(f"Content start {start_at} is beyond audio duration {duration}.")
+    count = max(1, math.ceil((duration - start_at) / slice_seconds))
+    slices: list[LocalizedSlice] = []
+    for index in range(count):
+        base_start = start_at + index * slice_seconds
+        base_end = min(duration, start_at + (index + 1) * slice_seconds)
+        audio_start = round(max(start_at, base_start - (overlap if index else 0.0)), 3)
+        audio_end = round(min(duration, base_end + (overlap if base_end < duration else 0.0)), 3)
+        token_start = official_token_at_or_before(audio_start, anchors)
+        token_end = official_token_at_or_after(audio_end, anchors) + 1
+        token_start = max(0, token_start - (text_overlap if index else 0))
+        token_end = min(len(official), token_end + (text_overlap if audio_end < duration else 0))
+        if token_end <= token_start:
+            raise LocalizationError(f"Localized slice {index + 1} has an empty official token range.")
+        basename = f"section-{section:02d}.slice-{index + 1:03d}"
+        text = official_slice_text(official, token_start, token_end)
+        preview = text[:157] + "..." if len(text) > 160 else text
+        slices.append(
+            LocalizedSlice(
+                index=index + 1,
+                audio_start=audio_start,
+                audio_end=audio_end,
+                official_token_start=token_start,
+                official_token_end=token_end,
+                audio=work_dir / "slices" / f"{basename}.wav",
+                text_path=work_dir / "slices" / f"{basename}.official.txt",
+                basename=basename,
+                text_preview=preview,
+            )
+        )
+    plan = {
+        "schemaVersion": LOCALIZED_SLICE_PLAN_SCHEMA_VERSION,
+        "section": section,
+        "sourceAudio": str(audio),
+        "sourceAudioDurationSeconds": round(duration, 3),
+        "officialTranscript": str(transcript),
+        "transcriptHash": file_sha256(transcript),
+        "localizationArtifact": str(localization_artifact),
+        "cliParameters": localization_cli_parameters(args),
+        "contentStart": content_start,
+        "contentStartSeconds": content_start["contentStartSeconds"],
+        "localizationScore": content_start.get("score"),
+        "tokenCounts": {"official": len(official), "localization": len(localization)},
+        "anchors": anchors,
+        "diagnostics": diagnostics,
+        "sliceSeconds": slice_seconds,
+        "sliceOverlapSeconds": overlap,
+        "textOverlapTokens": text_overlap,
+        "slices": [localized_slice_to_record(item) for item in slices],
+    }
+    plan["planHash"] = stable_plan_hash({key: value for key, value in plan.items() if key != "planHash"})
+    if write_plan:
+        write_json(localized_slice_plan_path(work_dir, section), plan, args.overwrite)
+    return plan, slices
+
+
+def official_section_text(section_payload: dict[str, Any]) -> str:
+    return " ".join(str(segment.get("text", "")).strip() for segment in section_payload.get("segments", []) if str(segment.get("text", "")).strip())
+
+
+def official_text_path(work_dir: Path, basename: str) -> Path:
+    return work_dir / f"{basename}.official.txt"
+
+
+def build_direct_align_command(
+    args: argparse.Namespace,
+    audio: Path,
+    work_dir: Path,
+    section: int,
+    *,
+    basename: str | None = None,
+    output_dir: Path | None = None,
+    text_path_override: Path | None = None,
+) -> tuple[list[str], Path, Path]:
+    basename = basename or f"section-{section:02d}"
+    qwen_json = (output_dir or work_dir) / f"{basename}.qwen.json"
+    text_path = text_path_override or official_text_path(work_dir, basename)
     cmd = [
         str(Path(args.qwen_python)),
-        str(Path(args.qwen_wrapper)),
+        str(Path(args.direct_align_worker)),
         "--input",
         str(audio),
-        "--output-dir",
-        str(work_dir),
-        "--basename",
-        basename,
-        "--profile",
-        args.profile,
+        "--text-file",
+        str(text_path),
+        "--output-json",
+        str(qwen_json),
+        "--aligner-model",
+        str(Path(args.model_root) / "Qwen3-ForcedAligner-0.6B"),
         "--language",
         args.language,
-        "--context",
-        args.context,
-        "--model-root",
-        str(Path(args.model_root)),
-        "--ffmpeg",
-        str(Path(args.ffmpeg)),
+        "--device-map",
+        args.qwen_device_map,
+        "--dtype",
+        args.qwen_dtype,
     ]
     if args.overwrite:
         cmd.append("--overwrite")
-    return cmd, qwen_json
+    return cmd, qwen_json, text_path
 
 
-def run_wrapper(cmd: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(cmd, check=True, text=True, capture_output=True)
+def wrapper_log_path(work_dir: Path, basename: str) -> Path:
+    return work_dir / f"{basename}.wrapper.log.json"
+
+
+def stream_log_path(log_path: Path, stream_name: str) -> Path:
+    name = log_path.name
+    prefix = name[: -len(".log.json")] if name.endswith(".log.json") else log_path.stem
+    return log_path.with_name(f"{prefix}.{stream_name}.log")
+
+
+def output_text(value: str | bytes | None) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value
+
+
+def write_wrapper_log(
+    log_path: Path,
+    *,
+    cmd: list[str],
+    started_at: str,
+    status: str,
+    timeout_seconds: float | None,
+    returncode: int | None,
+    stdout: str | bytes | None,
+    stderr: str | bytes | None,
+) -> None:
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "command": cmd,
+        "status": status,
+        "timeoutSeconds": timeout_seconds,
+        "returnCode": returncode,
+        "startedAt": started_at,
+        "finishedAt": utc_now(),
+        "stdoutLog": str(stream_log_path(log_path, "stdout")),
+        "stderrLog": str(stream_log_path(log_path, "stderr")),
+        "stdout": output_text(stdout)[-20000:],
+        "stderr": output_text(stderr)[-20000:],
+    }
+    log_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def terminate_process_tree(proc: subprocess.Popen[str]) -> None:
+    if proc.poll() is not None:
+        return
+    if sys.platform == "win32":
+        subprocess.run(
+            ["taskkill", "/PID", str(proc.pid), "/T", "/F"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    if proc.poll() is None:
+        proc.kill()
+
+
+def qwen_child_environment() -> dict[str, str]:
+    env = os.environ.copy()
+    env["PYTHONUTF8"] = "1"
+    env["PYTHONIOENCODING"] = "utf-8"
+    return env
+
+
+def tee_stream(stream, chunks: list[str], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", errors="replace") as handle:
+        while True:
+            data = stream.readline()
+            if data == "":
+                break
+            chunks.append(data)
+            handle.write(data)
+            handle.flush()
+
+
+def run_wrapper(cmd: list[str], *, log_path: Path, timeout_seconds: float | None) -> subprocess.CompletedProcess[str]:
+    timeout = None if timeout_seconds is None or timeout_seconds <= 0 else float(timeout_seconds)
+    started_at = utc_now()
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        bufsize=1,
+        env=qwen_child_environment(),
+    )
+    stdout_chunks: list[str] = []
+    stderr_chunks: list[str] = []
+    stdout_thread = threading.Thread(
+        target=tee_stream,
+        args=(proc.stdout, stdout_chunks, stream_log_path(log_path, "stdout")),
+        daemon=True,
+    )
+    stderr_thread = threading.Thread(
+        target=tee_stream,
+        args=(proc.stderr, stderr_chunks, stream_log_path(log_path, "stderr")),
+        daemon=True,
+    )
+    stdout_thread.start()
+    stderr_thread.start()
+    try:
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        terminate_process_tree(proc)
+        proc.wait()
+        stdout_thread.join(timeout=5)
+        stderr_thread.join(timeout=5)
+        stdout = "".join(stdout_chunks)
+        stderr = "".join(stderr_chunks)
+        write_wrapper_log(
+            log_path,
+            cmd=cmd,
+            started_at=started_at,
+            status="timeout",
+            timeout_seconds=timeout,
+            returncode=proc.returncode,
+            stdout=stdout or exc.output,
+            stderr=stderr or exc.stderr,
+        )
+        raise subprocess.TimeoutExpired(
+            cmd,
+            timeout,
+            output=stdout or exc.output,
+            stderr=(output_text(stderr or exc.stderr) + f"\nWrapper log: {log_path}").strip(),
+        ) from exc
+    stdout_thread.join(timeout=5)
+    stderr_thread.join(timeout=5)
+    stdout = "".join(stdout_chunks)
+    stderr = "".join(stderr_chunks)
+
+    status = "ok" if proc.returncode == 0 else "failed"
+    write_wrapper_log(
+        log_path,
+        cmd=cmd,
+        started_at=started_at,
+        status=status,
+        timeout_seconds=timeout,
+        returncode=proc.returncode,
+        stdout=stdout,
+        stderr=stderr,
+    )
+    if proc.returncode != 0:
+        raise subprocess.CalledProcessError(
+            proc.returncode,
+            cmd,
+            output=stdout,
+            stderr=(stderr + f"\nWrapper log: {log_path}").strip(),
+        )
+    return subprocess.CompletedProcess(cmd, proc.returncode, stdout, stderr)
+
+
+def offset_time_fields(item: dict[str, Any], offset: float) -> dict[str, Any]:
+    out = copy.deepcopy(item)
+    for key in ("start", "end", "start_time", "end_time", "startTime", "endTime"):
+        if key in out and out[key] is not None:
+            out[key] = round(float(out[key]) + offset, 6)
+    return out
+
+
+def offset_qwen_payload(payload: dict[str, Any], offset: float) -> dict[str, Any]:
+    out = copy.deepcopy(payload)
+    for key in ("timestamps", "words", "segments"):
+        values = out.get(key)
+        if isinstance(values, list):
+            out[key] = [offset_time_fields(item, offset) if isinstance(item, dict) else item for item in values]
+    return out
+
+
+def merge_slice_qwen_payloads(
+    args: argparse.Namespace,
+    *,
+    output_json: Path,
+    original_audio: Path,
+    text: str,
+    slices: list[AudioSlice],
+    slice_jsons: list[Path],
+) -> None:
+    timestamps: list[Any] = []
+    segments: list[Any] = []
+    slice_records: list[dict[str, Any]] = []
+    language = args.language
+    for audio_slice, slice_json in zip(slices, slice_jsons):
+        payload = load_json(slice_json)
+        shifted = offset_qwen_payload(payload, audio_slice.start)
+        timestamps.extend(shifted.get("timestamps") or [])
+        segments.extend(shifted.get("segments") or [])
+        language = str(shifted.get("language") or language)
+        slice_records.append(
+            {
+                "index": audio_slice.index,
+                "start": audio_slice.start,
+                "end": audio_slice.end,
+                "audio": str(audio_slice.audio),
+                "qwenJson": str(slice_json),
+                "timestampCount": len(shifted.get("timestamps") or []),
+                "segmentCount": len(shifted.get("segments") or []),
+            }
+        )
+
+    payload = {
+        "config": {
+            "source": "transcript-slices",
+            "aligner_model": str(Path(args.model_root) / "Qwen3-ForcedAligner-0.6B"),
+            "language": language,
+            "device_map": args.qwen_device_map,
+            "dtype": args.qwen_dtype,
+            "return_time_stamps": True,
+            "sliceThresholdSeconds": float(args.slice_threshold_seconds),
+            "sliceSeconds": float(args.slice_seconds),
+        },
+        "language": language,
+        "text": text,
+        "timestamps": timestamps,
+        "segments": segments,
+        "audio_path": str(original_audio),
+        "slices": slice_records,
+    }
+    write_json(output_json, payload, args.overwrite)
+
+
+def materialize_localized_slice(
+    args: argparse.Namespace,
+    source_audio: Path,
+    localized_slice: LocalizedSlice,
+    official: list[Token],
+    *,
+    plan_hash: str,
+    plan_metadata: dict[str, Any] | None = None,
+) -> None:
+    manifest = localized_slice.audio.with_suffix(".manifest.json")
+    if localized_slice.audio.exists() and localized_slice.text_path.exists() and not args.overwrite:
+        if not manifest.exists():
+            raise FileExistsError(f"Localized slice exists without manifest: {localized_slice.audio}")
+        existing = load_json(manifest)
+        if existing.get("planHash") != plan_hash:
+            raise FileExistsError(f"Localized slice manifest hash mismatch for {localized_slice.audio}")
+        return
+    localized_slice.audio.parent.mkdir(parents=True, exist_ok=True)
+    localized_slice.text_path.parent.mkdir(parents=True, exist_ok=True)
+    localized_slice.text_path.write_text(
+        official_slice_text(official, localized_slice.official_token_start, localized_slice.official_token_end) + "\n",
+        encoding="utf-8",
+    )
+    duration = max(0.001, localized_slice.audio_end - localized_slice.audio_start)
+    cmd = [
+        str(Path(args.ffmpeg)),
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-y" if args.overwrite else "-n",
+        "-ss",
+        f"{localized_slice.audio_start:.3f}",
+        "-t",
+        f"{duration:.3f}",
+        "-i",
+        str(source_audio),
+        "-ac",
+        "1",
+        "-ar",
+        "16000",
+        "-c:a",
+        "pcm_s16le",
+        str(localized_slice.audio),
+    ]
+    subprocess.run(cmd, check=True, text=True, capture_output=True)
+    manifest_payload = {
+        "planHash": plan_hash,
+        "sliceIndex": localized_slice.index,
+        "audioStart": localized_slice.audio_start,
+        "audioEnd": localized_slice.audio_end,
+        "officialTokenStart": localized_slice.official_token_start,
+        "officialTokenEnd": localized_slice.official_token_end,
+    }
+    if plan_metadata:
+        manifest_payload.update(
+            {
+                "sourceAudio": plan_metadata.get("sourceAudio"),
+                "sourceAudioDurationSeconds": plan_metadata.get("sourceAudioDurationSeconds"),
+                "officialTranscript": plan_metadata.get("officialTranscript"),
+                "transcriptHash": plan_metadata.get("transcriptHash"),
+                "cliParameters": plan_metadata.get("cliParameters"),
+            }
+        )
+    write_json(manifest, manifest_payload, True)
+
+
+def slice_boundary_distance(start: float, end: float, localized_slice: LocalizedSlice) -> float:
+    midpoint = (start + end) / 2
+    return min(midpoint - localized_slice.audio_start, localized_slice.audio_end - midpoint)
+
+
+def localized_slice_candidates(
+    payload: dict[str, Any],
+    *,
+    section: int,
+    official: list[Token],
+    localized_slice: LocalizedSlice,
+    slice_qwen_json: Path,
+) -> list[dict[str, Any]]:
+    review_items: list[dict[str, Any]] = []
+    timed = timed_tokens_from_qwen(payload, section, review_items)
+    official_range = official[localized_slice.official_token_start : localized_slice.official_token_end]
+    matcher = difflib.SequenceMatcher(
+        a=[token.normalized for token in official_range],
+        b=[token.normalized for token in timed],
+        autojunk=False,
+    )
+    candidates: list[dict[str, Any]] = []
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag != "equal":
+            continue
+        for offset in range(i2 - i1):
+            official_token = official_range[i1 + offset]
+            timed_token = timed[j1 + offset]
+            start = round(timed_token.start + localized_slice.audio_start, 6)
+            end = round(timed_token.end + localized_slice.audio_start, 6)
+            candidates.append(
+                {
+                    "text": official_token.text,
+                    "start_time": start,
+                    "end_time": end,
+                    "officialTokenIndex": official_token.global_index,
+                    "sourceIndex": timed_token.source_index,
+                    "sliceIndex": localized_slice.index,
+                    "sliceAudioStart": localized_slice.audio_start,
+                    "officialTokenStart": localized_slice.official_token_start,
+                    "officialTokenEnd": localized_slice.official_token_end,
+                    "sliceQwenJson": str(slice_qwen_json),
+                    "boundaryDistance": round(slice_boundary_distance(start, end, localized_slice), 6),
+                }
+            )
+    return candidates
+
+
+def choose_localized_candidate(current: dict[str, Any] | None, candidate: dict[str, Any]) -> dict[str, Any]:
+    if current is None:
+        return candidate
+    candidate_positive = candidate["end_time"] > candidate["start_time"]
+    current_positive = current["end_time"] > current["start_time"]
+    if candidate_positive != current_positive:
+        return candidate if candidate_positive else current
+    if candidate["boundaryDistance"] > current["boundaryDistance"] + 1e-9:
+        return candidate
+    if abs(candidate["boundaryDistance"] - current["boundaryDistance"]) <= 1e-9 and candidate["sliceIndex"] < current["sliceIndex"]:
+        return candidate
+    return current
+
+
+def merge_localized_slice_qwen_payloads(
+    args: argparse.Namespace,
+    *,
+    output_json: Path,
+    original_audio: Path,
+    text: str,
+    official: list[Token],
+    slices: list[LocalizedSlice],
+    slice_jsons: list[Path],
+    plan: dict[str, Any],
+) -> None:
+    by_official: dict[int, dict[str, Any]] = {}
+    slice_records: list[dict[str, Any]] = []
+    language = args.language
+    for localized_slice, slice_json in zip(slices, slice_jsons):
+        payload = load_json(slice_json)
+        language = str(payload.get("language") or language)
+        candidates = localized_slice_candidates(
+            payload,
+            section=int(plan["section"]),
+            official=official,
+            localized_slice=localized_slice,
+            slice_qwen_json=slice_json,
+        )
+        for candidate in candidates:
+            key = int(candidate["officialTokenIndex"])
+            by_official[key] = choose_localized_candidate(by_official.get(key), candidate)
+        record = localized_slice_to_record(localized_slice)
+        record["qwenJson"] = str(slice_json)
+        record["timestampCount"] = len(payload.get("timestamps") or [])
+        slice_records.append(record)
+    timestamps = [by_official[index] for index in sorted(by_official)]
+    for item in timestamps:
+        item.pop("boundaryDistance", None)
+    localization = {
+        "source": plan.get("contentStart", {}).get("source"),
+        "contentStartSeconds": plan.get("contentStartSeconds"),
+        "score": plan.get("localizationScore"),
+        "artifact": plan.get("localizationArtifact"),
+        "slicePlan": str(localized_slice_plan_path(output_json.parent.parent if output_json.parent.name == "slices" else output_json.parent, int(plan["section"]))),
+        "slices": plan.get("slices") or [],
+    }
+    payload = {
+        "config": {
+            "source": "localized-transcript-slices",
+            "aligner_model": str(Path(args.model_root) / "Qwen3-ForcedAligner-0.6B"),
+            "language": language,
+            "device_map": args.qwen_device_map,
+            "dtype": args.qwen_dtype,
+            "return_time_stamps": True,
+            "sliceThresholdSeconds": float(args.slice_threshold_seconds),
+            "sliceSeconds": float(args.slice_seconds),
+            "sliceOverlapSeconds": float(args.slice_overlap_seconds),
+            "textOverlapTokens": int(args.text_overlap_tokens),
+        },
+        "language": language,
+        "text": text,
+        "timestamps": timestamps,
+        "segments": [],
+        "audio_path": str(original_audio),
+        "localization": localization,
+        "slices": slice_records,
+    }
+    write_json(output_json, payload, args.overwrite)
+
+
+def run_direct_align(
+    args: argparse.Namespace,
+    audio: Path,
+    work_dir: Path,
+    section: int,
+    section_payload: dict[str, Any],
+) -> tuple[subprocess.CompletedProcess[str], Path]:
+    basename = f"section-{section:02d}"
+    duration = probe_audio_duration(args, audio)
+    slices = audio_slices_for(args, audio, work_dir, section, duration)
+    cmd, qwen_json, text_path = build_direct_align_command(args, audio, work_dir, section, basename=basename)
+    text = official_section_text(section_payload)
+    if not text:
+        raise ValueError(f"Section {section} has no transcript text to align.")
+    text_path.parent.mkdir(parents=True, exist_ok=True)
+    text_path.write_text(text + "\n", encoding="utf-8")
+    should_localize = bool(args.localize_content_start or args.localization_input or duration > float(args.slice_threshold_seconds))
+    if should_localize:
+        localization_payload = generate_or_load_localization(args, audio, work_dir, section)
+        validate_localization_source(localization_payload, audio)
+        localization_artifact = Path(args.localization_output) if args.localization_output else localization_output_path(args, work_dir, section)
+        localization_payload = enrich_localization_payload(
+            localization_payload,
+            audio=audio,
+            duration=duration,
+            transcript=Path(args.transcript),
+            args=args,
+        )
+        plan, localized_slices = build_localized_slice_plan(
+            args,
+            audio=audio,
+            work_dir=work_dir,
+            section=section,
+            duration=duration,
+            section_payload=section_payload,
+            transcript=Path(args.transcript),
+            localization_payload=localization_payload,
+            localization_artifact=localization_artifact,
+            write_plan=True,
+        )
+        localization_payload = enrich_localization_payload(
+            localization_payload,
+            audio=audio,
+            duration=duration,
+            transcript=Path(args.transcript),
+            args=args,
+            plan_hash=str(plan["planHash"]),
+        )
+        write_json(localization_artifact, localization_payload, args.overwrite)
+        official = official_tokens(section_payload)
+        completed_runs: list[subprocess.CompletedProcess[str]] = []
+        slice_jsons: list[Path] = []
+        for localized_slice in localized_slices:
+            materialize_localized_slice(args, audio, localized_slice, official, plan_hash=str(plan["planHash"]), plan_metadata=plan)
+            localized_slice.text_path.parent.mkdir(parents=True, exist_ok=True)
+            localized_slice.text_path.write_text(
+                official_slice_text(official, localized_slice.official_token_start, localized_slice.official_token_end) + "\n",
+                encoding="utf-8",
+            )
+            slice_cmd, slice_qwen_json, _slice_text_path = build_direct_align_command(
+                args,
+                localized_slice.audio,
+                work_dir,
+                section,
+                basename=localized_slice.basename,
+                output_dir=localized_slice.audio.parent,
+                text_path_override=localized_slice.text_path,
+            )
+            completed_runs.append(
+                run_wrapper(
+                    slice_cmd,
+                    log_path=wrapper_log_path(localized_slice.audio.parent, f"{localized_slice.basename}.direct-align"),
+                    timeout_seconds=args.qwen_timeout_seconds,
+                )
+            )
+            slice_jsons.append(slice_qwen_json)
+        merge_localized_slice_qwen_payloads(
+            args,
+            output_json=qwen_json,
+            original_audio=audio,
+            text=text,
+            official=official,
+            slices=localized_slices,
+            slice_jsons=slice_jsons,
+            plan=plan,
+        )
+        stdout = json.dumps({"qwenJson": str(qwen_json), "sliceCount": len(localized_slices), "localized": True}, ensure_ascii=False)
+        stderr = "\n".join(run.stderr for run in completed_runs if run.stderr)
+        return subprocess.CompletedProcess([str(Path(args.qwen_python)), str(Path(args.direct_align_worker)), "--localized-sliced"], 0, stdout, stderr), qwen_json
+
+    if slices:
+        completed_runs: list[subprocess.CompletedProcess[str]] = []
+        slice_jsons: list[Path] = []
+        for audio_slice in slices:
+            create_audio_slice(args, audio, audio_slice)
+            slice_cmd, slice_qwen_json, slice_text_path = build_direct_align_command(
+                args,
+                audio_slice.audio,
+                work_dir,
+                section,
+                basename=audio_slice.basename,
+            )
+            slice_text_path.parent.mkdir(parents=True, exist_ok=True)
+            slice_text_path.write_text(text + "\n", encoding="utf-8")
+            completed_runs.append(
+                run_wrapper(
+                    slice_cmd,
+                    log_path=wrapper_log_path(work_dir, f"{audio_slice.basename}.direct-align"),
+                    timeout_seconds=args.qwen_timeout_seconds,
+                )
+            )
+            slice_jsons.append(slice_qwen_json)
+        merge_slice_qwen_payloads(
+            args,
+            output_json=qwen_json,
+            original_audio=audio,
+            text=text,
+            slices=slices,
+            slice_jsons=slice_jsons,
+        )
+        stdout = json.dumps({"qwenJson": str(qwen_json), "sliceCount": len(slices)}, ensure_ascii=False)
+        stderr = "\n".join(run.stderr for run in completed_runs if run.stderr)
+        return subprocess.CompletedProcess([str(Path(args.qwen_python)), str(Path(args.direct_align_worker)), "--sliced"], 0, stdout, stderr), qwen_json
+
+    completed = run_wrapper(
+        cmd,
+        log_path=wrapper_log_path(work_dir, f"{basename}.direct-align"),
+        timeout_seconds=args.qwen_timeout_seconds,
+    )
+    return completed, qwen_json
+
+
+def check_gpu_preflight(args: argparse.Namespace) -> dict[str, Any]:
+    minimum = int(args.min_free_gpu_memory_mib or 0)
+    if minimum <= 0 or not str(args.qwen_device_map).lower().startswith("cuda"):
+        return {"required": False}
+    cmd = ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"]
+    try:
+        completed = subprocess.run(cmd, check=True, text=True, capture_output=True)
+    except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+        raise RuntimeError(f"GPU preflight failed to run nvidia-smi: {exc}") from exc
+    values = [int(float(line.strip())) for line in completed.stdout.splitlines() if line.strip()]
+    if not values:
+        raise RuntimeError("GPU preflight found no GPU memory readings from nvidia-smi.")
+    free_mib = max(values)
+    result = {"required": True, "freeMiB": free_mib, "minimumFreeMiB": minimum}
+    if free_mib < minimum:
+        raise RuntimeError(f"Insufficient free GPU memory: {free_mib} MiB free, requires at least {minimum} MiB.")
+    return result
 
 
 def review_reasons_for(entry: dict[str, Any]) -> list[str]:
@@ -460,6 +1747,19 @@ def map_tokens(section: int, official: list[Token], timed: list[TimedToken]) -> 
             "match": match,
             "risks": list(token.risks),
         }
+        if source_token:
+            if source_token.slice_index is not None:
+                entry["sliceIndex"] = source_token.slice_index
+            if source_token.slice_audio_start is not None:
+                entry["sliceAudioStart"] = source_token.slice_audio_start
+            if source_token.official_token_start is not None:
+                entry["officialTokenStart"] = source_token.official_token_start
+            if source_token.official_token_end is not None:
+                entry["officialTokenEnd"] = source_token.official_token_end
+            if source_token.slice_qwen_json is not None:
+                entry["sliceQwenJson"] = source_token.slice_qwen_json
+            if source_token.official_token_index is not None:
+                entry["sourceOfficialTokenIndex"] = source_token.official_token_index
         entry["requiresReview"] = bool(review_reasons_for(entry))
         word_timings.append(entry)
 
@@ -513,8 +1813,7 @@ def align_section(args: argparse.Namespace, section: int, transcript_sections: d
     if not audio.exists():
         raise FileNotFoundError(f"Section audio not found: {audio}")
 
-    cmd, qwen_json = build_wrapper_command(args, audio, work_dir, section)
-    completed = run_wrapper(cmd)
+    completed, qwen_json = run_direct_align(args, audio, work_dir, section, transcript_sections[section])
     if completed.stderr.strip():
         section_review.append(
             make_review_item(
@@ -537,6 +1836,7 @@ def align_section(args: argparse.Namespace, section: int, transcript_sections: d
         "status": status_from(section_review, diagnostics, pending_reviews),
         "audio": str(audio),
         "qwenJson": str(qwen_json),
+        "localization": payload.get("localization"),
         "segmentCount": len(transcript_sections[section].get("segments", [])),
         "wordTimings": word_timings,
         "reviewItems": section_review,
@@ -556,17 +1856,23 @@ def tool_metadata(args: argparse.Namespace, work_dir: Path) -> dict[str, Any]:
     return {
         "name": TOOL_NAME,
         "version": TOOL_VERSION,
-        "profile": args.profile,
         "language": args.language,
-        "context": args.context,
+        "qwenDeviceMap": args.qwen_device_map,
+        "qwenDtype": args.qwen_dtype,
+        "qwenTimeoutSeconds": args.qwen_timeout_seconds,
+        "minFreeGpuMemoryMiB": args.min_free_gpu_memory_mib,
+        "sliceThresholdSeconds": args.slice_threshold_seconds,
+        "sliceSeconds": args.slice_seconds,
+        "sliceOverlapSeconds": args.slice_overlap_seconds,
+        "textOverlapTokens": args.text_overlap_tokens,
+        "minLocalizationScore": args.min_localization_score,
         "qwenPython": str(Path(args.qwen_python)),
-        "qwenWrapper": str(Path(args.qwen_wrapper)),
+        "directAlignWorker": str(Path(args.direct_align_worker)),
         "modelRoot": str(Path(args.model_root)),
         "forcedAligner": str(DEFAULT_ALIGNER),
-        "fastAsrModel": str(DEFAULT_FAST_ASR),
-        "qualityAsrModel": str(DEFAULT_QUALITY_ASR),
         "ffmpeg": str(Path(args.ffmpeg)),
         "ffprobe": str(Path(args.ffprobe)),
+        "whisper": str(Path(args.whisper)),
         "workDir": str(work_dir),
     }
 
@@ -660,6 +1966,7 @@ def build_review_artifact(
                 "autoMapping": {
                     "schemaVersion": SCHEMA_VERSION,
                     "status": section_payload.get("status"),
+                    "localization": section_payload.get("localization"),
                     "segmentCount": section_payload.get("segmentCount"),
                     "wordTimings": section_payload.get("wordTimings", []),
                     "reviewItems": section_payload.get("reviewItems", []),
@@ -717,6 +2024,7 @@ def apply_review_to_section(section_payload: dict[str, Any], review_path: Path, 
         "status": "verified",
         "audio": section_payload.get("audio"),
         "qwenJson": section_payload.get("qwenJson"),
+        "localization": section_payload.get("autoMapping", {}).get("localization"),
         "segmentCount": section_payload.get("autoMapping", {}).get("segmentCount"),
         "wordTimings": [],
         "reviewItems": [],
@@ -876,18 +2184,96 @@ def dry_run_plan(args: argparse.Namespace, transcript_sections: dict[int, dict[s
     planned = []
     for section in selected_sections(args):
         audio = section_audio(pack_root, section)
-        cmd, qwen_json = build_wrapper_command(args, audio, work_dir, section)
-        planned.append(
-            {
-                "section": section,
-                "audio": str(audio),
-                "audioExists": audio.exists(),
-                "officialSegmentCount": len(transcript_sections[section].get("segments", [])),
-                "officialTokenCount": len(official_tokens(transcript_sections[section])),
-                "qwenJson": str(qwen_json),
-                "wrapperCommand": cmd,
+        duration = probe_audio_duration(args, audio) if audio.exists() else None
+        should_localize = bool(duration is not None and (args.localize_content_start or args.localization_input or duration > float(args.slice_threshold_seconds)))
+        slices = [] if should_localize else audio_slices_for(args, audio, work_dir, section, duration) if duration is not None else []
+        direct_cmd, direct_qwen_json, text_path = build_direct_align_command(args, audio, work_dir, section)
+        item: dict[str, Any] = {
+            "section": section,
+            "audio": str(audio),
+            "audioExists": audio.exists(),
+            "audioDurationSeconds": round(duration, 3) if duration is not None else None,
+            "officialSegmentCount": len(transcript_sections[section].get("segments", [])),
+            "officialTokenCount": len(official_tokens(transcript_sections[section])),
+            "qwenJson": str(direct_qwen_json),
+            "officialText": str(text_path),
+            "directAlignCommand": None if slices else direct_cmd,
+            "directAlignLog": str(wrapper_log_path(work_dir, f"section-{section:02d}.direct-align")),
+            "officialTextChars": len(official_section_text(transcript_sections[section])),
+            "slicing": slice_summary(args, slices),
+        }
+        if should_localize and duration is not None:
+            if not args.localization_input:
+                item["localization"] = {
+                    "required": True,
+                    "localizer": args.localizer,
+                    "localizationInput": None,
+                    "whisper": str(Path(args.whisper)),
+                    "whisperExists": Path(args.whisper).exists(),
+                    "message": "Provide --localization-input for a full localized dry-run plan without running Whisper.",
+                }
+                item["directAlignCommand"] = None
+                planned.append(item)
+                continue
+            localization_payload = load_localization_transcript(Path(args.localization_input))
+            plan, localized_slices = build_localized_slice_plan(
+                args,
+                audio=audio,
+                work_dir=work_dir,
+                section=section,
+                duration=duration,
+                section_payload=transcript_sections[section],
+                transcript=transcript,
+                localization_payload=localization_payload,
+                localization_artifact=Path(args.localization_input),
+                write_plan=False,
+            )
+            item["localization"] = {
+                "required": True,
+                "source": plan.get("contentStart", {}).get("source"),
+                "contentStartSeconds": plan.get("contentStartSeconds"),
+                "score": plan.get("localizationScore"),
+                "artifact": str(Path(args.localization_input)),
+                "slicePlan": str(localized_slice_plan_path(work_dir, section)),
             }
-        )
+            item["directAlignCommand"] = None
+            item["slicing"] = {
+                "required": bool(localized_slices),
+                "thresholdSeconds": float(args.slice_threshold_seconds),
+                "sliceSeconds": float(args.slice_seconds),
+                "sliceOverlapSeconds": float(args.slice_overlap_seconds),
+                "textOverlapTokens": int(args.text_overlap_tokens),
+                "slices": [localized_slice_to_record(slice_item) for slice_item in localized_slices],
+            }
+            for slice_item, localized_slice in zip(item["slicing"]["slices"], localized_slices):
+                slice_cmd, slice_qwen_json, _slice_text_path = build_direct_align_command(
+                    args,
+                    localized_slice.audio,
+                    work_dir,
+                    section,
+                    basename=localized_slice.basename,
+                    output_dir=localized_slice.audio.parent,
+                    text_path_override=localized_slice.text_path,
+                )
+                slice_item["qwenJson"] = str(slice_qwen_json)
+                slice_item["directAlignCommand"] = slice_cmd
+                slice_item["directAlignLog"] = str(wrapper_log_path(localized_slice.audio.parent, f"{localized_slice.basename}.direct-align"))
+            planned.append(item)
+            continue
+        if slices:
+            for slice_item, audio_slice in zip(item["slicing"]["slices"], slices):
+                slice_cmd, slice_qwen_json, slice_text_path = build_direct_align_command(
+                    args,
+                    audio_slice.audio,
+                    work_dir,
+                    section,
+                    basename=audio_slice.basename,
+                )
+                slice_item["qwenJson"] = str(slice_qwen_json)
+                slice_item["officialText"] = str(slice_text_path)
+                slice_item["directAlignCommand"] = slice_cmd
+                slice_item["directAlignLog"] = str(wrapper_log_path(work_dir, f"{audio_slice.basename}.direct-align"))
+        planned.append(item)
     return {
         "dryRun": True,
         "mode": "align-and-review",
@@ -899,13 +2285,12 @@ def dry_run_plan(args: argparse.Namespace, transcript_sections: dict[int, dict[s
         "reviewOutput": str(Path(args.review_output)),
         "finalOutput": str(Path(args.output)),
         "qwenPythonExists": Path(args.qwen_python).exists(),
-        "qwenWrapperExists": Path(args.qwen_wrapper).exists(),
+        "directAlignWorkerExists": Path(args.direct_align_worker).exists(),
         "modelRootExists": Path(args.model_root).exists(),
         "forcedAlignerExists": DEFAULT_ALIGNER.exists(),
-        "fastAsrModelExists": DEFAULT_FAST_ASR.exists(),
-        "qualityAsrModelExists": DEFAULT_QUALITY_ASR.exists(),
         "ffmpegExists": Path(args.ffmpeg).exists(),
         "ffprobeExists": Path(args.ffprobe).exists(),
+        "gpuPreflight": {"minimumFreeMiB": args.min_free_gpu_memory_mib, "deviceMap": args.qwen_device_map},
         "workDir": str(work_dir),
         "plannedSections": planned,
     }
@@ -920,6 +2305,14 @@ def validate_args(parser: argparse.ArgumentParser, args: argparse.Namespace, tra
     missing_sections = [section for section in sections if section not in transcript_sections]
     if missing_sections:
         parser.error(f"Transcript is missing requested section(s): {missing_sections}")
+    if args.qwen_timeout_seconds < 0:
+        parser.error("--qwen-timeout-seconds must be 0 or a positive number.")
+    if args.min_free_gpu_memory_mib < 0:
+        parser.error("--min-free-gpu-memory-mib must be 0 or a positive integer.")
+    if args.slice_threshold_seconds <= 0:
+        parser.error("--slice-threshold-seconds must be positive.")
+    if args.slice_seconds <= 0:
+        parser.error("--slice-seconds must be positive.")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -946,8 +2339,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     work_dir.mkdir(parents=True, exist_ok=True)
+    gpu_preflight = check_gpu_preflight(args)
     sections = [align_section(args, section, transcript_sections, pack_root, work_dir) for section in selected_sections(args)]
     draft_artifact = build_timing_artifact(args, sections, pack_root, transcript, work_dir, review_output, False)
+    draft_artifact["tool"]["gpuPreflight"] = gpu_preflight
     review_artifact = build_review_artifact(args, sections, pack_root, transcript, work_dir, draft_output, output)
     write_json(draft_output, draft_artifact, args.overwrite)
     write_json(review_output, review_artifact, args.overwrite)
@@ -991,3 +2386,11 @@ if __name__ == "__main__":
         if exc.stderr:
             print("stderr:", exc.stderr[-4000:], file=sys.stderr)
         raise SystemExit(exc.returncode)
+    except subprocess.TimeoutExpired as exc:
+        print(f"Qwen wrapper timed out after {exc.timeout} seconds", file=sys.stderr)
+        print("Command:", " ".join(exc.cmd), file=sys.stderr)
+        if exc.output:
+            print("stdout:", output_text(exc.output)[-4000:], file=sys.stderr)
+        if exc.stderr:
+            print("stderr:", output_text(exc.stderr)[-4000:], file=sys.stderr)
+        raise SystemExit(124)

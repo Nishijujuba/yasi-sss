@@ -47,6 +47,8 @@ interface PracticeSessionContextValue {
   nextIncorrectId: string | null;
   audioPositions: Record<string, number>;
   setAudioPosition: (section: number, position: number) => void;
+  transcriptViewed: boolean;
+  markTranscriptViewed: () => void;
   canSubmit: boolean;
   notebook: MistakeVocabularyNotebookState;
   submitMistakePractice: (cardKey: string, correct: boolean) => void;
@@ -54,6 +56,10 @@ interface PracticeSessionContextValue {
 }
 
 const PracticeSessionContext = createContext<PracticeSessionContextValue | null>(null);
+
+type TranscriptViewedSession = PracticeSession & {
+  transcriptViewed?: boolean;
+};
 
 function updateAndSave(
   setSession: (updater: (session: PracticeSession) => PracticeSession) => void,
@@ -88,6 +94,10 @@ function capturedQuestionIdsForCard(pack: LoadedPack, cardKey: string): Set<stri
   }
 
   return ids;
+}
+
+function hasViewedTranscript(session: PracticeSession): boolean {
+  return (session as TranscriptViewedSession).transcriptViewed === true;
 }
 
 export function PracticeSessionProvider({ children }: { children: ReactNode }) {
@@ -205,6 +215,17 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const markTranscriptViewed = useCallback(() => {
+    updateAndSave(
+      setSession,
+      (current) =>
+        ({
+          ...current,
+          transcriptViewed: true,
+        }) as PracticeSession,
+    );
+  }, []);
+
   const submitMistakePractice = useCallback((cardKey: string, correct: boolean) => {
     setNotebook((current) => {
       const next = recordMistakePractice(current, cardKey, correct);
@@ -254,6 +275,8 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       nextIncorrectId: session.results?.incorrectIds[0] ?? null,
       audioPositions: session.audioPositions,
       setAudioPosition,
+      transcriptViewed: hasViewedTranscript(session),
+      markTranscriptViewed,
       canSubmit: hasAnyAnswer(session.answers),
       notebook,
       submitMistakePractice,
@@ -274,6 +297,7 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       startPractice,
       openMistakeVocabulary,
       setAudioPosition,
+      markTranscriptViewed,
       notebook,
       submitMistakePractice,
       removeMistakeCardFromNotebook,
@@ -289,4 +313,8 @@ export function usePracticeSession(): PracticeSessionContextValue {
     throw new Error("usePracticeSession must be used within PracticeSessionProvider");
   }
   return value;
+}
+
+export function useOptionalPracticeSession(): PracticeSessionContextValue | null {
+  return useContext(PracticeSessionContext);
 }

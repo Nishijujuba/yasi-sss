@@ -28,6 +28,11 @@
       "title": "Meaningzh",
       "type": "string"
     },
+    "spokenText": {
+      "minLength": 1,
+      "title": "Spokentext",
+      "type": "string"
+    },
     "audio": {
       "minLength": 1,
       "title": "Audio",
@@ -40,6 +45,7 @@
     "normalizedTerm",
     "acceptedVariants",
     "meaningZh",
+    "spokenText",
     "audio"
   ],
   "title": "VocabularyItem",

@@ -96,7 +96,7 @@
     "vocabulary": "vocabulary.json"
   },
   "build": {
-    "sourceCommit": "868fb08af7aa88eda6566e6d924a5057f5b4e703",
-    "builtAt": "2026-06-17T08:00:12.702339Z"
+    "sourceCommit": "1a5ab7647fe8374eb454ff675b9865c85173a847",
+    "builtAt": "2026-06-17T11:48:41.052273Z"
   }
 }

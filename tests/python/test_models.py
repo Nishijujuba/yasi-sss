@@ -47,34 +47,36 @@ def test_manifest_rejects_non_released_status_for_runtime():
         ReleasedManifest.model_validate(minimal_manifest(status="building"))
 
 
-def test_vocabulary_item_model_accepts_pack_shape_and_rejects_extra_fields():
+def test_vocabulary_item_model_requires_spoken_text_and_rejects_extra_fields():
     assert hasattr(model_module, "VocabularyItem")
-    item = model_module.VocabularyItem.model_validate(
-        {
-            "id": "photo-card",
-            "term": "photo card",
-            "normalizedTerm": "photo card",
-            "acceptedVariants": ["photo cards"],
-            "meaningZh": "照片卡",
-            "audio": "assets/audio/vocabulary/photo-card.mp3",
-        }
-    )
+    payload = {
+        "id": "photo-card",
+        "term": "photo card",
+        "normalizedTerm": "photo card",
+        "acceptedVariants": ["photo cards"],
+        "meaningZh": "照片卡",
+        "spokenText": "photo card",
+        "audio": "assets/audio/vocabulary/photo-card.mp3",
+    }
+    item = model_module.VocabularyItem.model_validate(payload)
 
     assert item.term == "photo card"
+    assert item.spokenText == "photo card"
     assert item.acceptedVariants == ["photo cards"]
 
     with pytest.raises(ValidationError):
-        model_module.VocabularyItem.model_validate(
-            {
-                "id": "photo-card",
-                "term": "photo card",
-                "normalizedTerm": "photo card",
-                "acceptedVariants": [],
-                "meaningZh": "照片卡",
-                "audio": "assets/audio/vocabulary/photo-card.mp3",
-                "unexpected": True,
-            }
-        )
+        model_module.VocabularyItem.model_validate(payload | {"spokenText": ""})
+
+    with pytest.raises(ValidationError):
+        model_module.VocabularyItem.model_validate(payload | {"spokenText": "   "})
+
+    without_spoken_text = dict(payload)
+    del without_spoken_text["spokenText"]
+    with pytest.raises(ValidationError):
+        model_module.VocabularyItem.model_validate(without_spoken_text)
+
+    with pytest.raises(ValidationError):
+        model_module.VocabularyItem.model_validate(payload | {"unexpected": True})
 
 
 def test_answer_audio_window_model_requires_valid_positive_window():
@@ -121,7 +123,7 @@ def test_manifest_assets_requires_vocabulary_asset():
         ReleasedManifest.model_validate(payload)
 
 
-def test_release_report_requires_vocabulary_window_and_clip_counts():
+def test_release_report_requires_vocabulary_and_clip_counts_without_window_count():
     payload = {
         "status": "released",
         "questionCoverage": list(range(1, 41)),
@@ -132,7 +134,6 @@ def test_release_report_requires_vocabulary_window_and_clip_counts():
         "pageAssets": ["assets/pages/page-010.png"],
         "pendingAnswerCandidates": 0,
         "vocabularyCount": 33,
-        "windowCount": 33,
         "clipCount": 33,
         "errors": [],
     }
@@ -140,8 +141,11 @@ def test_release_report_requires_vocabulary_window_and_clip_counts():
     report = model_module.ReleaseReport.model_validate(payload)
 
     assert report.vocabularyCount == 33
-    assert report.windowCount == 33
     assert report.clipCount == 33
+    assert not hasattr(report, "windowCount")
+
+    with pytest.raises(ValidationError):
+        model_module.ReleaseReport.model_validate(payload | {"windowCount": 33})
 
     del payload["clipCount"]
     with pytest.raises(ValidationError):

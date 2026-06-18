@@ -102,6 +102,31 @@ def validate_review_items(items: list[dict[str, Any]], errors: list[str]) -> Non
             errors.append(f"reviewItems[{idx}] is missing message.")
 
 
+def validate_localization_metadata(
+    section_payload: dict[str, Any],
+    artifact: dict[str, Any],
+    errors: list[str],
+) -> bool:
+    section = section_payload.get("section")
+    localization = section_payload.get("localization")
+    if not isinstance(localization, dict):
+        return False
+    slices = localization.get("slices") or []
+    has_slices = bool(slices or localization.get("slicePlan"))
+    threshold = localization.get("minLocalizationScore", artifact.get("tool", {}).get("minLocalizationScore", 0.0))
+    score = localization.get("score")
+    if section_payload.get("status") == "verified" and isinstance(score, (int, float)) and isinstance(threshold, (int, float)) and score < threshold:
+        errors.append(f"Section {section} is verified but localization score {score} is below threshold {threshold}.")
+    for item in slices:
+        if not isinstance(item, dict):
+            continue
+        start = item.get("officialTokenStart")
+        end = item.get("officialTokenEnd")
+        if not isinstance(start, int) or not isinstance(end, int) or end <= start:
+            errors.append(f"Section {section} localized slice {item.get('index')} has an empty official token range.")
+    return has_slices
+
+
 def validate_section(
     section_payload: dict[str, Any],
     transcript_sections: dict[int, dict[str, Any]],
@@ -126,6 +151,7 @@ def validate_section(
     if len(word_timings) != len(expected_tokens):
         errors.append(f"Section {section} token coverage mismatch: expected {len(expected_tokens)}, got {len(word_timings)}.")
 
+    requires_slice_provenance = validate_localization_metadata(section_payload, artifact, errors)
     seen_identities: set[tuple[int, int, int]] = set()
     previous_start: float | None = None
     previous_end: float | None = None
@@ -168,6 +194,8 @@ def validate_section(
             errors.append(f"Section {section} entry {idx} end time moved backward: previous={previous_end}, current={end}.")
         previous_start = float(start)
         previous_end = float(end)
+        if requires_slice_provenance and ("sliceIndex" not in entry or not entry.get("sliceQwenJson")):
+            errors.append(f"Section {section} entry {idx} lacks slice provenance for localized timing.")
 
         if require_review_trace and timing_requires_trace(entry):
             trace = entry.get("review")

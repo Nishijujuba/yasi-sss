@@ -8,6 +8,10 @@ export interface PracticeActionsProps {
   hasResult?: boolean;
   hasIncorrect?: boolean;
   canSubmit?: boolean;
+  transcriptShadowingAvailable?: boolean;
+  transcriptShadowingOpen?: boolean;
+  transcriptShadowingHint?: string;
+  onToggleTranscriptShadowing?: () => void;
 }
 
 export function PracticeActions({
@@ -18,6 +22,10 @@ export function PracticeActions({
   hasResult = false,
   hasIncorrect = false,
   canSubmit = true,
+  transcriptShadowingAvailable = false,
+  transcriptShadowingOpen = false,
+  transcriptShadowingHint = "等待逐词时间轴",
+  onToggleTranscriptShadowing,
 }: PracticeActionsProps) {
   const [confirmingReset, setConfirmingReset] = useState(false);
 
@@ -71,9 +79,15 @@ export function PracticeActions({
       <button disabled type="button">
         精听
       </button>
-      <button disabled type="button">
-        原文跟读
+      <button
+        className="secondary-action"
+        disabled={!transcriptShadowingAvailable}
+        onClick={onToggleTranscriptShadowing}
+        type="button"
+      >
+        {transcriptShadowingAvailable ? (transcriptShadowingOpen ? "收起原文" : "打开原文") : "原文跟读"}
       </button>
+      {transcriptShadowingAvailable ? null : <p className="action-hint">{transcriptShadowingHint}</p>}
     </aside>
   );
 }

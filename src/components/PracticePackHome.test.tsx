@@ -36,6 +36,7 @@ const pack: LoadedPack = {
   answers: [],
   overlays: [],
   transcript: [],
+  transcriptTimings: null,
   vocabulary: [],
   questionsById: new Map(questions.map((question) => [question.id, question])),
   answersByQuestionId: new Map(),

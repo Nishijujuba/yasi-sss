@@ -27,6 +27,11 @@ from builder.validate_pack import (
 
 
 VOCABULARY_COUNT = 33
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PACK_ID = "cambridge-10-test-1-listening"
+REVIEW_ARTIFACT_RELATIVE = (
+    f"build/review/transcript-timing/{PACK_ID}/alignment-review.json"
+)
 
 
 def unique_test_dir(name: str) -> Path:
@@ -40,12 +45,14 @@ def _write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def _load_alignment_helpers():
-    script_path = Path(".agents/skills/yasi-forced-alignment/scripts/align_transcript.py").resolve()
+def _load_timing_helpers():
+    script_path = Path(
+        ".agents/skills/yasi-asr-timing-reconciliation/scripts/validate_timings.py"
+    ).resolve()
     script_dir = str(script_path.parent)
     if script_dir not in sys.path:
         sys.path.insert(0, script_dir)
-    spec = importlib_util.spec_from_file_location("test_align_transcript_helpers", script_path)
+    spec = importlib_util.spec_from_file_location("test_asr_timing_helpers", script_path)
     assert spec is not None
     assert spec.loader is not None
     module = importlib_util.module_from_spec(spec)
@@ -104,6 +111,7 @@ def _copy_pack_with_vocabulary(monkeypatch, name: str) -> tuple[Path, list[dict]
     manifest_path = pack_copy / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["assets"]["vocabulary"] = "vocabulary.json"
+    manifest["assets"].pop("transcriptTimings", None)
     _write_json(manifest_path, manifest)
 
     records = _canonical_blank_records()
@@ -145,10 +153,15 @@ def _write_transcript_timing_asset(
     status: str = "verified",
     risky_first_token: bool = False,
     review_artifact: str | None = None,
+    include_review_trace: bool = False,
+    review_decision: str = "approved",
+    trace_review_artifact: str | None = None,
+    trace_decision: str | None = None,
 ) -> None:
-    helpers = _load_alignment_helpers()
+    helpers = _load_timing_helpers()
     transcript_sections = helpers.load_official_sections(pack_root / "transcript.json")
     timing_sections = []
+    review_id = "s01-g0000"
 
     for section in sections:
         word_timings = []
@@ -157,13 +170,31 @@ def _write_transcript_timing_asset(
                 "section": section,
                 "segmentOrder": token.segment_order,
                 "tokenIndex": token.token_index,
+                "globalTokenIndex": token.global_token_index,
+                "token": token.text,
                 "text": token.text,
                 "normalized": token.normalized,
                 "start": round(index * 0.25, 3),
                 "end": round(index * 0.25 + 0.18, 3),
+                "matchType": "exact",
+                "match": "exact",
+                "riskTypes": [],
+                "requiresReview": False,
             }
             if risky_first_token and section == sections[0] and index == 0:
-                entry["risks"] = ["number"]
+                entry["riskTypes"] = ["number"]
+                entry["requiresReview"] = True
+                if include_review_trace:
+                    entry["review"] = {
+                        "reviewArtifact": trace_review_artifact or review_artifact,
+                        "reviewId": review_id,
+                        "decision": trace_decision or review_decision,
+                        "riskTypes": ["number"],
+                        "reasons": ["risk:number"],
+                        "reviewer": "test",
+                        "reviewedAt": "2026-06-18T00:00:00Z",
+                        "notes": "",
+                    }
             word_timings.append(entry)
         timing_sections.append(
             {
@@ -196,25 +227,109 @@ def _write_transcript_timing_asset(
     _write_json(manifest_path, manifest)
 
 
-def _write_empty_alignment_review(pack_root: Path) -> None:
-    helpers = _load_alignment_helpers()
+def _write_preview_transcript_timing_asset(pack_root: Path, *, sections: tuple[int, ...] = (1,)) -> None:
+    helpers = _load_timing_helpers()
+    transcript_sections = helpers.load_official_sections(pack_root / "transcript.json")
+    timing_sections = []
+    for section in sections:
+        word_timings = []
+        for index, token in enumerate(helpers.official_tokens(transcript_sections[section])):
+            word_timings.append(
+                {
+                    "section": section,
+                    "segmentOrder": token.segment_order,
+                    "tokenIndex": token.token_index,
+                    "globalTokenIndex": token.global_token_index,
+                    "token": token.text,
+                    "text": token.text,
+                    "normalized": token.normalized,
+                    "start": round(index * 0.25, 3),
+                    "end": round(index * 0.25 + 0.18, 3),
+                    "matchType": "exact",
+                    "match": "exact",
+                    "riskTypes": [],
+                    "requiresReview": False,
+                }
+            )
+        timing_sections.append({"section": section, "status": "preview", "wordTimings": word_timings})
+
+    payload = {
+        "schemaVersion": helpers.SCHEMA_VERSION,
+        "status": "preview",
+        "generatedAt": "2026-06-20T00:00:00Z",
+        "sections": timing_sections,
+        "reviewItems": [],
+    }
+    _write_json(pack_root / "transcript-timings.preview.json", payload)
+
+    manifest_path = pack_root / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["assets"]["transcriptTimings"] = "transcript-timings.preview.json"
+    _write_json(manifest_path, manifest)
+
+
+def _write_alignment_review(
+    repo_root: Path,
+    *,
+    decision: str = "approved",
+    include_item: bool = True,
+) -> Path:
+    helpers = _load_timing_helpers()
+    transcript_sections = helpers.load_official_sections(PACK_ROOT / "transcript.json")
+    token = helpers.official_tokens(transcript_sections[1])[0]
+    review_dir = repo_root / "build" / "review" / "transcript-timing" / PACK_ID
+    review_path = review_dir / "alignment-review.json"
+    mapping_reviews = []
+    if include_item:
+        mapping_reviews.append(
+            {
+                "reviewId": "s01-g0000",
+                "section": 1,
+                "matchType": "exact",
+                "decision": decision,
+                "officialToken": {
+                    "section": 1,
+                    "segmentOrder": token.segment_order,
+                    "tokenIndex": token.token_index,
+                    "globalTokenIndex": token.global_token_index,
+                    "text": token.text,
+                    "normalized": token.normalized,
+                    "answerRefs": list(token.answer_refs),
+                },
+                "sourceWord": {
+                    "sourceIndex": 0,
+                    "word": token.text,
+                    "normalized": token.normalized,
+                    "start": 0.0,
+                    "end": 0.18,
+                },
+                "timing": {"start": 0.0, "end": 0.18},
+                "riskTypes": ["number"],
+                "reasons": ["risk:number"],
+                "correction": None,
+                "reviewer": "test",
+                "reviewedAt": "2026-06-18T00:00:00Z",
+                "notes": "",
+            }
+        )
     _write_json(
-        pack_root / "alignment-review.json",
+        review_path,
         {
             "schemaVersion": helpers.REVIEW_SCHEMA_VERSION,
-            "status": "reviewed",
+            "reviewArtifact": REVIEW_ARTIFACT_RELATIVE,
+            "status": "reviewed" if decision in {"approved", "corrected"} else "needs-review",
             "generatedAt": "2026-06-17T00:00:00Z",
             "tool": {"name": "test"},
-            "packRoot": str(pack_root),
-            "transcript": "transcript.json",
+            "packRoot": "public/packs/cambridge-10/test-1/listening",
+            "transcript": "public/packs/cambridge-10/test-1/listening/transcript.json",
             "draftTimingArtifact": "transcript-timings.json",
             "finalTimingArtifact": "transcript-timings.json",
             "sections": [
-                {"section": section, "status": "reviewed", "mappingReviews": []}
-                for section in range(1, 5)
+                {"section": 1, "status": "reviewed", "mappingReviews": mapping_reviews}
             ],
         },
     )
+    return review_path
 
 
 def test_all_answers_have_official_provenance():
@@ -393,6 +508,18 @@ def test_validate_pack_allows_missing_optional_transcript_timings(monkeypatch):
     assert report.status == "released"
 
 
+def test_validate_pack_allows_preview_transcript_timings_for_optional_gate(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-preview-optional",
+    )
+    _write_preview_transcript_timing_asset(pack_copy, sections=(1, 2, 3, 4))
+
+    report = validate_pack(pack_copy)
+
+    assert report.status == "released"
+
+
 def test_validate_pack_rejects_declared_draft_transcript_timings(monkeypatch):
     pack_copy, _ = _copy_pack_with_vocabulary(
         monkeypatch,
@@ -421,9 +548,63 @@ def test_validate_pack_release_timing_gate_rejects_missing_sections(monkeypatch)
         monkeypatch,
         "pack-timings-release-missing-sections",
     )
-    _write_transcript_timing_asset(pack_copy, sections=(1,))
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, include_item=False)
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1,),
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
+    )
 
     with pytest.raises(ReleaseBlocked, match="require-all-sections"):
+        validate_pack(pack_copy, transcript_timing_gate="release")
+
+
+def test_validate_pack_release_timing_gate_rejects_missing_review_artifact(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-missing-review-artifact",
+    )
+    _write_transcript_timing_asset(pack_copy, sections=(1, 2, 3, 4))
+
+    with pytest.raises(ReleaseBlocked, match="reviewArtifact"):
+        validate_pack(pack_copy, transcript_timing_gate="release")
+
+
+def test_validate_pack_release_timing_gate_rejects_pack_relative_review_artifact(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-pack-relative-review",
+    )
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1, 2, 3, 4),
+        review_artifact="alignment-review.json",
+    )
+
+    with pytest.raises(ReleaseBlocked, match="repo-root-relative"):
+        validate_pack(pack_copy, transcript_timing_gate="release")
+
+
+def test_validate_pack_release_timing_gate_rejects_pending_review_artifact(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-pending-review",
+    )
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, decision="pending")
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1, 2, 3, 4),
+        risky_first_token=True,
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
+        include_review_trace=True,
+        review_decision="pending",
+    )
+
+    with pytest.raises(ReleaseBlocked, match="pending"):
         validate_pack(pack_copy, transcript_timing_gate="release")
 
 
@@ -432,15 +613,84 @@ def test_validate_pack_release_timing_gate_rejects_missing_review_trace(monkeypa
         monkeypatch,
         "pack-timings-release-missing-review-trace",
     )
-    _write_empty_alignment_review(pack_copy)
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, include_item=False)
     _write_transcript_timing_asset(
         pack_copy,
         sections=(1, 2, 3, 4),
         risky_first_token=True,
-        review_artifact="alignment-review.json",
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
     )
 
     with pytest.raises(ReleaseBlocked, match="requires review trace"):
+        validate_pack(pack_copy, transcript_timing_gate="release")
+
+
+def test_validate_pack_release_timing_gate_accepts_repo_root_relative_review_artifact(monkeypatch):
+    validate_pack_module._load_timing_validator.cache_clear()
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-reviewed",
+    )
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, decision="approved")
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1, 2, 3, 4),
+        risky_first_token=True,
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
+        include_review_trace=True,
+        review_decision="approved",
+    )
+
+    report = validate_pack(pack_copy, transcript_timing_gate="release")
+
+    assert report.status == "released"
+
+
+def test_validate_pack_release_timing_gate_rejects_trace_review_artifact_mismatch(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-trace-artifact-mismatch",
+    )
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, decision="approved")
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1, 2, 3, 4),
+        risky_first_token=True,
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
+        include_review_trace=True,
+        review_decision="approved",
+        trace_review_artifact="alignment-review.json",
+    )
+
+    with pytest.raises(ReleaseBlocked, match="reviewArtifact"):
+        validate_pack(pack_copy, transcript_timing_gate="release")
+
+
+def test_validate_pack_release_timing_gate_rejects_trace_decision_mismatch(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-timings-release-trace-decision-mismatch",
+    )
+    repo_root = unique_test_dir("pack-timings-review-root")
+    monkeypatch.setattr(validate_pack_module, "_repo_root", lambda: repo_root)
+    _write_alignment_review(repo_root, decision="approved")
+    _write_transcript_timing_asset(
+        pack_copy,
+        sections=(1, 2, 3, 4),
+        risky_first_token=True,
+        review_artifact=REVIEW_ARTIFACT_RELATIVE,
+        include_review_trace=True,
+        review_decision="approved",
+        trace_decision="corrected",
+    )
+
+    with pytest.raises(ReleaseBlocked, match="decision"):
         validate_pack(pack_copy, transcript_timing_gate="release")
 
 

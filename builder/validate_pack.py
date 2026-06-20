@@ -33,6 +33,14 @@ class ReleaseBlocked(RuntimeError):
 TranscriptTimingGate = Literal["optional", "section-01-pilot", "release"]
 
 
+def _source_repo_root() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def _repo_root() -> Path:
+    return _source_repo_root()
+
+
 def _question_number(question_id: str) -> int:
     match = re.fullmatch(r"q([1-9]|[1-3][0-9]|40)", question_id)
     if not match:
@@ -343,7 +351,13 @@ def _validate_vocabulary_release_gate(
 
 @lru_cache(maxsize=1)
 def _load_timing_validator():
-    script_dir = Path(__file__).resolve().parents[1] / ".agents" / "skills" / "yasi-forced-alignment" / "scripts"
+    script_dir = (
+        _source_repo_root()
+        / ".agents"
+        / "skills"
+        / "yasi-asr-timing-reconciliation"
+        / "scripts"
+    )
     validator_path = script_dir / "validate_timings.py"
     if not validator_path.is_file():
         raise ReleaseBlocked(f"transcript timing validator is missing: {validator_path}")
@@ -359,15 +373,23 @@ def _load_timing_validator():
     return module
 
 
-def _resolve_review_artifact(pack_root: Path, timing_payload: dict[str, Any]) -> Path | None:
+def _resolve_review_artifact(
+    pack_root: Path,
+    timing_payload: dict[str, Any],
+    pack_id: str,
+) -> Path:
     raw_path = timing_payload.get("reviewArtifact")
     if not isinstance(raw_path, str) or not raw_path.strip():
-        fallback = pack_root / "alignment-review.json"
-        return fallback if fallback.is_file() else None
+        raise ReleaseBlocked("transcript timing reviewArtifact is required for release gate")
+    normalized = raw_path.strip().replace("\\", "/")
+    expected = f"build/review/transcript-timing/{pack_id}/alignment-review.json"
     review_path = Path(raw_path)
-    if not review_path.is_absolute():
-        review_path = pack_root / review_path
-    return review_path
+    if review_path.is_absolute() or normalized != expected:
+        raise ReleaseBlocked(
+            "transcript timing reviewArtifact must be the repo-root-relative "
+            f"path {expected}; found {raw_path}"
+        )
+    return _repo_root() / Path(*normalized.split("/"))
 
 
 def _validate_transcript_timing_asset(
@@ -389,6 +411,8 @@ def _validate_transcript_timing_asset(
     timing_payload = _read_json(timing_path)
     if not isinstance(timing_payload, dict):
         raise ReleaseBlocked("transcript timings must be a JSON object")
+    if timing_payload.get("status") == "draft":
+        raise ReleaseBlocked("transcript timings require-verified or preview status for release validation")
 
     timing_validator = _load_timing_validator()
     transcript_sections = timing_validator.load_official_sections(
@@ -398,21 +422,18 @@ def _validate_transcript_timing_asset(
     require_release_gate = gate == "release"
     review_payload = None
     if require_release_gate:
-        review_path = _resolve_review_artifact(pack_root, timing_payload)
-        if review_path is None:
-            review_payload = None
-        else:
-            if not review_path.is_file():
-                raise ReleaseBlocked(f"transcript timing review artifact is missing: {review_path}")
-            review_payload = _read_json(review_path)
-            if not isinstance(review_payload, dict):
-                raise ReleaseBlocked("transcript timing review artifact must be a JSON object")
+        review_path = _resolve_review_artifact(pack_root, timing_payload, manifest.packId)
+        if not review_path.is_file():
+            raise ReleaseBlocked(f"transcript timing review artifact is missing: {review_path}")
+        review_payload = _read_json(review_path)
+        if not isinstance(review_payload, dict):
+            raise ReleaseBlocked("transcript timing review artifact must be a JSON object")
 
     errors = timing_validator.validate(
         timing_payload,
         transcript_sections,
         require_release_gate,
-        True,
+        require_release_gate,
         require_release_gate,
         review_payload,
     )

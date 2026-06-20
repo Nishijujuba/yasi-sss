@@ -187,16 +187,38 @@ function buildTranscriptTokenCounts(transcript: TranscriptSection[]): Map<string
   return tokenCounts;
 }
 
-function assertTranscriptWordTiming(value: unknown, path: string): asserts value is TranscriptWordTiming {
+function assertTranscriptWordTiming(
+  value: unknown,
+  path: string,
+  options: { requireTiming: boolean },
+): asserts value is TranscriptWordTiming {
   if (!isRecord(value)) throw new Error(`${path} must be an object`);
   if (!Number.isInteger(value.section)) throw new Error(`${path}.section is required`);
   if (!Number.isInteger(value.segmentOrder)) throw new Error(`${path}.segmentOrder is required`);
   if (!Number.isInteger(value.tokenIndex)) throw new Error(`${path}.tokenIndex is required`);
-  if (!isFiniteNumber(value.start) || !isFiniteNumber(value.end)) {
-    throw new Error(`${path} must include numeric start and end`);
+  if (
+    options.requireTiming ||
+    (value.start !== undefined && value.start !== null) ||
+    (value.end !== undefined && value.end !== null)
+  ) {
+    if (!isFiniteNumber(value.start) || !isFiniteNumber(value.end)) {
+      throw new Error(`${path} must include numeric start and end`);
+    }
+    if (value.start < 0 || value.end <= value.start) {
+      throw new Error(`${path} must have a positive interval`);
+    }
   }
-  if (value.start < 0 || value.end <= value.start) {
-    throw new Error(`${path} must have a positive interval`);
+  if (value.riskTypes !== undefined && !isStringArray(value.riskTypes)) {
+    throw new Error(`${path}.riskTypes must be a string array`);
+  }
+  if (value.reasons !== undefined && !isStringArray(value.reasons)) {
+    throw new Error(`${path}.reasons must be a string array`);
+  }
+  if (value.requiresReview !== undefined && typeof value.requiresReview !== "boolean") {
+    throw new Error(`${path}.requiresReview must be a boolean`);
+  }
+  if (value.review !== undefined && !isRecord(value.review)) {
+    throw new Error(`${path}.review must be an object`);
   }
 }
 
@@ -208,8 +230,8 @@ function assertTranscriptTimingArtifact(
   if (value.schemaVersion !== "yasi.transcript-timings.v1") {
     throw new Error("transcriptTimings.schemaVersion must be yasi.transcript-timings.v1");
   }
-  if (value.status !== "verified") {
-    throw new Error("transcriptTimings.status must be verified");
+  if (value.status !== "verified" && value.status !== "preview") {
+    throw new Error("transcriptTimings.status must be verified or preview");
   }
   if (!Array.isArray(value.sections)) {
     throw new Error("transcriptTimings.sections is required");
@@ -220,13 +242,15 @@ function assertTranscriptTimingArtifact(
     const sectionPath = `transcriptTimings.sections[${sectionIndex}]`;
     if (!isRecord(sectionTiming)) throw new Error(`${sectionPath} must be an object`);
     if (!Number.isInteger(sectionTiming.section)) throw new Error(`${sectionPath}.section is required`);
-    if (sectionTiming.status !== "verified") throw new Error(`${sectionPath}.status must be verified`);
+    if (sectionTiming.status !== value.status) {
+      throw new Error(`${sectionPath}.status must match transcriptTimings.status`);
+    }
     if (!Array.isArray(sectionTiming.wordTimings)) throw new Error(`${sectionPath}.wordTimings must be an array`);
 
     const seenIdentities = new Set<string>();
     sectionTiming.wordTimings.forEach((timing, timingIndex) => {
       const timingPath = `${sectionPath}.wordTimings[${timingIndex}]`;
-      assertTranscriptWordTiming(timing, timingPath);
+      assertTranscriptWordTiming(timing, timingPath, { requireTiming: value.status === "verified" });
       if (timing.section !== sectionTiming.section) {
         throw new Error(`${timingPath} section mismatch`);
       }
@@ -284,7 +308,7 @@ function assertUniqueVocabularyIds(vocabulary: VocabularyItem[]): void {
 }
 
 async function fetchJson(url: string): Promise<unknown> {
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Failed to fetch ${url}: ${response.status}`);
   }

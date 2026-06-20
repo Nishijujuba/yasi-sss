@@ -140,6 +140,26 @@ _Avoid_: Equal-duration text approximation, decorative highlighting, browser-gen
 An explicit review step for uncertain official-token-to-timing mappings, producing approved corrections or blocking diagnostics before Transcript Word Timings can be treated as verified.
 _Avoid_: Silent auto-correction, unreviewed token merges, hidden timing gaps
 
+**Transcript Timing Review Screening**:
+A pre-review triage pass that separates timing review items into deterministic approvals, model-assisted suggestions, and human-required decisions before final release review.
+_Avoid_: Final release approval, untraceable bulk approval, confidence score substitution
+
+**Blind Transcript Timing Pre-Review**:
+A code or language-model review pass performed before the learner has listened with the official transcript exposed, producing advisory labels without human auditory checking.
+_Avoid_: Manual listening review, final release approval, answer-safe learner view
+
+**Deferred Transcript Timing Auditory Review**:
+A manual audio-and-transcript timing review performed only after the learner has submitted the relevant Listening Section or explicitly entered Transcript Shadowing.
+_Avoid_: Pre-practice listening validation, exam-equivalent review, hidden answer exposure
+
+**Timing Uncertainty Marker**:
+A visible marker on a transcript review surface that highlights a timing item still needing attention after automatic screening or Blind Transcript Timing Pre-Review.
+_Avoid_: Exam Simulation hint, answer-location cue, silent pending review
+
+**Transcript Timing Review Suggestion**:
+An advisory recommendation, usually produced by a large language model or reviewer helper, that proposes how a review item might be resolved while leaving the release decision with an explicit reviewer.
+_Avoid_: Automatic release decision, transcript rewrite, hidden correction
+
 **Transcript Timing Release Audit**:
 The durable review trace retained when verified Transcript Word Timings are released, preserving the approved or corrected evidence behind non-trivial timing mappings.
 _Avoid_: Benchmark scratch review, chat approval, temporary ASR evidence

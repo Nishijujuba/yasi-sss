@@ -168,6 +168,9 @@ function packWithSectionOneTimings(): LoadedPack {
               normalized: "good",
               start: 42.5,
               end: 42.9,
+              requiresReview: true,
+              riskTypes: ["answer-near"],
+              review: { decision: "approved", reviewId: "s01-g0000" },
             },
           ],
         },
@@ -359,7 +362,29 @@ describe("ExamWorkspace", () => {
     expect(onMarkTranscriptViewed).toHaveBeenCalledTimes(1);
     expect(screen.getByLabelText("Section 01 原文跟读")).toBeTruthy();
     expect(screen.getByRole("button", { name: "收起原文" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Good" })).toHaveClass("transcript-word--review-approved");
     expect(container.querySelector(".workspace-body")).toHaveClass("workspace-body--with-transcript");
+  });
+
+  it("opens transcript shadowing when timing status is preview", () => {
+    const pack = packWithSectionOneTimings();
+    pack.transcriptTimings = {
+      ...pack.transcriptTimings!,
+      status: "preview",
+      sections: pack.transcriptTimings!.sections.map((section) => ({ ...section, status: "preview" })),
+    };
+    render(
+      <ExamWorkspace
+        pack={pack}
+        activeSection={1}
+        answers={{}}
+        onAnswerChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "打开原文" }));
+
+    expect(screen.getByLabelText("Section 01 原文跟读")).toBeTruthy();
   });
 
   it("opens the transcript panel without changing native audio time or play state", () => {

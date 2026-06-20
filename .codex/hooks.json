@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$(git rev-parse --show-toplevel)/.codex/hooks/session_start_server_policy.ps1\"",
+            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"D:\\Project\\yasi\\.codex\\hooks\\session_start_server_policy.ps1\"",
+            "timeout": 10,
+            "statusMessage": "Loading yasi server startup policy"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$(git rev-parse --show-toplevel)/.codex/hooks/pre_tool_use_server_guard.ps1\"",
+            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"D:\\Project\\yasi\\.codex\\hooks\\pre_tool_use_server_guard.ps1\"",
+            "timeout": 10,
+            "statusMessage": "Checking yasi server startup policy"
+          }
+        ]
+      }
+    ]
+  }
+}

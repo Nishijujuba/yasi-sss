@@ -93,6 +93,7 @@
     "answers": "answers.json",
     "overlays": "overlays.json",
     "transcript": "transcript.json",
+    "transcriptTimings": "transcript-timings.preview.json",
     "vocabulary": "vocabulary.json"
   },
   "build": {

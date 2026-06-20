@@ -81,7 +81,27 @@ ready-for-default =
   longestUnanchoredGap <= 8 official tokens
 ```
 
-Only models that pass this Section 01 gate can become the first skill default. If no candidate passes, keep the skill default unset and report `rerun-asr` or a benchmark failure instead of pretending one model is production-ready. Full-pack release still requires all four sections to pass reconciliation and timing validation.
+Only models that pass this Section 01 gate can become an automatic release-ready default. If no candidate passes, keep the release gate unresolved and report `rerun-asr` or a benchmark failure instead of pretending one model is production-ready. Full-pack release still requires all four sections to pass reconciliation and timing validation.
+
+**2026-06-18 benchmark result:**
+
+| Model | Anchor Coverage | Unmatched Rate | Pending Review Rate | Longest Unanchored Gap | Runtime Seconds | Gate Outcome | Review Items |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| `small` | 0.9765 | 0.009025 | 0.3285 | 3 | 57.54 | `needs-review` | 182 |
+| `medium` | 0.9711 | 0.009025 | 0.3339 | 3 | 90.73 | `needs-review` | 185 |
+| `large-v3` | 0.9747 | 0.01083 | 0.3285 | 3 | 199.1 | `needs-review` | 182 |
+
+Result: no model qualifies as an unscreened automatic release default. The skill generation default is now `small` because it is fastest and has equal or lower review burden than the larger candidates. This does not weaken the release gate; it only selects the first model to run. Temporary artifacts were generated under `D:\Project\yasi\待删除\yasi-asr-timing-reconciliation\section-01\<model>\`.
+
+**2026-06-18 review screening result:**
+
+| Model | Total Review Items | Code Approved | LLM Candidates | Human Required |
+| --- | ---: | ---: | ---: | ---: |
+| `small` | 182 | 160 | 3 | 19 |
+| `medium` | 185 | 160 | 4 | 21 |
+| `large-v3` | 182 | 159 | 3 | 20 |
+
+The code-screening layer can approve exact normalized mappings with valid timing and no structural risk. The LLM layer receives textual fuzzy or variant candidates as advisory suggestions. Human review remains mandatory for numbers, currency, phone/postcode-like tokens, spelling sequences, unmatched tokens, missing timing, and invalid timing intervals.
 
 ## Task 2: Define The Artifact Contracts
 
@@ -101,6 +121,7 @@ Only models that pass this Section 01 gate can become the first skill default. I
 ## Task 4: Finalize And Validate
 
 - Apply approved and corrected review entries.
+- Run deterministic and LLM-assisted review screening before manual review to reduce the unresolved queue.
 - Emit `transcript-timings.json` with schema `yasi.transcript-timings.v1`.
 - Promote the final review trace to `build/review/transcript-timing/<pack-id>/alignment-review.json` before release validation passes.
 - Set `transcript-timings.json.reviewArtifact` to the promoted release audit artifact as a repo-root-relative path, such as `build/review/transcript-timing/cambridge-10-test-1-listening/alignment-review.json`.

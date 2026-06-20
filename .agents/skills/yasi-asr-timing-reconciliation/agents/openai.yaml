@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yasi ASR Timing Reconciliation"
+  short_description: "Whisper timing evidence for yasi transcripts"
+  default_prompt: "Use $yasi-asr-timing-reconciliation with default Whisper model small, then run review screening before finalizing yasi transcript shadowing timings."

@@ -67,12 +67,18 @@ function focusQuestion(questionId: string): void {
 
 function timingSectionFor(pack: LoadedPack, section: number): PackTimingSection | null {
   const timings = pack.transcriptTimings;
-  if (timings?.status !== "verified" || !Array.isArray(timings.sections)) {
+  if (
+    (timings?.status !== "verified" && timings?.status !== "preview") ||
+    !Array.isArray(timings.sections)
+  ) {
     return null;
   }
   return (
     timings.sections.find(
-      (entry) => entry.section === section && entry.status === "verified" && entry.wordTimings.length > 0,
+      (entry) =>
+        entry.section === section &&
+        (entry.status === "verified" || entry.status === "preview") &&
+        entry.wordTimings.length > 0,
     ) ?? null
   );
 }
@@ -85,6 +91,12 @@ function toPanelTimingSection(timingSection: PackTimingSection): PanelTimingSect
       segmentOrder: timing.segmentOrder,
       tokenIndex: timing.tokenIndex,
       token: "",
+      matchType: timing.matchType,
+      match: timing.match,
+      riskTypes: timing.riskTypes,
+      reasons: timing.reasons,
+      requiresReview: timing.requiresReview,
+      review: timing.review,
       start: timing.start,
       end: timing.end,
     })),
@@ -218,6 +230,7 @@ export function ExamWorkspace({
   const activeTimingSection = timingSectionFor(loadedPack, active.number);
   const canOpenTranscriptPanel = activeTimingSection !== null && activeTranscriptSection !== null;
   const showTranscriptPanel = transcriptPanelOpen && activeTimingSection !== null && activeTranscriptSection !== null;
+  const showTimingReviewMarkers = showTranscriptPanel && (effectiveResult !== null || effectiveTranscriptViewed || transcriptPanelOpen);
 
   function recordAudioPosition(section: number, position: number): void {
     if (section === currentSection) {
@@ -339,6 +352,7 @@ export function ExamWorkspace({
         {showTranscriptPanel && activeTimingSection !== null && activeTranscriptSection !== null ? (
           <TranscriptShadowingPanel
             currentTime={currentAudioTime}
+            showTimingReviewMarkers={showTimingReviewMarkers}
             timingSection={toPanelTimingSection(activeTimingSection)}
             transcriptSection={activeTranscriptSection}
             onSeek={seekToTranscriptPosition}

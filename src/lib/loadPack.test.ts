@@ -105,6 +105,11 @@ const verifiedTranscriptTimings = {
           normalized: "morning",
           start: 0.3,
           end: 0.6,
+          matchType: "fuzzy",
+          riskTypes: ["answer-near"],
+          reasons: ["match:fuzzy"],
+          requiresReview: true,
+          review: { decision: "corrected", reviewId: "s01-g0001" },
         },
       ],
     },
@@ -154,9 +159,15 @@ describe("loadPack", () => {
     expect(pack.overlaysByQuestionId.get("q1")).toEqual(assets.overlays);
     expect(pack.vocabularyById.get("ardleigh")).toEqual(assets.vocabulary[0]);
     expect(pack.vocabularyById.get("ardleigh")?.spokenText).toBe("Ardleigh");
-    expect(fetchMock).toHaveBeenNthCalledWith(1, "/packs/cambridge-10/test-1/listening/manifest.json");
-    expect(fetchMock).toHaveBeenNthCalledWith(2, "/packs/cambridge-10/test-1/listening/questions.json");
-    expect(fetchMock).toHaveBeenNthCalledWith(6, "/packs/cambridge-10/test-1/listening/vocabulary.json");
+    expect(fetchMock).toHaveBeenNthCalledWith(1, "/packs/cambridge-10/test-1/listening/manifest.json", {
+      cache: "no-store",
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(2, "/packs/cambridge-10/test-1/listening/questions.json", {
+      cache: "no-store",
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(6, "/packs/cambridge-10/test-1/listening/vocabulary.json", {
+      cache: "no-store",
+    });
   });
 
   it("loads a verified optional transcript timing artifact declared by the manifest", async () => {
@@ -180,10 +191,61 @@ describe("loadPack", () => {
     const pack = await loadPack("/packs/cambridge-10/test-1/listening");
 
     expect(pack.transcriptTimings).toEqual(verifiedTranscriptTimings);
+    expect(pack.transcriptTimings?.sections[0].wordTimings[1].review?.reviewId).toBe("s01-g0001");
     expect(fetchMock).toHaveBeenNthCalledWith(
       7,
       "/packs/cambridge-10/test-1/listening/transcript-timings.json",
+      { cache: "no-store" },
     );
+  });
+
+  it("loads a preview transcript timing artifact with an untimed review marker", async () => {
+    const manifest = {
+      ...baseManifest,
+      assets: {
+        ...baseManifest.assets,
+        transcriptTimings: "transcript-timings.preview.json",
+      },
+    };
+    const previewTimings = {
+      ...verifiedTranscriptTimings,
+      status: "preview",
+      sections: [
+        {
+          ...verifiedTranscriptTimings.sections[0],
+          status: "preview",
+          wordTimings: [
+            verifiedTranscriptTimings.sections[0].wordTimings[0],
+            {
+              section: 1,
+              segmentOrder: 1,
+              tokenIndex: 1,
+              token: "morning",
+              normalized: "morning",
+              start: null,
+              end: null,
+              requiresReview: true,
+              riskTypes: ["answer-near"],
+              review: { decision: "pending", reviewId: "s01-g0001" },
+            },
+          ],
+        },
+      ],
+    };
+    mockJsonFetch([
+      manifest,
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      assets.vocabulary,
+      previewTimings,
+    ]);
+
+    const pack = await loadPack("/packs/cambridge-10/test-1/listening");
+
+    expect(pack.transcriptTimings?.status).toBe("preview");
+    expect(pack.transcriptTimings?.sections[0].wordTimings[1].review?.decision).toBe("pending");
   });
 
   it("rejects draft transcript timing artifacts", async () => {

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "yasi.asr-timing-evidence.v1",
+  "engine": "whisper",
+  "model": "small",
+  "sourceAudio": "public/packs/cambridge-10/test-1/listening/assets/audio/section-01.mp3",
+  "sourceTranscript": "public/packs/cambridge-10/test-1/listening/transcript.json",
+  "generatedAt": "2026-06-18T00:00:00Z",
+  "command": [
+    "D:/Project/video2pdf/kimi/.venv/Scripts/whisper.exe",
+    "public/packs/cambridge-10/test-1/listening/assets/audio/section-01.mp3",
+    "--model",
+    "small",
+    "--language",
+    "en",
+    "--word_timestamps",
+    "True",
+    "--output_format",
+    "json"
+  ],
+  "words": [
+    {
+      "index": 0,
+      "word": "Good",
+      "normalized": "good",
+      "start": 0.42,
+      "end": 0.72
+    },
+    {
+      "index": 1,
+      "word": "morning",
+      "normalized": "morning",
+      "start": 0.73,
+      "end": 1.12
+    },
+    {
+      "index": 2,
+      "word": "World",
+      "normalized": "world",
+      "start": 1.32,
+      "end": 1.66
+    },
+    {
+      "index": 3,
+      "word": "Tours",
+      "normalized": "tours",
+      "start": 1.67,
+      "end": 2.03
+    }
+  ]
+}

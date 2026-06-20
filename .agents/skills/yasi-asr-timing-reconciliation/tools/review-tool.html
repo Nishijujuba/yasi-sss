@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yasi Timing Review</title>
+  <style>
+    :root {
+      --bg: #f5f7fa; --panel: #fff; --ink: #202a35; --muted: #657486;
+      --line: #d8dee7; --blue: #155fbd; --green: #147a46; --red: #b42318;
+      --amber: #9a5b00; --violet: #6741b8; --chip: #eef2f7;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 "Segoe UI", Arial, sans-serif; letter-spacing: 0; }
+    button, input, select, textarea { font: inherit; letter-spacing: 0; }
+    button { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 7px 10px; cursor: pointer; }
+    button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    button.good { background: var(--green); border-color: var(--green); color: #fff; }
+    button.warn { background: #fff7ed; border-color: #e3b66e; color: var(--amber); }
+    button.danger { background: #fff1f0; border-color: #e4a19d; color: var(--red); }
+    input, select, textarea { border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; min-width: 0; }
+    textarea { width: 100%; min-height: 90px; resize: vertical; }
+    .app { min-height: 100vh; display: grid; grid-template-rows: auto auto 1fr; }
+    header { background: var(--panel); border-bottom: 1px solid var(--line); padding: 12px 18px; display: flex; gap: 12px; justify-content: space-between; align-items: center; }
+    h1 { margin: 0; font-size: 18px; line-height: 1.2; }
+    .summary, .chips, .actions { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+    .pill, .chip { border-radius: 999px; background: var(--chip); color: var(--muted); padding: 3px 8px; font-size: 12px; white-space: nowrap; }
+    .pill strong { color: var(--ink); }
+    .chip.human-required, .pill.red { background: #fff0ef; color: var(--red); }
+    .chip.llm-candidate { background: #f3edff; color: var(--violet); }
+    .pill.green { background: #e8f5ee; color: var(--green); }
+    .loader { background: #edf2f7; border-bottom: 1px solid var(--line); padding: 10px 18px; display: grid; grid-template-columns: 1fr 1fr 1.4fr auto; gap: 10px; align-items: end; }
+    .loader label, .field { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
+    main { display: grid; grid-template-columns: minmax(320px, 400px) 1fr; min-height: 0; }
+    aside { background: var(--panel); border-right: 1px solid var(--line); min-height: 0; display: grid; grid-template-rows: auto 1fr; }
+    .filters { padding: 12px; border-bottom: 1px solid var(--line); display: grid; gap: 9px; }
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .queue { overflow: auto; padding: 8px; }
+    .queue-item { width: 100%; text-align: left; display: grid; gap: 5px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; margin-bottom: 8px; }
+    .queue-item.active { border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); }
+    .queue-title, .token-line { display: flex; gap: 8px; justify-content: space-between; align-items: center; }
+    .token-line span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .workspace { min-height: 0; overflow: auto; padding: 18px; display: grid; gap: 14px; align-content: start; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; }
+    .panel h2 { margin: 0 0 10px; font-size: 16px; }
+    .detail-grid, .time-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .time-grid { grid-template-columns: repeat(4, minmax(90px, 1fr)); }
+    .value { border: 1px solid var(--line); border-radius: 6px; padding: 8px 9px; color: var(--ink); background: #fafbfc; overflow-wrap: anywhere; }
+    .context { display: flex; gap: 6px; flex-wrap: wrap; }
+    .word { border: 1px solid var(--line); border-radius: 5px; background: #fff; padding: 4px 7px; }
+    .word.target { border-color: var(--blue); background: #eaf3ff; color: #0b4f9f; font-weight: 650; }
+    .review-map { display: flex; gap: 5px; flex-wrap: wrap; max-height: 170px; overflow: auto; }
+    .map-word { border: 1px solid transparent; border-radius: 5px; background: transparent; color: var(--ink); padding: 3px 5px; }
+    .map-word.marker { border-color: var(--line); cursor: pointer; font-weight: 650; }
+    .marker--human-required, .marker--needs-human, .marker--needs-auditory { background: #fff7ed; border-color: #e3b66e; color: var(--amber); }
+    .marker--llm-candidate { background: #f3edff; border-color: #c7b7ff; color: var(--violet); }
+    .marker--reject-evidence { background: #fff1f0; border-color: #e4a19d; color: var(--red); }
+    .llm-box { background: #fbfaff; border: 1px solid #d8ccff; border-radius: 6px; margin-top: 12px; padding: 10px; }
+    .llm-box b { color: var(--violet); }
+    .audio-row { display: grid; grid-template-columns: minmax(260px, 1fr) auto auto auto; gap: 8px; align-items: center; }
+    audio { width: 100%; min-width: 220px; }
+    .empty { color: var(--muted); padding: 20px; text-align: center; }
+    .footer-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 900px) {
+      .loader, main, .detail-grid, .time-grid, .audio-row { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--line); max-height: 46vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header><h1 id="title">Yasi Timing Review</h1><div id="summary" class="summary"></div></header>
+    <section class="loader">
+      <label>Review JSON <input id="reviewFile" type="file" accept="application/json,.json"></label>
+      <label>Screening report <input id="reportFile" type="file" accept="application/json,.json"></label>
+      <label>Audio URL <input id="audioUrl" type="text" placeholder="file:///D:/Project/yasi/.../section-01.mp3"></label>
+      <button id="loadFiles" class="primary">Load</button>
+    </section>
+    <main>
+      <aside>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Search review id, token, reason">
+          <div class="filter-row">
+            <select id="tierFilter"><option value="unresolved">Unresolved</option><option value="human-required">Human required</option><option value="llm-candidate">LLM candidate</option><option value="all">All</option></select>
+            <select id="riskFilter"><option value="">All risks</option></select>
+          </div>
+        </div>
+        <div id="queue" class="queue"></div>
+      </aside>
+      <section class="workspace">
+        <div class="panel">
+          <h2>Timing Map</h2>
+          <div id="reviewMap" class="review-map"></div>
+        </div>
+        <div id="detail" class="panel"></div>
+        <div class="panel">
+          <h2>Audio</h2>
+          <div class="audio-row"><audio id="audio" controls preload="metadata"></audio><button id="playWindow">Play window</button><button id="setStart">Use current as start</button><button id="setEnd">Use current as end</button></div>
+        </div>
+        <div class="panel">
+          <h2>Decision</h2>
+          <div class="time-grid">
+            <label class="field">Start <input id="startInput" type="number" step="0.001"></label>
+            <label class="field">End <input id="endInput" type="number" step="0.001"></label>
+            <label class="field">Reviewer <input id="reviewerInput" type="text" value="human-review-tool"></label>
+            <label class="field">Decision <select id="decisionInput"><option value="pending">pending</option><option value="approved">approved</option><option value="corrected">corrected</option><option value="rejected">rejected</option></select></label>
+          </div>
+          <label class="field" style="margin-top:10px;">Notes <textarea id="notesInput"></textarea></label>
+          <div class="actions" style="margin-top:10px;"><button id="approveButton" class="good">Approve timing</button><button id="correctButton" class="primary">Save correction</button><button id="pendingButton" class="warn">Keep pending</button><button id="rejectButton" class="danger">Reject</button></div>
+        </div>
+        <div class="footer-actions"><button id="exportButton" class="primary">Export reviewed JSON</button></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    window.__YASI_REVIEW_TOOL_DATA__ = null;
+    const state = { data: window.__YASI_REVIEW_TOOL_DATA__, selectedId: null, timer: null };
+    const done = new Set(["approved", "corrected"]);
+    const $ = (id) => document.getElementById(id);
+    const esc = (v) => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const num = (v) => v === null || v === undefined || Number.isNaN(Number(v)) ? "" : String(v);
+    function flatten(payload) { return (payload.sections || []).flatMap(s => s.mappingReviews || []); }
+    function timings(payload) { return (payload.sections || []).flatMap(s => (s.autoMapping || {}).wordTimings || []).sort((a,b)=>(a.globalTokenIndex??-1)-(b.globalTokenIndex??-1)); }
+    function mapReport(report) { const m = new Map(); for (const k of ["humanRequired","llmCandidates","codeApproved","preservedReviewed"]) for (const it of (report[k] || [])) if (it.reviewId) m.set(String(it.reviewId), it); return m; }
+    function mergeScreening(i, byId) { const rec = byId.get(String(i.reviewId)) || {}; return {...rec, ...(rec.screening || {}), ...(i.screening || {})}; }
+    function summarize(items, queue) { return { total:items.length, pending:items.filter(i=>i.decision==="pending").length, approved:items.filter(i=>i.decision==="approved").length, corrected:items.filter(i=>i.decision==="corrected").length, rejected:items.filter(i=>i.decision==="rejected").length, queue:queue.length }; }
+    function contextFor(item, words) { const target = item.officialToken?.globalTokenIndex; if (target === undefined) return []; return words.filter(w => Math.abs((w.globalTokenIndex ?? -9999) - target) <= 4).map(w => ({...w, isTarget:w.globalTokenIndex === target})); }
+    function markerClass(marker) { const s = marker?.llmSuggestion || {}; if (s.preReviewLabel === "reject-evidence") return "marker--reject-evidence"; if (s.suggestedDecision === "needs-human") return "marker--needs-human"; if (s.preReviewLabel === "needs-auditory-review" || s.preReviewLabel === "needs-manual-timing") return "marker--needs-auditory"; return `marker--${marker?.tier || "human-required"}`; }
+    function transcriptMapFor(words, queue) { const markers = new Map(); for (const i of queue) { const idx = i.officialToken?.globalTokenIndex; if (Number.isInteger(idx)) markers.set(idx, {globalTokenIndex:idx, reviewId:i.reviewId, tier:i.tier, decision:i.decision, matchType:i.matchType, riskTypes:i.riskTypes, reasons:i.reasons, llmSuggestion:i.screening?.llmSuggestion || null}); } return words.map(w => ({globalTokenIndex:w.globalTokenIndex, token:w.token, start:w.start, end:w.end, marker:markers.get(w.globalTokenIndex) || null})); }
+    function buildData(reviewPayload, screeningReport, audioUrl) {
+      const words = timings(reviewPayload), byId = mapReport(screeningReport || {}), all = flatten(reviewPayload);
+      const queueItems = all.filter(i => !done.has(i.decision)).map(i => { const screening = mergeScreening(i, byId); return { reviewId:i.reviewId, section:i.section || i.officialToken?.section, decision:i.decision || "pending", tier:screening.tier || "unclassified", matchType:i.matchType, officialToken:i.officialToken || {}, sourceWord:i.sourceWord || {}, timing:i.timing || {}, riskTypes:i.riskTypes || [], reasons:i.reasons || [], context:contextFor(i, words), screening }; });
+      return { schemaVersion:"yasi.review-tool-data.v1", title:"Yasi Timing Review", audioUrl, reviewPayload, screeningReport:screeningReport || {}, queueItems, transcriptMap:transcriptMapFor(words, queueItems), summary:summarize(all, queueItems) };
+    }
+    async function fileJson(input) { const file = input.files && input.files[0]; return file ? JSON.parse(await file.text()) : null; }
+    async function loadFiles() { const review = await fileJson($("reviewFile")); if (!review) return; state.data = buildData(review, await fileJson($("reportFile")), $("audioUrl").value.trim()); state.selectedId = null; render(); }
+    function filtered() { if (!state.data) return []; const q=$("search").value.toLowerCase(), tier=$("tierFilter").value, risk=$("riskFilter").value; return state.data.queueItems.filter(i => (tier==="all" || tier==="unresolved" || i.tier===tier) && (!risk || i.riskTypes.includes(risk)) && (!q || [i.reviewId,i.officialToken?.text,i.sourceWord?.word,i.matchType,i.tier,...i.riskTypes,...i.reasons].join(" ").toLowerCase().includes(q))); }
+    function item() { return (state.data?.queueItems || []).find(i => i.reviewId === state.selectedId) || null; }
+    function reviewItem() { for (const s of state.data?.reviewPayload?.sections || []) for (const i of s.mappingReviews || []) if (i.reviewId === state.selectedId) return i; return null; }
+    function renderSummary() { const s=state.data?.summary || {}; $("summary").innerHTML = [["Queue",s.queue??0,"red"],["Pending",s.pending??0,"red"],["Approved",s.approved??0,"green"],["Corrected",s.corrected??0,"green"],["Total",s.total??0,""]].map(x=>`<span class="pill ${x[2]}">${x[0]} <strong>${x[1]}</strong></span>`).join(""); }
+    function renderRisks() { const old=$("riskFilter").value, risks=new Set(); for (const i of state.data?.queueItems || []) for (const r of i.riskTypes) risks.add(r); $("riskFilter").innerHTML='<option value="">All risks</option>'+[...risks].sort().map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join(""); $("riskFilter").value = risks.has(old) ? old : ""; }
+    function renderQueue() { const items=filtered(); if (!state.selectedId && items[0]) state.selectedId=items[0].reviewId; if (state.selectedId && !items.some(i=>i.reviewId===state.selectedId) && items[0]) state.selectedId=items[0].reviewId; $("queue").innerHTML = items.length ? items.map(i=>`<button class="queue-item ${i.reviewId===state.selectedId?"active":""}" data-id="${esc(i.reviewId)}"><span class="queue-title"><b>${esc(i.reviewId)}</b><span class="chip ${esc(i.tier)}">${esc(i.tier)}</span></span><span class="token-line"><span>${esc(i.officialToken?.text)}</span><span>-></span><span>${esc(i.sourceWord?.word || "missing")}</span></span><span class="chips">${[i.matchType,...i.riskTypes].filter(Boolean).map(v=>`<span class="chip">${esc(v)}</span>`).join("")}</span></button>`).join("") : '<div class="empty">No items match the current filters.</div>'; for (const b of $("queue").querySelectorAll("[data-id]")) b.onclick=()=>{state.selectedId=b.dataset.id; render();}; }
+    function renderReviewMap() { const entries = state.data?.transcriptMap || []; $("reviewMap").innerHTML = entries.length ? entries.map(e => e.marker ? `<button class="map-word marker ${markerClass(e.marker)}" data-id="${esc(e.marker.reviewId)}" title="${esc(e.marker.reviewId)} ${esc(e.marker.tier)}">${esc(e.token)}</button>` : `<span class="map-word">${esc(e.token)}</span>`).join("") : '<div class="empty">No timing map loaded.</div>'; for (const b of $("reviewMap").querySelectorAll("[data-id]")) b.onclick=()=>{state.selectedId=b.dataset.id; render();}; }
+    function renderDetail() { const i=item(); if (!i) { $("detail").innerHTML='<div class="empty">Load review data or select an item.</div>'; return; } const llm=i.screening?.llmSuggestion; const llmHtml=llm ? `<div class="llm-box"><b>Advisory LLM suggestion</b><div class="chips" style="margin-top:6px;"><span class="chip">${esc(llm.suggestedDecision)}</span><span class="chip">${esc(llm.preReviewLabel || "")}</span><span class="chip">${esc(num(llm.confidence))}</span></div><div class="value" style="margin-top:8px;">${esc(llm.notes || "")}</div>${llm.correction ? `<div class="value" style="margin-top:8px;">${esc(num(llm.correction.start))}-${esc(num(llm.correction.end))}</div>` : ""}</div>` : ""; $("detail").innerHTML=`<h2>${esc(i.reviewId)}</h2><div class="detail-grid"><div class="field"><label>Official token</label><div class="value">${esc(i.officialToken?.text)}</div></div><div class="field"><label>Whisper source</label><div class="value">${esc(i.sourceWord?.word || "missing")}</div></div><div class="field"><label>Match type</label><div class="value">${esc(i.matchType)}</div></div><div class="field"><label>Tier</label><div class="value">${esc(i.tier)}</div></div><div class="field"><label>Risks</label><div class="value">${esc(i.riskTypes.join(", ") || "none")}</div></div><div class="field"><label>Reasons</label><div class="value">${esc(i.reasons.join(", ") || "none")}</div></div></div>${llmHtml}<div class="field" style="margin-top:12px;"><label>Transcript context</label><div class="context">${(i.context||[]).map(w=>`<span class="word ${w.isTarget?"target":""}" title="${num(w.start)}-${num(w.end)}">${esc(w.token)}</span>`).join("") || '<span class="word">No context</span>'}</div></div>`; $("startInput").value=num(i.timing?.start); $("endInput").value=num(i.timing?.end); $("decisionInput").value=i.decision || "pending"; $("notesInput").value=reviewItem()?.notes || ""; }
+    function updateReview(decision) { const raw=reviewItem(), i=item(); if (!raw || !i) return; const reviewer=$("reviewerInput").value.trim() || "human-review-tool", reviewedAt=new Date().toISOString().replace(/\.\d{3}Z$/,"Z"), start=Number($("startInput").value), end=Number($("endInput").value); raw.decision=decision; raw.reviewer=reviewer; raw.reviewedAt=reviewedAt; raw.notes=$("notesInput").value; raw.correction = decision==="corrected" ? {start,end,reviewer,reviewedAt,notes:raw.notes} : null; i.decision=decision; state.data.summary=summarize(flatten(state.data.reviewPayload), state.data.queueItems); render(); }
+    function playWindow() { const i=item(), audio=$("audio"); if (!i || !audio.src) return; const start=Number(i.timing?.start), end=Number(i.timing?.end); if (!Number.isFinite(start) || !Number.isFinite(end)) return; audio.currentTime=Math.max(0,start-1.2); audio.play(); clearInterval(state.timer); state.timer=setInterval(()=>{ if (audio.currentTime >= end+1.2) { audio.pause(); clearInterval(state.timer); } }, 120); }
+    function refreshStatuses(payload) { let unresolved=0; for (const s of payload.sections || []) { const pending=(s.mappingReviews || []).filter(i=>!done.has(i.decision)); unresolved += pending.length; s.status=pending.length?"pending":"reviewed"; } payload.status=unresolved?"needs-review":"reviewed"; }
+    function exportReviewedJson() { if (!state.data?.reviewPayload) return; refreshStatuses(state.data.reviewPayload); const blob=new Blob([JSON.stringify(state.data.reviewPayload,null,2)+"\n"], {type:"application/json"}); const url=URL.createObjectURL(blob), a=document.createElement("a"); a.href=url; a.download="alignment-review.reviewed.json"; a.click(); URL.revokeObjectURL(url); }
+    function render() { if (!state.data) { renderSummary(); $("detail").innerHTML='<div class="empty">Load a screened review JSON to begin.</div>'; $("reviewMap").innerHTML='<div class="empty">No timing map loaded.</div>'; return; } $("title").textContent=state.data.title || "Yasi Timing Review"; $("audioUrl").value=state.data.audioUrl || $("audioUrl").value; $("audio").src=state.data.audioUrl || ""; renderSummary(); renderRisks(); renderQueue(); renderReviewMap(); renderDetail(); }
+    $("loadFiles").onclick=loadFiles; $("search").oninput=render; $("tierFilter").onchange=render; $("riskFilter").onchange=render; $("playWindow").onclick=playWindow; $("setStart").onclick=()=>{$("startInput").value=$("audio").currentTime.toFixed(3);}; $("setEnd").onclick=()=>{$("endInput").value=$("audio").currentTime.toFixed(3);}; $("approveButton").onclick=()=>updateReview("approved"); $("correctButton").onclick=()=>updateReview("corrected"); $("pendingButton").onclick=()=>updateReview("pending"); $("rejectButton").onclick=()=>updateReview("rejected"); $("exportButton").onclick=exportReviewedJson;
+    render();
+  </script>
+</body>
+</html>

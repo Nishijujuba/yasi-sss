@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "yasi.alignment-review.v1",
+  "reviewArtifact": "build/review/transcript-timing/cambridge-10-test-1-listening/alignment-review.json",
+  "sourceEvidence": ".agents/skills/yasi-asr-timing-reconciliation/fixtures/sample-asr-timing-evidence.json",
+  "officialTranscript": "public/packs/cambridge-10/test-1/listening/transcript.json",
+  "sections": [
+    {
+      "section": 1,
+      "status": "reviewed",
+      "mappingReviews": [
+        {
+          "reviewId": "s01-g0000",
+          "section": 1,
+          "matchType": "exact",
+          "decision": "approved",
+          "officialToken": {
+            "section": 1,
+            "segmentOrder": 1,
+            "tokenIndex": 0,
+            "globalTokenIndex": 0,
+            "text": "Good",
+            "normalized": "good",
+            "answerRefs": []
+          },
+          "sourceWord": {
+            "sourceIndex": 0,
+            "word": "Good",
+            "normalized": "good",
+            "start": 0.42,
+            "end": 0.72
+          },
+          "timing": {
+            "start": 0.42,
+            "end": 0.72
+          },
+          "riskTypes": [],
+          "reasons": [],
+          "correction": null,
+          "reviewer": "fixture",
+          "reviewedAt": "2026-06-18T00:00:00Z",
+          "notes": "Exact opening token timing approved."
+        },
+        {
+          "reviewId": "s01-g0002",
+          "section": 1,
+          "matchType": "fuzzy",
+          "decision": "corrected",
+          "officialToken": {
+            "section": 1,
+            "segmentOrder": 1,
+            "tokenIndex": 2,
+            "globalTokenIndex": 2,
+            "text": "World",
+            "normalized": "world",
+            "answerRefs": []
+          },
+          "sourceWord": {
+            "sourceIndex": 2,
+            "word": "World",
+            "normalized": "world",
+            "start": 1.32,
+            "end": 1.66
+          },
+          "timing": {
+            "start": 1.32,
+            "end": 1.66
+          },
+          "riskTypes": [
+            "answer-near"
+          ],
+          "reasons": [
+            "match:fuzzy",
+            "risk:answer-near"
+          ],
+          "correction": {
+            "start": 1.31,
+            "end": 1.67,
+            "sourceIndex": 2,
+            "sourceToken": "World",
+            "reviewer": "fixture",
+            "reviewedAt": "2026-06-18T00:00:00Z",
+            "notes": "Corrected boundary keeps the full word inside the reviewed interval."
+          },
+          "reviewer": "fixture",
+          "reviewedAt": "2026-06-18T00:00:00Z",
+          "notes": "Fuzzy review item demonstrates the correction-compatible shape."
+        }
+      ]
+    }
+  ]
+}

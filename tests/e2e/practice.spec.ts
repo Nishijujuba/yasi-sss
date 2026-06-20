@@ -6,7 +6,7 @@ async function startOrContinuePractice(page: Page) {
   await entryButton.click()
 }
 
-async function switchToSection(page: Page, section: '01' | '02') {
+async function switchToSection(page: Page, section: '01' | '02' | '03' | '04') {
   await page
     .getByRole('tab', { name: new RegExp(`^(Section\\s*)?${section}|\\u7b2c\\s*${Number(section)}\\s*\\u90e8\\u5206`) })
     .click()
@@ -63,7 +63,9 @@ test.describe('practice workflow', () => {
     })
 
     const sideBox = await sidePanel.boundingBox()
-    const followButtonBox = await page.getByRole('button', { name: /^\u539f\u6587\u8ddf\u8bfb$/ }).boundingBox()
+    const followButton = page.getByRole('button', { name: /^\u6253\u5f00\u539f\u6587$/ })
+    await expect(followButton).toBeEnabled()
+    const followButtonBox = await followButton.boundingBox()
     expect(sideBox).not.toBeNull()
     expect(followButtonBox).not.toBeNull()
     expect(followButtonBox!.y + followButtonBox!.height).toBeLessThanOrEqual(sideBox!.y + sideBox!.height + 1)
@@ -96,5 +98,21 @@ test.describe('practice workflow', () => {
 
     await ardleighCard.getByRole('button', { name: /^\u79fb\u9664$/ }).click()
     await expect(ardleighCard).toHaveCount(0)
+  })
+
+  test('opens transcript shadowing in Sections 02 through 04', async ({ page }) => {
+    await page.goto('/')
+    await startOrContinuePractice(page)
+
+    for (const section of ['02', '03', '04'] as const) {
+      await switchToSection(page, section)
+      const openTranscript = page.getByRole('button', { name: /^\u6253\u5f00\u539f\u6587$/ })
+      await expect(openTranscript).toBeEnabled()
+      await openTranscript.click()
+
+      await expect(page.getByRole('region', { name: `Section ${section} \u539f\u6587\u8ddf\u8bfb` })).toBeVisible()
+      await expect(page.getByRole('button', { name: /^\u6536\u8d77\u539f\u6587$/ })).toBeVisible()
+      await page.getByRole('button', { name: /^\u6536\u8d77\u539f\u6587$/ }).click()
+    }
   })
 })

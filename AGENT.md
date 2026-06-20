@@ -18,7 +18,15 @@ Common command forms:
 ```
 
 Avoid bare `python` for project work because the system Python may not have the
-project dependencies installed, such as Pillow, NumPy, Pydantic, and pytest.
+project dependencies installed, such as Pillow, NumPy, Pydantic, PyYAML, and
+pytest.
+
+Skill validation must also use the project virtual environment explicitly:
+
+```powershell
+$env:PYTHONUTF8='1'
+D:\Project\yasi\.venv\Scripts\python.exe C:\Users\juju\.codex\skills\.system\skill-creator\scripts\quick_validate.py D:\Project\yasi\.agents\skills\yasi-asr-timing-reconciliation
+```
 
 When dependency synchronization is needed and permissions allow it, prefer:
 

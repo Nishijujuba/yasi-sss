@@ -113,20 +113,25 @@ export interface TranscriptWordTiming {
   text?: string;
   token?: string;
   normalized?: string;
-  start: number;
-  end: number;
+  start?: number | null;
+  end?: number | null;
+  matchType?: string;
+  match?: string;
+  riskTypes?: string[];
+  reasons?: string[];
+  requiresReview?: boolean;
   review?: Record<string, unknown>;
 }
 
 export interface TranscriptTimingSection {
   section: number;
-  status: "verified";
+  status: "verified" | "preview";
   wordTimings: TranscriptWordTiming[];
 }
 
 export interface TranscriptTimingArtifact {
   schemaVersion: "yasi.transcript-timings.v1";
-  status: "verified";
+  status: "verified" | "preview";
   sections: TranscriptTimingSection[];
 }
 

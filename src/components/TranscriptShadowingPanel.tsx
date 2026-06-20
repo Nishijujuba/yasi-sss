@@ -7,10 +7,16 @@ export interface TranscriptWordTiming {
   segmentOrder: number;
   tokenIndex: number;
   token?: string;
-  start?: number;
-  end?: number;
-  startTime?: number;
-  endTime?: number;
+  matchType?: string;
+  match?: string;
+  riskTypes?: string[];
+  reasons?: string[];
+  requiresReview?: boolean;
+  review?: Record<string, unknown>;
+  start?: number | null;
+  end?: number | null;
+  startTime?: number | null;
+  endTime?: number | null;
 }
 
 export interface TranscriptTimingSection {
@@ -24,6 +30,7 @@ export interface TranscriptShadowingPanelProps {
   currentTime: number;
   onSeek: (start: number) => void;
   defaultFollow?: boolean;
+  showTimingReviewMarkers?: boolean;
 }
 
 function timingKey(segmentOrder: number, tokenIndex: number): string {
@@ -39,6 +46,12 @@ interface NormalizedTranscriptWordTiming {
   segmentOrder: number;
   tokenIndex: number;
   token?: string;
+  matchType?: string;
+  match?: string;
+  riskTypes?: string[];
+  reasons?: string[];
+  requiresReview?: boolean;
+  review?: Record<string, unknown>;
   start: number;
   end: number;
 }
@@ -67,6 +80,33 @@ function normalizeWordTimings(
       return { ...timing, start, end };
     })
     .filter((timing): timing is NormalizedTranscriptWordTiming => timing !== null);
+}
+
+type ReviewMarkerTiming = Pick<
+  TranscriptWordTiming,
+  "requiresReview" | "riskTypes" | "review" | "matchType" | "match" | "reasons"
+>;
+
+function reviewDecision(timing: ReviewMarkerTiming): string {
+  const decision = timing.review?.decision;
+  return typeof decision === "string" ? decision : "";
+}
+
+function reviewMarkerClass(timing: ReviewMarkerTiming | undefined, showMarkers: boolean): string | false {
+  if (!showMarkers || timing === undefined) {
+    return false;
+  }
+  const decision = reviewDecision(timing);
+  if (decision === "corrected") {
+    return "transcript-word--review-corrected";
+  }
+  if (decision === "approved") {
+    return "transcript-word--review-approved";
+  }
+  if (timing.requiresReview || timing.review !== undefined) {
+    return "transcript-word--review-required";
+  }
+  return false;
 }
 
 function useActiveSegmentOrder(
@@ -106,9 +146,14 @@ export function TranscriptShadowingPanel({
   currentTime,
   onSeek,
   defaultFollow = true,
+  showTimingReviewMarkers = false,
 }: TranscriptShadowingPanelProps) {
   const [isFollowing, setIsFollowing] = useState(defaultFollow);
   const activeWordRef = useRef<HTMLSpanElement | null>(null);
+  const rawWordTimings = useMemo(() => {
+    const rawTimings = timingSection?.wordTimings;
+    return Array.isArray(rawTimings) ? rawTimings : Object.values(rawTimings ?? {});
+  }, [timingSection]);
   const wordTimings = useMemo(() => normalizeWordTimings(timingSection), [timingSection]);
   const activeTiming = useMemo(
     () => wordTimings.find((timing) => timing.start <= currentTime && currentTime < timing.end) ?? null,
@@ -122,6 +167,15 @@ export function TranscriptShadowingPanel({
     }
     return out;
   }, [wordTimings]);
+  const reviewMarkersByToken = useMemo(() => {
+    const out = new Map<string, TranscriptWordTiming>();
+    for (const timing of rawWordTimings) {
+      if (timing.requiresReview || timing.review !== undefined) {
+        out.set(timingKey(timing.segmentOrder, timing.tokenIndex), timing);
+      }
+    }
+    return out;
+  }, [rawWordTimings]);
   const activeTimingIdentity =
     activeTiming === null ? "none" : timingKey(activeTiming.segmentOrder, activeTiming.tokenIndex);
 
@@ -133,7 +187,7 @@ export function TranscriptShadowingPanel({
     activeWordRef.current.scrollIntoView?.({ block: "center", inline: "nearest" });
   }, [activeTimingIdentity, isFollowing]);
 
-  function handleTranscriptScroll() {
+  function pauseFollowing() {
     setIsFollowing(false);
   }
 
@@ -149,7 +203,13 @@ export function TranscriptShadowingPanel({
     <section
       aria-label={`Section ${String(transcriptSection.section).padStart(2, "0")} 原文跟读`}
       className="transcript-shadowing-panel"
-      onScroll={handleTranscriptScroll}
+      onPointerDown={(event) => {
+        if (event.currentTarget === event.target) {
+          pauseFollowing();
+        }
+      }}
+      onTouchStart={pauseFollowing}
+      onWheel={pauseFollowing}
       role="region"
     >
       <div className="transcript-shadowing-panel__toolbar">
@@ -181,8 +241,16 @@ export function TranscriptShadowingPanel({
                 activeTiming?.segmentOrder === segment.order && activeTiming.tokenIndex === part.tokenIndex;
 
               if (timing === undefined) {
+                const reviewMarker = reviewMarkersByToken.get(timingKey(segment.order, part.tokenIndex));
                 return (
-                  <span className="transcript-word transcript-word--untimed" key={`word-${part.tokenIndex}`}>
+                  <span
+                    className={classNames(
+                      "transcript-word",
+                      "transcript-word--untimed",
+                      reviewMarkerClass(reviewMarker, showTimingReviewMarkers),
+                    )}
+                    key={`word-${part.tokenIndex}`}
+                  >
                     {part.text}
                   </span>
                 );
@@ -191,7 +259,11 @@ export function TranscriptShadowingPanel({
               return (
                 <span
                   aria-current={isActive ? "true" : undefined}
-                  className={classNames("transcript-word", isActive && "transcript-word--active")}
+                  className={classNames(
+                    "transcript-word",
+                    reviewMarkerClass(timing, showTimingReviewMarkers),
+                    isActive && "transcript-word--active",
+                  )}
                   key={`word-${part.tokenIndex}`}
                   onClick={() => onSeek(timing.start)}
                   onKeyDown={(event) => handleWordKeyDown(event, timing.start)}

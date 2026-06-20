@@ -98,6 +98,81 @@ describe("TranscriptShadowingPanel", () => {
     expect(document.querySelector(".transcript-word--active")).toBeNull();
   });
 
+  it("shows timing review markers only when enabled", () => {
+    const reviewedTimingSection: TranscriptTimingSection = {
+      section: 1,
+      wordTimings: [
+        {
+          section: 1,
+          segmentOrder: 1,
+          tokenIndex: 1,
+          token: "morning",
+          start: 0.3,
+          end: 0.6,
+          riskTypes: ["answer-near"],
+          review: { decision: "corrected", reviewId: "s01-g0001" },
+        },
+      ],
+    };
+    const { rerender } = render(
+      <TranscriptShadowingPanel
+        currentTime={0}
+        onSeek={vi.fn()}
+        timingSection={reviewedTimingSection}
+        transcriptSection={transcriptSection}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "morning" })).not.toHaveClass(
+      "transcript-word--review-corrected",
+    );
+
+    rerender(
+      <TranscriptShadowingPanel
+        currentTime={0}
+        onSeek={vi.fn()}
+        showTimingReviewMarkers
+        timingSection={reviewedTimingSection}
+        transcriptSection={transcriptSection}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "morning" })).toHaveClass("transcript-word--review-corrected");
+  });
+
+  it("shows review markers for untimed preview tokens", () => {
+    const previewTimingSection: TranscriptTimingSection = {
+      section: 1,
+      wordTimings: [
+        {
+          section: 1,
+          segmentOrder: 1,
+          tokenIndex: 1,
+          token: "morning",
+          start: undefined,
+          end: undefined,
+          requiresReview: true,
+          riskTypes: ["answer-near"],
+          review: { decision: "pending", reviewId: "s01-g0001" },
+        },
+      ],
+    };
+
+    render(
+      <TranscriptShadowingPanel
+        currentTime={0}
+        onSeek={vi.fn()}
+        showTimingReviewMarkers
+        timingSection={previewTimingSection}
+        transcriptSection={transcriptSection}
+      />,
+    );
+
+    const untimedWord = screen.getByText("morning");
+    expect(untimedWord).toHaveClass("transcript-word--untimed");
+    expect(untimedWord).toHaveClass("transcript-word--review-required");
+  });
+
   it("seeks to a word start when the learner clicks a word", () => {
     const onSeek = vi.fn();
     render(
@@ -130,7 +205,7 @@ describe("TranscriptShadowingPanel", () => {
     expect(screen.queryByRole("button", { name: /copy|复制/i })).toBeNull();
   });
 
-  it("disables follow after manual transcript scroll and restores it with the follow control", () => {
+  it("disables follow after manual transcript wheel scroll and restores it with the follow control", () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;
     const { rerender } = render(
@@ -144,7 +219,7 @@ describe("TranscriptShadowingPanel", () => {
 
     expect(scrollIntoView).toHaveBeenCalledTimes(1);
 
-    fireEvent.scroll(screen.getByRole("region", { name: "Section 01 原文跟读" }));
+    fireEvent.wheel(screen.getByRole("region", { name: "Section 01 原文跟读" }));
     rerender(
       <TranscriptShadowingPanel
         currentTime={0.8}
@@ -159,6 +234,41 @@ describe("TranscriptShadowingPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "跟随当前词" }));
 
     expect(scrollIntoView).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps following after its own automatic scroll event", () => {
+    const originalScrollIntoView = Element.prototype.scrollIntoView;
+    const scrollIntoView = vi.fn(function (this: Element) {
+      this.closest(".transcript-shadowing-panel")?.dispatchEvent(new Event("scroll"));
+    });
+    Element.prototype.scrollIntoView = scrollIntoView;
+
+    try {
+      const { rerender } = render(
+        <TranscriptShadowingPanel
+          currentTime={0.35}
+          onSeek={vi.fn()}
+          timingSection={timingSection}
+          transcriptSection={transcriptSection}
+        />,
+      );
+
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+
+      rerender(
+        <TranscriptShadowingPanel
+          currentTime={1.7}
+          onSeek={vi.fn()}
+          timingSection={timingSection}
+          transcriptSection={transcriptSection}
+        />,
+      );
+
+      expect(screen.getByRole("button", { name: "£525" })).toHaveClass("transcript-word--active");
+      expect(scrollIntoView).toHaveBeenCalledTimes(2);
+    } finally {
+      Element.prototype.scrollIntoView = originalScrollIntoView;
+    }
   });
 
   it("wraps only word tokens as clickable controls", () => {

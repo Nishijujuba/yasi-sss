@@ -1,0 +1,654 @@
+{
+  "schemaVersion": "yasi.intensive-listening-candidates.v1",
+  "section": 2,
+  "candidates": [
+    {
+      "section": 2,
+      "segmentOrder": 1,
+      "startTokenIndex": 3,
+      "endTokenIndex": 5,
+      "text": "LP Clubs",
+      "reason": "Proper noun introduction with capitalization and spelling value.",
+      "tags": ["proper-noun", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 1,
+      "startTokenIndex": 15,
+      "endTokenIndex": 17,
+      "text": "Sandy Fisher",
+      "reason": "Speaker name with proper-noun spelling value.",
+      "tags": ["proper-noun", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 1,
+      "startTokenIndex": 47,
+      "endTokenIndex": 49,
+      "text": "recent improvements",
+      "reason": "Tour signpost that previews the improvement details tested later.",
+      "tags": ["signpost", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 1,
+      "startTokenIndex": 52,
+      "endTokenIndex": 55,
+      "text": "types of membership",
+      "reason": "Section signpost for the membership categories and fees.",
+      "tags": ["signpost", "membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 6,
+      "endTokenIndex": 8,
+      "text": "swimming pool",
+      "reason": "Facility noun phrase tied to the multiple-choice improvement detail.",
+      "tags": ["answer-bearing", "multiple-choice", "facility"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 10,
+      "endTokenIndex": 12,
+      "text": "25 metres",
+      "reason": "Measurement detail that trains number and unit recognition.",
+      "tags": ["number", "measurement", "distractor-contrast"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 13,
+      "endTokenIndex": 14,
+      "text": "Olympic-sized",
+      "reason": "Hyphenated compound used in a contrast about pool size.",
+      "tags": ["compound", "hyphenated", "distractor-contrast"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 20,
+      "endTokenIndex": 22,
+      "text": "eight lanes",
+      "reason": "Answer-bearing improvement detail with number recognition value.",
+      "tags": ["answer-bearing", "multiple-choice", "number"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 48,
+      "endTokenIndex": 50,
+      "text": "outdoor pool",
+      "reason": "Facility phrase used in a rejected alternative about pool access.",
+      "tags": ["distractor-contrast", "facility", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 53,
+      "endTokenIndex": 55,
+      "text": "glass roof",
+      "reason": "Concrete facility feature that explains the open-air effect.",
+      "tags": ["facility", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 60,
+      "endTokenIndex": 62,
+      "text": "partly retractable",
+      "reason": "Technical adjective phrase with spelling and connected-speech value.",
+      "tags": ["spelling-risk", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 2,
+      "startTokenIndex": 70,
+      "endTokenIndex": 72,
+      "text": "open-air experience",
+      "reason": "Hyphenated compound phrase linked to the pool feature.",
+      "tags": ["compound", "hyphenated", "facility"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 1,
+      "endTokenIndex": 3,
+      "text": "recently refurbished",
+      "reason": "Improvement phrase with spelling value and task relevance.",
+      "tags": ["answer-bearing", "multiple-choice", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 3,
+      "endTokenIndex": 5,
+      "text": "fitness suite",
+      "reason": "Facility noun phrase tied to the improvement question.",
+      "tags": ["answer-bearing", "multiple-choice", "facility"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 8,
+      "endTokenIndex": 11,
+      "text": "latest exercise equipment",
+      "reason": "Noun phrase that carries the refurbished facility detail.",
+      "tags": ["answer-bearing", "facility", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 12,
+      "endTokenIndex": 16,
+      "text": "ten new running machines",
+      "reason": "Answer-bearing improvement detail with number and compound value.",
+      "tags": ["answer-bearing", "number", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 21,
+      "endTokenIndex": 23,
+      "text": "weight-training machines",
+      "reason": "Hyphenated equipment phrase with word-boundary value.",
+      "tags": ["compound", "hyphenated", "facility"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 27,
+      "endTokenIndex": 29,
+      "text": "full training",
+      "reason": "Service-detail noun phrase that can be missed in connected speech.",
+      "tags": ["noun-phrase", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 40,
+      "endTokenIndex": 43,
+      "text": "trainer on duty",
+      "reason": "Service-detail phrase with useful word-boundary control.",
+      "tags": ["noun-phrase", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 52,
+      "endTokenIndex": 54,
+      "text": "adult-only times",
+      "reason": "Hyphenated schedule phrase with task-detail value.",
+      "tags": ["hyphenated", "schedule", "compound"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 54,
+      "endTokenIndex": 56,
+      "text": "after 6",
+      "reason": "Time detail that trains number recognition in a schedule context.",
+      "tags": ["number", "time", "schedule"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 61,
+      "endTokenIndex": 62,
+      "text": "weekends",
+      "reason": "Schedule word with plural ending and listening-detail value.",
+      "tags": ["schedule", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 64,
+      "endTokenIndex": 67,
+      "text": "well catered for",
+      "reason": "Idiomatic phrase whose final preposition is easy to miss.",
+      "tags": ["idiom", "connected-speech", "weak-form"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 74,
+      "endTokenIndex": 78,
+      "text": "wide range of tuition",
+      "reason": "Noun phrase that carries the children's activity detail.",
+      "tags": ["noun-phrase", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 80,
+      "endTokenIndex": 81,
+      "text": "trampolining",
+      "reason": "Activity word with spelling and syllable-recognition value.",
+      "tags": ["activity", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 3,
+      "startTokenIndex": 82,
+      "endTokenIndex": 83,
+      "text": "yoga",
+      "reason": "Short activity word that contrasts with the longer activity list.",
+      "tags": ["activity", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 24,
+      "endTokenIndex": 26,
+      "text": "personal assessment",
+      "reason": "Process noun phrase introducing the health questionnaire sequence.",
+      "tags": ["process", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 30,
+      "endTokenIndex": 32,
+      "text": "fill in",
+      "reason": "Phrasal verb with weak-form boundary value before the questionnaire.",
+      "tags": ["phrasal-verb", "weak-form"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 33,
+      "endTokenIndex": 34,
+      "text": "questionnaire",
+      "reason": "Form-completion context word with substantial spelling value.",
+      "tags": ["form-completion", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 38,
+      "endTokenIndex": 40,
+      "text": "health problems",
+      "reason": "Official form-completion answer phrase for question 13.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 43,
+      "endTokenIndex": 45,
+      "text": "personal trainers",
+      "reason": "Role phrase with plural-ending and process-detail value.",
+      "tags": ["noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 4,
+      "startTokenIndex": 47,
+      "endTokenIndex": 49,
+      "text": "go through",
+      "reason": "Phrasal verb commonly reduced in connected speech.",
+      "tags": ["phrasal-verb", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 8,
+      "endTokenIndex": 10,
+      "text": "safety rules",
+      "reason": "Official form-completion answer phrase for question 14.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 21,
+      "endTokenIndex": 23,
+      "text": "exercise session",
+      "reason": "Process-detail noun phrase with word-boundary value.",
+      "tags": ["process", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 24,
+      "endTokenIndex": 26,
+      "text": "personal trainer",
+      "reason": "Role phrase central to the safety explanation.",
+      "tags": ["process", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 50,
+      "endTokenIndex": 52,
+      "text": "sports injuries",
+      "reason": "Safety-outcome noun phrase with plural-ending value.",
+      "tags": ["noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 57,
+      "endTokenIndex": 60,
+      "text": "looking after yourself",
+      "reason": "Connected-speech phrase that contrasts general self-care with weights.",
+      "tags": ["connected-speech", "phrase-boundary"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 5,
+      "startTokenIndex": 62,
+      "endTokenIndex": 64,
+      "text": "lifting weights",
+      "reason": "Exercise collocation with final-consonant and plural recognition value.",
+      "tags": ["collocation", "activity", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 6,
+      "startTokenIndex": 10,
+      "endTokenIndex": 12,
+      "text": "draw up",
+      "reason": "Phrasal verb that cues the following official answer.",
+      "tags": ["phrasal-verb", "process"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 6,
+      "startTokenIndex": 13,
+      "endTokenIndex": 14,
+      "text": "plan",
+      "reason": "Official form-completion answer for question 15.",
+      "tags": ["answer-bearing", "form-completion"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 6,
+      "startTokenIndex": 23,
+      "endTokenIndex": 25,
+      "text": "six-week period",
+      "reason": "Hyphenated time phrase with number and schedule value.",
+      "tags": ["number", "hyphenated", "schedule"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 6,
+      "startTokenIndex": 35,
+      "endTokenIndex": 37,
+      "text": "six weeks",
+      "reason": "Review-timing phrase that reinforces number recognition.",
+      "tags": ["number", "time", "schedule"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 18,
+      "endTokenIndex": 19,
+      "text": "joining",
+      "reason": "Official form-completion answer for question 16.",
+      "tags": ["answer-bearing", "form-completion", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 21,
+      "endTokenIndex": 22,
+      "text": "£90",
+      "reason": "Currency amount tied to the joining fee.",
+      "tags": ["currency", "number", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 29,
+      "endTokenIndex": 32,
+      "text": "monthly membership fees",
+      "reason": "Fee-category phrase with membership-task value.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 32,
+      "endTokenIndex": 34,
+      "text": "Gold membership",
+      "reason": "Membership type with capitalization and category value.",
+      "tags": ["membership", "proper-noun"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 37,
+      "endTokenIndex": 39,
+      "text": "free entry",
+      "reason": "Official form-completion answer phrase for question 17.",
+      "tags": ["answer-bearing", "form-completion", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 41,
+      "endTokenIndex": 43,
+      "text": "LP Clubs",
+      "reason": "Proper noun phrase tied to Gold membership access.",
+      "tags": ["proper-noun", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 50,
+      "endTokenIndex": 54,
+      "text": "major cities and towns",
+      "reason": "Location-distribution phrase explaining the membership advantage.",
+      "tags": ["noun-phrase", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 66,
+      "endTokenIndex": 69,
+      "text": "Individual gold membership",
+      "reason": "Membership category phrase that cues the following fee.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 70,
+      "endTokenIndex": 71,
+      "text": "£50",
+      "reason": "Currency amount for individual Gold membership.",
+      "tags": ["currency", "number", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 74,
+      "endTokenIndex": 76,
+      "text": "joint membership",
+      "reason": "Membership category phrase contrasted with individual membership.",
+      "tags": ["membership", "noun-phrase", "distractor-contrast"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 80,
+      "endTokenIndex": 81,
+      "text": "partner",
+      "reason": "Relationship term that clarifies joint membership eligibility.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 7,
+      "startTokenIndex": 83,
+      "endTokenIndex": 84,
+      "text": "£75",
+      "reason": "Currency amount for joint membership.",
+      "tags": ["currency", "number", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 0,
+      "endTokenIndex": 2,
+      "text": "Premier membership",
+      "reason": "Membership category phrase that introduces the second fee plan.",
+      "tags": ["membership", "proper-noun"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 4,
+      "endTokenIndex": 6,
+      "text": "professional people",
+      "reason": "Eligibility phrase for Premier membership.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 7,
+      "endTokenIndex": 9,
+      "text": "work commitments",
+      "reason": "Reason phrase explaining why Premier members need flexible access.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 25,
+      "endTokenIndex": 27,
+      "text": "booking preference",
+      "reason": "Service phrase that cues the peak-time answer.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 28,
+      "endTokenIndex": 30,
+      "text": "Premier members",
+      "reason": "Membership label with proper-noun and plural-ending value.",
+      "tags": ["membership", "proper-noun", "spelling-risk"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 31,
+      "endTokenIndex": 32,
+      "text": "peak",
+      "reason": "Official form-completion answer for question 18.",
+      "tags": ["answer-bearing", "form-completion", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 41,
+      "endTokenIndex": 44,
+      "text": "book the sessions",
+      "reason": "Service phrase with connected-speech and task-detail value.",
+      "tags": ["membership", "connected-speech"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 49,
+      "endTokenIndex": 51,
+      "text": "Reciprocal arrangements",
+      "reason": "Formal membership phrase with substantial spelling value.",
+      "tags": ["membership", "spelling-risk", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 53,
+      "endTokenIndex": 55,
+      "text": "LP Clubs",
+      "reason": "Proper noun phrase tied to reciprocal access.",
+      "tags": ["proper-noun", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 64,
+      "endTokenIndex": 66,
+      "text": "individuals only",
+      "reason": "Eligibility restriction phrase contrasting Premier with joint plans.",
+      "tags": ["membership", "distractor-contrast"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 73,
+      "endTokenIndex": 74,
+      "text": "guests",
+      "reason": "Official form-completion answer for question 19.",
+      "tags": ["answer-bearing", "form-completion", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 74,
+      "endTokenIndex": 76,
+      "text": "every month",
+      "reason": "Frequency phrase that clarifies the guest-pass benefit.",
+      "tags": ["membership", "time"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 77,
+      "endTokenIndex": 79,
+      "text": "monthly fee",
+      "reason": "Fee label that cues the Premier price.",
+      "tags": ["membership", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 8,
+      "startTokenIndex": 80,
+      "endTokenIndex": 81,
+      "text": "£65",
+      "reason": "Currency amount for Premier membership.",
+      "tags": ["currency", "number", "membership"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 9,
+      "startTokenIndex": 6,
+      "endTokenIndex": 10,
+      "text": "special clothes or equipment",
+      "reason": "Rejected requirement phrase that helps distinguish what visitors need.",
+      "tags": ["distractor-contrast", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 9,
+      "startTokenIndex": 17,
+      "endTokenIndex": 20,
+      "text": "robes and hairdryers",
+      "reason": "Provided-items phrase with spelling value for hairdryers.",
+      "tags": ["noun-phrase", "spelling-risk", "facility"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 9,
+      "startTokenIndex": 22,
+      "endTokenIndex": 24,
+      "text": "changing rooms",
+      "reason": "Facility noun phrase that locates the provided items.",
+      "tags": ["facility", "noun-phrase"]
+    },
+    {
+      "section": 2,
+      "segmentOrder": 9,
+      "startTokenIndex": 31,
+      "endTokenIndex": 33,
+      "text": "photo card",
+      "reason": "Official form-completion answer phrase for question 20.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    }
+  ]
+}

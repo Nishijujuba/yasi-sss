@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import PracticePackHome from "./PracticePackHome";
 import type { LoadedPack, Question } from "../types/pack";
 
@@ -45,6 +45,10 @@ const pack: LoadedPack = {
 };
 
 describe("PracticePackHome", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("opens the mistake vocabulary notebook from a dedicated home entry", () => {
     const onOpenMistakes = vi.fn();
 
@@ -61,5 +65,22 @@ describe("PracticePackHome", () => {
     fireEvent.click(screen.getByRole("button", { name: "错题本" }));
 
     expect(onOpenMistakes).toHaveBeenCalledOnce();
+  });
+
+  it("does not render section drill entries on the home screen", () => {
+    render(
+      <PracticePackHome
+        activeSection={1}
+        answers={{}}
+        onOpenMistakes={vi.fn()}
+        onStart={vi.fn()}
+        pack={pack}
+        result={null}
+      />,
+    );
+
+    expect(screen.queryByRole("button", { name: "精听" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "原文跟读" })).toBeNull();
+    expect(screen.queryByText("提交当前 Section 后开放精听")).toBeNull();
   });
 });

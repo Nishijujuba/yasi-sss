@@ -10,6 +10,10 @@ from typing import Any, Iterable, Literal
 
 from builder.config import FFPROBE, PACK_ROOT, SOURCE_DATA_ROOT
 from builder.convert_audio import AudioValidationError, probe_duration_seconds
+from builder.intensive_listening import (
+    IntensiveListeningBuildError,
+    validate_intensive_listening_asset,
+)
 from pydantic import ValidationError
 
 from builder.models import (
@@ -451,6 +455,26 @@ def _validate_transcript_timing_asset(
         )
 
 
+def _validate_intensive_listening_release_gate(
+    *,
+    pack_root: Path,
+    manifest: ReleasedManifest,
+    transcript: list[TranscriptSection],
+) -> None:
+    relative_path = manifest.assets.intensiveListening
+    if relative_path is None:
+        raise ReleaseBlocked("manifest.assets.intensiveListening is required")
+
+    intensive_path = _require_asset(pack_root, relative_path)
+    intensive_payload = _read_json(intensive_path)
+    try:
+        validate_intensive_listening_asset(intensive_payload, transcript)
+    except IntensiveListeningBuildError as exc:
+        raise ReleaseBlocked(
+            f"intensive listening failed validation: {exc}"
+        ) from exc
+
+
 def validate_pack(
     pack_root: Path = PACK_ROOT,
     *,
@@ -488,6 +512,11 @@ def validate_pack(
         "transcript",
     )
     validate_transcript_sections(transcript, answers)
+    _validate_intensive_listening_release_gate(
+        pack_root=pack_root,
+        manifest=manifest,
+        transcript=transcript,
+    )
     _validate_transcript_timing_asset(
         pack_root=pack_root,
         manifest=manifest,

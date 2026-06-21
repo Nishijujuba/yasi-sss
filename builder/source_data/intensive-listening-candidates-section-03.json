@@ -1,0 +1,501 @@
+{
+  "schemaVersion": "yasi.intensive-listening-candidates.v1",
+  "section": 3,
+  "candidates": [
+    {
+      "section": 3,
+      "segmentOrder": 1,
+      "startTokenIndex": 4,
+      "endTokenIndex": 6,
+      "text": "John Wishart",
+      "reason": "Proper noun introduction with surname spelling value in academic dialogue.",
+      "tags": ["proper-noun", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 1,
+      "startTokenIndex": 13,
+      "endTokenIndex": 16,
+      "text": "Global Design Competition",
+      "reason": "Named competition title with capitalization and multiword boundary value.",
+      "tags": ["proper-noun", "noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 3,
+      "startTokenIndex": 3,
+      "endTokenIndex": 6,
+      "text": "international design competition",
+      "reason": "Task-setting noun phrase that anchors the competition context for Section 3.",
+      "tags": ["noun-phrase", "task-context"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 3,
+      "startTokenIndex": 18,
+      "endTokenIndex": 22,
+      "text": "typical domestic kitchen appliance",
+      "reason": "Question-context noun phrase with adjective stack and appliance vocabulary.",
+      "tags": ["answer-bearing", "noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 5,
+      "startTokenIndex": 6,
+      "endTokenIndex": 9,
+      "text": "last year's competition",
+      "reason": "Contrast cue showing the energy-saving focus belongs to the previous year.",
+      "tags": ["distractor-contrast", "signpost"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 5,
+      "startTokenIndex": 17,
+      "endTokenIndex": 22,
+      "text": "innovative approach to existing technology",
+      "reason": "Correct Q21 evidence paraphrasing a new use for current technology.",
+      "tags": ["answer-bearing", "multiple-choice", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 5,
+      "startTokenIndex": 28,
+      "endTokenIndex": 33,
+      "text": "hasn't been thought of before",
+      "reason": "Connected-speech phrase that confirms novelty rather than simple energy efficiency.",
+      "tags": ["answer-bearing", "weak-form", "distractor-contrast"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 7,
+      "startTokenIndex": 6,
+      "endTokenIndex": 7,
+      "text": "dishwasher",
+      "reason": "Central appliance noun with spelling value and repeated task relevance.",
+      "tags": ["task-context", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 9,
+      "startTokenIndex": 3,
+      "endTokenIndex": 6,
+      "text": "everyday kitchen appliance",
+      "reason": "Product-category phrase contrasting ordinary use with the redesigned item.",
+      "tags": ["noun-phrase", "task-context"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 9,
+      "startTokenIndex": 8,
+      "endTokenIndex": 10,
+      "text": "Australian houses",
+      "reason": "Location-linked noun phrase with proper adjective recognition value.",
+      "tags": ["proper-noun", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 9,
+      "startTokenIndex": 13,
+      "endTokenIndex": 18,
+      "text": "pretty boring and almost identical",
+      "reason": "Compact negative description explaining why visual appeal matters for Q22.",
+      "tags": ["answer-bearing", "multiple-choice", "distractor-contrast"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 9,
+      "startTokenIndex": 29,
+      "endTokenIndex": 33,
+      "text": "pay a little extra",
+      "reason": "Distractor phrase that sounds economic but supports paying for a better-looking design.",
+      "tags": ["distractor-contrast", "weak-form", "phrase-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 9,
+      "startTokenIndex": 36,
+      "endTokenIndex": 38,
+      "text": "looks different",
+      "reason": "Correct Q22 evidence for the design being more appealing.",
+      "tags": ["answer-bearing", "multiple-choice"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 10,
+      "startTokenIndex": 10,
+      "endTokenIndex": 12,
+      "text": "the Rockpool",
+      "reason": "Design name with proper-noun and spelling recognition value.",
+      "tags": ["proper-noun", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 11,
+      "startTokenIndex": 6,
+      "endTokenIndex": 8,
+      "text": "rock pools",
+      "reason": "Compound noun explaining the design name and word-boundary value.",
+      "tags": ["compound", "noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 11,
+      "startTokenIndex": 16,
+      "endTokenIndex": 19,
+      "text": "made of glass",
+      "reason": "Material phrase with weak-form boundary between made, of, and glass.",
+      "tags": ["noun-phrase", "weak-form", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 12,
+      "startTokenIndex": 3,
+      "endTokenIndex": 7,
+      "text": "stone at the bottom",
+      "reason": "Object-location phrase that sets up the Q23 stone-function contrast.",
+      "tags": ["task-context", "noun-phrase", "distractor-contrast"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 12,
+      "startTokenIndex": 9,
+      "endTokenIndex": 12,
+      "text": "just for decoration",
+      "reason": "Distractor phrase rejected by the next turn for Q23.",
+      "tags": ["distractor-contrast", "multiple-choice"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 13,
+      "startTokenIndex": 8,
+      "endTokenIndex": 11,
+      "text": "pushing a button",
+      "reason": "Action phrase contrasted with the actual stone-turning control.",
+      "tags": ["distractor-contrast", "noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 13,
+      "startTokenIndex": 12,
+      "endTokenIndex": 15,
+      "text": "turn the stone",
+      "reason": "Correct Q23 evidence meaning the stone switches the dishwasher on.",
+      "tags": ["answer-bearing", "multiple-choice"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 14,
+      "startTokenIndex": 5,
+      "endTokenIndex": 7,
+      "text": "novel way",
+      "reason": "Compact evaluative phrase signaling the unusual control mechanism.",
+      "tags": ["noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 14,
+      "startTokenIndex": 8,
+      "endTokenIndex": 11,
+      "text": "starting the dishwasher",
+      "reason": "Paraphrase of switching it on, reinforcing the Q23 answer.",
+      "tags": ["answer-bearing", "multiple-choice", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 17,
+      "startTokenIndex": 9,
+      "endTokenIndex": 11,
+      "text": "carbon dioxide",
+      "reason": "Central technical compound with spelling and word-boundary value.",
+      "tags": ["compound", "technical-term", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 18,
+      "startTokenIndex": 3,
+      "endTokenIndex": 6,
+      "text": "water and detergent",
+      "reason": "Contrast phrase showing what the carbon-dioxide system replaces.",
+      "tags": ["distractor-contrast", "technical-term", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 19,
+      "startTokenIndex": 4,
+      "endTokenIndex": 5,
+      "text": "pressurise",
+      "reason": "Spelling-risk process verb in British spelling for the technical explanation.",
+      "tags": ["technical-term", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 19,
+      "startTokenIndex": 11,
+      "endTokenIndex": 14,
+      "text": "becomes a liquid",
+      "reason": "State-change phrase needed to follow the cleaning process.",
+      "tags": ["technical-term", "process", "weak-form"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 19,
+      "startTokenIndex": 18,
+      "endTokenIndex": 22,
+      "text": "released into the dishwasher",
+      "reason": "Process phrase with connected speech and appliance vocabulary.",
+      "tags": ["process", "technical-term", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 19,
+      "startTokenIndex": 24,
+      "endTokenIndex": 27,
+      "text": "cleans the dishes",
+      "reason": "Core process action phrase with useful verb-object boundary.",
+      "tags": ["process", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 20,
+      "startTokenIndex": 9,
+      "endTokenIndex": 12,
+      "text": "do away with",
+      "reason": "Phrasal verb with weak-form value in the detergent contrast.",
+      "tags": ["phrasal-verb", "weak-form", "distractor-contrast"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 20,
+      "startTokenIndex": 15,
+      "endTokenIndex": 17,
+      "text": "strong detergents",
+      "reason": "Technical cleaning noun phrase with spelling value.",
+      "tags": ["technical-term", "noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 7,
+      "endTokenIndex": 10,
+      "text": "liquid carbon dioxide",
+      "reason": "Technical noun phrase central to Q24's state-change explanation.",
+      "tags": ["answer-bearing", "technical-term", "compound"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 12,
+      "endTokenIndex": 14,
+      "text": "waste materials",
+      "reason": "Process noun phrase with plural ending and word-boundary value.",
+      "tags": ["technical-term", "noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 21,
+      "endTokenIndex": 23,
+      "text": "holding chamber",
+      "reason": "Equipment noun phrase with compound and spelling value.",
+      "tags": ["technical-term", "compound", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 28,
+      "endTokenIndex": 29,
+      "text": "depressurised",
+      "reason": "High-risk technical verb whose prefix and British spelling matter.",
+      "tags": ["technical-term", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 32,
+      "endTokenIndex": 36,
+      "text": "reverts to a gas",
+      "reason": "Correct Q24 evidence that the liquid changes back to gas.",
+      "tags": ["answer-bearing", "multiple-choice", "technical-term"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 38,
+      "endTokenIndex": 41,
+      "text": "oil and grease",
+      "reason": "Waste-material phrase with easily confused vowel sounds.",
+      "tags": ["technical-term", "noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 21,
+      "startTokenIndex": 48,
+      "endTokenIndex": 50,
+      "text": "waste system",
+      "reason": "Process destination compound with word-boundary value.",
+      "tags": ["technical-term", "compound", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 23,
+      "startTokenIndex": 4,
+      "endTokenIndex": 6,
+      "text": "real savings",
+      "reason": "Signpost phrase introducing the Q25 reuse benefit.",
+      "tags": ["answer-bearing", "signpost", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 23,
+      "startTokenIndex": 12,
+      "endTokenIndex": 17,
+      "text": "sent back to the cylinder",
+      "reason": "Correct Q25 evidence that the carbon dioxide is collected for reuse.",
+      "tags": ["answer-bearing", "multiple-choice", "technical-term"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 23,
+      "startTokenIndex": 20,
+      "endTokenIndex": 24,
+      "text": "used again and again",
+      "reason": "Repetition phrase confirming the reuse answer for Q25.",
+      "tags": ["answer-bearing", "multiple-choice", "weak-form"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 28,
+      "startTokenIndex": 8,
+      "endTokenIndex": 10,
+      "text": "final stage",
+      "reason": "Competition-stage phrase setting up the presentation task.",
+      "tags": ["task-context", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 28,
+      "startTokenIndex": 24,
+      "endTokenIndex": 25,
+      "text": "presentation",
+      "reason": "Exact Q26 blank answer with stress and spelling value.",
+      "tags": ["answer-bearing", "form-completion", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 30,
+      "startTokenIndex": 3,
+      "endTokenIndex": 5,
+      "text": "detailed drawings",
+      "reason": "Prepared-materials phrase contrasted with the missing model.",
+      "tags": ["distractor-contrast", "noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 30,
+      "startTokenIndex": 16,
+      "endTokenIndex": 18,
+      "text": "500-word paper",
+      "reason": "Hyphenated number phrase with strong IELTS spelling and boundary value.",
+      "tags": ["number", "compound", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 31,
+      "startTokenIndex": 17,
+      "endTokenIndex": 18,
+      "text": "model",
+      "reason": "Exact Q27 blank answer for what John needs to make.",
+      "tags": ["answer-bearing", "form-completion"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 33,
+      "startTokenIndex": 3,
+      "endTokenIndex": 5,
+      "text": "main difficulty",
+      "reason": "Question cue phrase that frames Q28's problem as a specific noun.",
+      "tags": ["signpost", "noun-phrase"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 33,
+      "startTokenIndex": 13,
+      "endTokenIndex": 14,
+      "text": "materials",
+      "reason": "Exact Q28 blank answer with plural-ending recognition value.",
+      "tags": ["answer-bearing", "form-completion", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 34,
+      "startTokenIndex": 10,
+      "endTokenIndex": 12,
+      "text": "top quality",
+      "reason": "Reason phrase explaining why suitable materials are expensive.",
+      "tags": ["distractor-contrast", "noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 34,
+      "startTokenIndex": 14,
+      "endTokenIndex": 16,
+      "text": "very expensive",
+      "reason": "Cost phrase confirming the materials difficulty behind Q28.",
+      "tags": ["answer-bearing", "distractor-contrast"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 35,
+      "startTokenIndex": 12,
+      "endTokenIndex": 15,
+      "text": "lift our profile",
+      "reason": "Idiomatic phrase with connected-speech value in the professor's justification.",
+      "tags": ["idiom", "weak-form", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 35,
+      "startTokenIndex": 25,
+      "endTokenIndex": 26,
+      "text": "grant",
+      "reason": "Exact Q29 blank answer with short-word recognition value.",
+      "tags": ["answer-bearing", "form-completion"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 35,
+      "startTokenIndex": 33,
+      "endTokenIndex": 35,
+      "text": "application forms",
+      "reason": "Administrative noun phrase linked to getting the grant.",
+      "tags": ["noun-phrase", "form-completion", "word-boundary"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 37,
+      "startTokenIndex": 12,
+      "endTokenIndex": 14,
+      "text": "global competition",
+      "reason": "Competition-context noun phrase with proper scope and boundary value.",
+      "tags": ["noun-phrase", "task-context"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 37,
+      "startTokenIndex": 23,
+      "endTokenIndex": 24,
+      "text": "technical",
+      "reason": "Exact Q30 blank answer and spelling-risk adjective.",
+      "tags": ["answer-bearing", "form-completion", "spelling-risk"]
+    },
+    {
+      "section": 3,
+      "segmentOrder": 37,
+      "startTokenIndex": 28,
+      "endTokenIndex": 31,
+      "text": "accurate and thorough",
+      "reason": "Evaluation phrase confirming what the technical details must be.",
+      "tags": ["answer-bearing", "noun-phrase", "spelling-risk"]
+    }
+  ]
+}

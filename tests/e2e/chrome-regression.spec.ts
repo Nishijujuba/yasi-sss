@@ -37,6 +37,10 @@ async function waitForQuestionPageImages(page: Page) {
   )
 }
 
+async function audioPlaybackRate(page: Page) {
+  return page.locator('audio').evaluate((audio: HTMLAudioElement) => audio.playbackRate)
+}
+
 test.describe('Chrome regression audit', () => {
   test('covers audio, cropped pages, cleaned watermark area, and compact overlays', async ({ page }) => {
     await enterPractice(page)
@@ -55,7 +59,13 @@ test.describe('Chrome regression audit', () => {
     expect(audioState.errorCode).toBeNull()
     expect(audioState.readyState).toBeGreaterThanOrEqual(1)
 
-    await page.locator('.audio-player__controls button').first().click()
+    const speedButton = page.getByRole('button', { name: '1.25x' })
+    await speedButton.click()
+    await expect(speedButton).toHaveAttribute('aria-pressed', 'true')
+    await expect(speedButton).toHaveAttribute('data-active', 'true')
+    expect(await audioPlaybackRate(page)).toBe(1.25)
+
+    await page.getByRole('button', { name: /^播放$/ }).click()
     await page.waitForFunction(() => {
       const audio = document.querySelector('audio')
       return audio !== null && !audio.paused && audio.currentTime > 0
@@ -68,6 +78,25 @@ test.describe('Chrome regression audit', () => {
     expect(playbackState.errorCode).toBeNull()
     expect(playbackState.paused).toBe(false)
     expect(playbackState.currentTime).toBeGreaterThan(0)
+
+    await switchSection(page, '02')
+    await expect(page.getByText('Listening Section 02')).toBeVisible()
+    await page.waitForFunction(() => {
+      const audio = document.querySelector('audio')
+      return audio !== null && (audio.readyState >= 1 || audio.error !== null)
+    })
+    expect(await audioPlaybackRate(page)).toBe(1.25)
+
+    await page.getByRole('button', { name: /^重置练习$/ }).click()
+    await page.getByRole('button', { name: /^确认重置$/ }).click()
+    expect(await audioPlaybackRate(page)).toBe(1)
+
+    await enterPractice(page)
+    await page.waitForFunction(() => {
+      const audio = document.querySelector('audio')
+      return audio !== null && (audio.readyState >= 1 || audio.error !== null)
+    })
+    expect(await audioPlaybackRate(page)).toBe(1)
 
     for (const section of ['01', '02', '03', '04']) {
       await switchSection(page, section)

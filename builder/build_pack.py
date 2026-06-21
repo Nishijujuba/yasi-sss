@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from builder.config import PACK_ROOT, REVIEW_ROOT, SCHEMA_VERSION
 from builder.convert_audio import convert_audio_sections
 from builder.detect_overlays import write_overlay_proposals
+from builder.intensive_listening import export_intensive_listening
 from builder.models import BuildMetadata, Manifest, ManifestAssets, SectionManifest
 from builder.overlay_review import draw_review_images, finalize_overlays
 from builder.render_pages import render_question_pages
@@ -70,7 +71,9 @@ def _manifest() -> Manifest:
             answers="answers.json",
             overlays="overlays.json",
             transcript="transcript.json",
+            transcriptTimings="transcript-timings.preview.json",
             vocabulary="vocabulary.json",
+            intensiveListening="intensive-listening.json",
         ),
         build=BuildMetadata(
             sourceCommit=_source_commit(),
@@ -98,6 +101,7 @@ def build_pack():
     convert_audio_sections()
     export_answers_and_transcript()
     export_vocabulary()
+    export_intensive_listening()
     build_vocabulary_audio_clips()
     write_manifest()
     report = validate_pack(PACK_ROOT)

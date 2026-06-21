@@ -1,6 +1,8 @@
 import type {
   AnswerRule,
   ChoiceOption,
+  IntensiveListeningArtifact,
+  IntensiveListeningBlank,
   LoadedPack,
   OverlayRegion,
   PackManifest,
@@ -92,6 +94,9 @@ function assertManifest(value: unknown): asserts value is PackManifest {
   }
   if (value.assets.transcriptTimings !== undefined && typeof value.assets.transcriptTimings !== "string") {
     throw new Error("manifest.assets.transcriptTimings must be a string");
+  }
+  if (value.assets.intensiveListening !== undefined && typeof value.assets.intensiveListening !== "string") {
+    throw new Error("manifest.assets.intensiveListening must be a string");
   }
 }
 
@@ -307,6 +312,55 @@ function assertUniqueVocabularyIds(vocabulary: VocabularyItem[]): void {
   }
 }
 
+function assertIntensiveListeningBlank(
+  value: unknown,
+  sectionIndex: number,
+  blankIndex: number,
+): asserts value is IntensiveListeningBlank {
+  const path = `intensiveListening.sections[${sectionIndex}].blanks[${blankIndex}]`;
+  if (!isRecord(value)) throw new Error(`${path} must be an object`);
+  if (typeof value.id !== "string" || value.id.trim() === "") throw new Error(`${path}.id is required`);
+  const { segmentOrder, startTokenIndex, endTokenIndex } = value;
+  if (typeof segmentOrder !== "number" || !Number.isInteger(segmentOrder)) {
+    throw new Error(`${path}.segmentOrder is required`);
+  }
+  if (typeof startTokenIndex !== "number" || !Number.isInteger(startTokenIndex)) {
+    throw new Error(`${path}.startTokenIndex is required`);
+  }
+  if (typeof endTokenIndex !== "number" || !Number.isInteger(endTokenIndex)) {
+    throw new Error(`${path}.endTokenIndex is required`);
+  }
+  if (startTokenIndex < 0 || endTokenIndex <= startTokenIndex) {
+    throw new Error(`${path} token span must be ordered`);
+  }
+  if (typeof value.answer !== "string" || value.answer.trim() === "") {
+    throw new Error(`${path}.answer is required`);
+  }
+  if (!isStringArray(value.acceptedVariants)) throw new Error(`${path}.acceptedVariants is required`);
+  if (typeof value.reason !== "string" || value.reason.trim() === "") {
+    throw new Error(`${path}.reason is required`);
+  }
+  if (!isStringArray(value.tags) || value.tags.length === 0) throw new Error(`${path}.tags is required`);
+}
+
+function assertIntensiveListeningArtifact(value: unknown): asserts value is IntensiveListeningArtifact {
+  if (!isRecord(value)) throw new Error("intensiveListening must be an object");
+  if (value.schemaVersion !== "yasi.intensive-listening.v1") {
+    throw new Error("intensiveListening.schemaVersion must be yasi.intensive-listening.v1");
+  }
+  if (!Array.isArray(value.sections)) throw new Error("intensiveListening.sections is required");
+
+  value.sections.forEach((section, sectionIndex) => {
+    const sectionPath = `intensiveListening.sections[${sectionIndex}]`;
+    if (!isRecord(section)) throw new Error(`${sectionPath} must be an object`);
+    if (!Number.isInteger(section.section)) throw new Error(`${sectionPath}.section is required`);
+    if (!Array.isArray(section.blanks)) throw new Error(`${sectionPath}.blanks is required`);
+    section.blanks.forEach((blank, blankIndex) =>
+      assertIntensiveListeningBlank(blank, sectionIndex, blankIndex),
+    );
+  });
+}
+
 async function fetchJson(url: string): Promise<unknown> {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
@@ -324,7 +378,15 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   const manifestJson = await fetchJson(joinUrl(normalizedBaseUrl, "manifest.json"));
   assertManifest(manifestJson);
 
-  const [questionsJson, answersJson, overlaysJson, transcriptJson, vocabularyJson, transcriptTimingsJson] =
+  const [
+    questionsJson,
+    answersJson,
+    overlaysJson,
+    transcriptJson,
+    vocabularyJson,
+    transcriptTimingsJson,
+    intensiveListeningJson,
+  ] =
     await Promise.all([
       fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.questions)),
       fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.answers)),
@@ -334,6 +396,9 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
       manifestJson.assets.transcriptTimings === undefined
         ? Promise.resolve(null)
         : fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.transcriptTimings)),
+      manifestJson.assets.intensiveListening === undefined
+        ? Promise.resolve(null)
+        : fetchJson(joinUrl(normalizedBaseUrl, manifestJson.assets.intensiveListening)),
     ]);
 
   if (!Array.isArray(questionsJson)) throw new Error("questions asset must be an array");
@@ -349,6 +414,9 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
   assertUniqueVocabularyIds(vocabularyJson);
   if (transcriptTimingsJson !== null) {
     assertTranscriptTimingArtifact(transcriptTimingsJson, transcriptJson);
+  }
+  if (intensiveListeningJson !== null) {
+    assertIntensiveListeningArtifact(intensiveListeningJson);
   }
 
   const questionsById = new Map(questionsJson.map((question) => [question.id, question]));
@@ -375,6 +443,7 @@ export async function loadPack(baseUrl = "/packs/cambridge-10/test-1/listening")
     transcript: transcriptJson,
     transcriptTimings: transcriptTimingsJson,
     vocabulary: vocabularyJson,
+    intensiveListening: intensiveListeningJson,
     questionsById,
     answersByQuestionId,
     overlaysByQuestionId,

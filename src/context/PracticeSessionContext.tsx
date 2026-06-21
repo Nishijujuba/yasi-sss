@@ -21,12 +21,24 @@ import { hasAnyAnswer, markAttemptedSections } from "../lib/scopedSubmission";
 import {
   createEmptySession,
   loadSession,
+  SESSION_PACK_ID,
   saveSession,
   type PracticeSession,
 } from "../lib/session";
 import type { AnswerMap, LoadedPack, MarkResult } from "../types/pack";
+import {
+  createEmptyIntensiveListeningSession,
+  isIntensiveListeningSectionUnlocked,
+  loadIntensiveListeningSession,
+  markIntensiveListeningSessionSection,
+  revealIntensiveListeningAnswers as revealIntensiveListeningSessionAnswers,
+  revealIntensiveListeningTranscript as revealIntensiveListeningSessionTranscript,
+  saveIntensiveListeningSession,
+  setIntensiveListeningAnswer as setIntensiveListeningSessionAnswer,
+} from "../lib/intensiveListeningSession";
+import type { IntensiveListeningSessionState } from "../lib/intensiveListeningSession";
 
-type PracticeView = "home" | "workspace" | "mistakes";
+type PracticeView = "home" | "workspace" | "mistakes" | "intensiveListening";
 
 interface PracticeSessionContextValue {
   pack: LoadedPack | null;
@@ -43,6 +55,7 @@ interface PracticeSessionContextValue {
   goHome: () => void;
   startPractice: () => void;
   openMistakeVocabulary: () => void;
+  openIntensiveListening: (section?: number) => void;
   result: MarkResult | null;
   nextIncorrectId: string | null;
   audioPositions: Record<string, number>;
@@ -53,6 +66,15 @@ interface PracticeSessionContextValue {
   notebook: MistakeVocabularyNotebookState;
   submitMistakePractice: (cardKey: string, correct: boolean) => void;
   removeMistakeCard: (cardKey: string) => void;
+  intensiveListeningSession: IntensiveListeningSessionState;
+  intensiveListeningUnlockedSections: number[];
+  intensiveListeningAvailable: boolean;
+  intensiveListeningUnlocked: boolean;
+  setIntensiveListeningAnswer: (section: number, blankId: string, value: string) => void;
+  submitIntensiveListening: (section: number) => void;
+  revealIntensiveListeningAnswers: (section: number) => void;
+  revealIntensiveListeningTranscript: (section: number) => void;
+  resetIntensiveListening: (section: number) => void;
 }
 
 const PracticeSessionContext = createContext<PracticeSessionContextValue | null>(null);
@@ -60,6 +82,20 @@ const PracticeSessionContext = createContext<PracticeSessionContextValue | null>
 type TranscriptViewedSession = PracticeSession & {
   transcriptViewed?: boolean;
 };
+
+function intensiveListeningDrill(pack: LoadedPack | null, section: number) {
+  return pack?.intensiveListening?.sections.find((entry) => entry.section === section) ?? null;
+}
+
+function intensiveListeningUnlockedSections(pack: LoadedPack | null, practiceSession: PracticeSession): number[] {
+  if (pack === null) {
+    return [];
+  }
+  return pack.manifest.sections
+    .map((section) => section.number)
+    .filter((section) => intensiveListeningDrill(pack, section) !== null)
+    .filter((section) => isIntensiveListeningSectionUnlocked(pack, practiceSession, section));
+}
 
 function updateAndSave(
   setSession: (updater: (session: PracticeSession) => PracticeSession) => void,
@@ -107,6 +143,9 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<PracticeView>("home");
   const [session, setSession] = useState<PracticeSession>(() => loadSession() ?? createEmptySession());
   const [notebook, setNotebook] = useState<MistakeVocabularyNotebookState>(() => loadMistakeVocabularyNotebook());
+  const [intensiveSession, setIntensiveSession] = useState<IntensiveListeningSessionState>(
+    () => loadIntensiveListeningSession(SESSION_PACK_ID) ?? createEmptyIntensiveListeningSession(SESSION_PACK_ID),
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -135,6 +174,19 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (pack === null) {
+      return;
+    }
+    const packId = pack.manifest.packId;
+    setIntensiveSession((current) => {
+      if (current.packId === packId) {
+        return current;
+      }
+      return loadIntensiveListeningSession(packId) ?? createEmptyIntensiveListeningSession(packId);
+    });
+  }, [pack]);
 
   const setAnswer = useCallback((questionId: string, value: string) => {
     updateAndSave(setSession, (current) => ({
@@ -208,6 +260,116 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
     setView("mistakes");
   }, []);
 
+  const updateIntensiveListeningSession = useCallback(
+    (updater: (current: IntensiveListeningSessionState) => IntensiveListeningSessionState) => {
+      setIntensiveSession((current) => {
+        const next = updater(current);
+        saveIntensiveListeningSession(next);
+        return next;
+      });
+    },
+    [],
+  );
+
+  const openIntensiveListening = useCallback((section = session.activeSection) => {
+    if (pack === null || intensiveListeningDrill(pack, section) === null) {
+      return;
+    }
+    if (!isIntensiveListeningSectionUnlocked(pack, session, section)) {
+      return;
+    }
+    updateAndSave(setSession, (current) => ({
+      ...current,
+      activeSection: section,
+    }));
+    setView("intensiveListening");
+  }, [pack, session]);
+
+  const setIntensiveListeningAnswer = useCallback(
+    (section: number, blankId: string, value: string) => {
+      updateIntensiveListeningSession((current) =>
+        setIntensiveListeningSessionAnswer(current, section, blankId, value),
+      );
+    },
+    [updateIntensiveListeningSession],
+  );
+
+  const submitIntensiveListening = useCallback(
+    (section: number) => {
+      if (pack === null) {
+        return;
+      }
+      updateIntensiveListeningSession((current) => {
+        try {
+          return markIntensiveListeningSessionSection(pack, current, section);
+        } catch {
+          return current;
+        }
+      });
+    },
+    [pack, updateIntensiveListeningSession],
+  );
+
+  const revealIntensiveListeningAnswers = useCallback(
+    (section: number) => {
+      if (pack === null) {
+        return;
+      }
+      updateIntensiveListeningSession((current) => {
+        try {
+          const currentSection = current.sections[String(section)];
+          const marked =
+            currentSection?.marking === null || currentSection?.marking === undefined
+              ? markIntensiveListeningSessionSection(pack, current, section)
+              : current;
+          return revealIntensiveListeningSessionAnswers(marked, section);
+        } catch {
+          return current;
+        }
+      });
+    },
+    [pack, updateIntensiveListeningSession],
+  );
+
+  const revealIntensiveListeningTranscript = useCallback(
+    (section: number) => {
+      if (pack === null) {
+        return;
+      }
+      updateIntensiveListeningSession((current) => {
+        try {
+          const currentSection = current.sections[String(section)];
+          const marked =
+            currentSection?.marking === null || currentSection?.marking === undefined
+              ? markIntensiveListeningSessionSection(pack, current, section)
+              : current;
+          return revealIntensiveListeningSessionTranscript(
+            revealIntensiveListeningSessionAnswers(marked, section),
+            section,
+          );
+        } catch {
+          return current;
+        }
+      });
+    },
+    [pack, updateIntensiveListeningSession],
+  );
+
+  const resetIntensiveListening = useCallback(
+    (section: number) => {
+      updateIntensiveListeningSession((current) => {
+        const nextSections = Object.fromEntries(
+          Object.entries(current.sections).filter(([key]) => key !== String(section)),
+        );
+        return {
+          ...current,
+          sections: nextSections,
+        };
+      });
+    },
+    [updateIntensiveListeningSession],
+  );
+
   const setAudioPosition = useCallback((section: number, position: number) => {
     updateAndSave(setSession, (current) => ({
       ...current,
@@ -255,6 +417,13 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
     }
   }, [pack]);
 
+  const unlockedIntensiveListeningSections = useMemo(
+    () => intensiveListeningUnlockedSections(pack, session),
+    [pack, session],
+  );
+  const activeIntensiveListeningAvailable = intensiveListeningDrill(pack, session.activeSection) !== null;
+  const activeIntensiveListeningUnlocked = unlockedIntensiveListeningSections.includes(session.activeSection);
+
   const value = useMemo<PracticeSessionContextValue>(
     () => ({
       pack,
@@ -271,6 +440,7 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       goHome,
       startPractice,
       openMistakeVocabulary,
+      openIntensiveListening,
       result: session.results,
       nextIncorrectId: session.results?.incorrectIds[0] ?? null,
       audioPositions: session.audioPositions,
@@ -281,6 +451,15 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       notebook,
       submitMistakePractice,
       removeMistakeCard: removeMistakeCardFromNotebook,
+      intensiveListeningSession: intensiveSession,
+      intensiveListeningUnlockedSections: unlockedIntensiveListeningSections,
+      intensiveListeningAvailable: activeIntensiveListeningAvailable,
+      intensiveListeningUnlocked: activeIntensiveListeningUnlocked,
+      setIntensiveListeningAnswer,
+      submitIntensiveListening,
+      revealIntensiveListeningAnswers,
+      revealIntensiveListeningTranscript,
+      resetIntensiveListening,
     }),
     [
       pack,
@@ -296,11 +475,21 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       goHome,
       startPractice,
       openMistakeVocabulary,
+      openIntensiveListening,
       setAudioPosition,
       markTranscriptViewed,
       notebook,
       submitMistakePractice,
       removeMistakeCardFromNotebook,
+      intensiveSession,
+      unlockedIntensiveListeningSections,
+      activeIntensiveListeningAvailable,
+      activeIntensiveListeningUnlocked,
+      setIntensiveListeningAnswer,
+      submitIntensiveListening,
+      revealIntensiveListeningAnswers,
+      revealIntensiveListeningTranscript,
+      resetIntensiveListening,
     ],
   );
 

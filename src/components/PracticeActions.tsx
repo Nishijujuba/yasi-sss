@@ -12,6 +12,10 @@ export interface PracticeActionsProps {
   transcriptShadowingOpen?: boolean;
   transcriptShadowingHint?: string;
   onToggleTranscriptShadowing?: () => void;
+  intensiveListeningAvailable?: boolean;
+  intensiveListeningUnlocked?: boolean;
+  intensiveListeningHint?: string;
+  onOpenIntensiveListening?: () => void;
 }
 
 export function PracticeActions({
@@ -26,8 +30,16 @@ export function PracticeActions({
   transcriptShadowingOpen = false,
   transcriptShadowingHint = "等待逐词时间轴",
   onToggleTranscriptShadowing,
+  intensiveListeningAvailable = false,
+  intensiveListeningUnlocked = false,
+  intensiveListeningHint,
+  onOpenIntensiveListening,
 }: PracticeActionsProps) {
   const [confirmingReset, setConfirmingReset] = useState(false);
+  const canOpenIntensiveListening = intensiveListeningAvailable && intensiveListeningUnlocked;
+  const resolvedIntensiveListeningHint =
+    intensiveListeningHint ??
+    (intensiveListeningAvailable ? "提交当前 Section 后开放精听" : "等待精听数据");
 
   return (
     <aside aria-label="练习操作" className="action-rail">
@@ -76,9 +88,15 @@ export function PracticeActions({
         </button>
       )}
 
-      <button disabled type="button">
+      <button
+        className="secondary-action"
+        disabled={!canOpenIntensiveListening}
+        onClick={onOpenIntensiveListening}
+        type="button"
+      >
         精听
       </button>
+      {canOpenIntensiveListening ? null : <p className="action-hint">{resolvedIntensiveListeningHint}</p>}
       <button
         className="secondary-action"
         disabled={!transcriptShadowingAvailable}

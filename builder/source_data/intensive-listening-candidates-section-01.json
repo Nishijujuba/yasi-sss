@@ -1,0 +1,528 @@
+{
+  "schemaVersion": "yasi.intensive-listening-candidates.v1",
+  "section": 1,
+  "candidates": [
+    {
+      "section": 1,
+      "segmentOrder": 1,
+      "startTokenIndex": 2,
+      "endTokenIndex": 4,
+      "text": "World Tours",
+      "reason": "Travel-agency proper noun trains capitalization, word boundary, and scenario recognition.",
+      "tags": ["proper-noun", "word-boundary", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 1,
+      "startTokenIndex": 7,
+      "endTokenIndex": 8,
+      "text": "Jamie",
+      "reason": "Personal name trains recognition of a short proper noun in an opening exchange.",
+      "tags": ["proper-noun", "name", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 2,
+      "startTokenIndex": 7,
+      "endTokenIndex": 9,
+      "text": "self-drive tours",
+      "reason": "Hyphenated travel-service phrase trains compound and word-boundary control.",
+      "tags": ["compound", "word-boundary", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 2,
+      "startTokenIndex": 11,
+      "endTokenIndex": 12,
+      "text": "USA",
+      "reason": "Country abbreviation trains letter-name recognition in a travel context.",
+      "tags": ["proper-noun", "abbreviation", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 2,
+      "startTokenIndex": 17,
+      "endTokenIndex": 18,
+      "text": "brochure",
+      "reason": "Travel-document noun has spelling value and anchors the request purpose.",
+      "tags": ["noun-phrase", "spelling-risk", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 4,
+      "startTokenIndex": 0,
+      "endTokenIndex": 2,
+      "text": "Andrea Brown",
+      "reason": "Full personal name trains recognition of first-name and surname boundaries.",
+      "tags": ["proper-noun", "name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 6,
+      "startTokenIndex": 0,
+      "endTokenIndex": 1,
+      "text": "24",
+      "reason": "Address number trains digit recognition before the street answer.",
+      "tags": ["number", "address", "form-completion"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 6,
+      "startTokenIndex": 1,
+      "endTokenIndex": 2,
+      "text": "Ardleigh",
+      "reason": "IELTS form-completion answer with uncommon street-name spelling value.",
+      "tags": ["answer-bearing", "form-completion", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 8,
+      "startTokenIndex": 0,
+      "endTokenIndex": 1,
+      "text": "A-R-D-L-E-I-G-H",
+      "reason": "Spelled-out street name trains letter-by-letter recognition for the address answer.",
+      "tags": ["answer-bearing", "spelling-risk", "letter-sequence"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 10,
+      "startTokenIndex": 0,
+      "endTokenIndex": 3,
+      "text": "BH5 2 OP",
+      "reason": "Postcode-style sequence trains mixed letters and numbers in grouped form.",
+      "tags": ["postcode", "number", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 14,
+      "startTokenIndex": 1,
+      "endTokenIndex": 2,
+      "text": "07786643091",
+      "reason": "Long phone number trains continuous digit recognition.",
+      "tags": ["phone-number", "number", "form-completion"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 15,
+      "startTokenIndex": 15,
+      "endTokenIndex": 16,
+      "text": "friend",
+      "reason": "Rejected source option helps distinguish the newspaper answer from nearby alternatives.",
+      "tags": ["distractor-contrast", "source-option", "form-completion"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 15,
+      "startTokenIndex": 21,
+      "endTokenIndex": 22,
+      "text": "advert",
+      "reason": "Rejected source option contrasts with the later newspaper answer.",
+      "tags": ["distractor-contrast", "source-option", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 16,
+      "startTokenIndex": 7,
+      "endTokenIndex": 8,
+      "text": "newspaper",
+      "reason": "IELTS form-completion answer trains recognition of the correct information source.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 18,
+      "startTokenIndex": 5,
+      "endTokenIndex": 6,
+      "text": "California",
+      "reason": "State name anchors the tour location and has proper-noun spelling value.",
+      "tags": ["proper-noun", "place-name", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 18,
+      "startTokenIndex": 11,
+      "endTokenIndex": 13,
+      "text": "two children",
+      "reason": "Family-detail phrase trains number recognition in the travel enquiry.",
+      "tags": ["number", "noun-phrase", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 18,
+      "startTokenIndex": 17,
+      "endTokenIndex": 20,
+      "text": "hire a car",
+      "reason": "Car-rental phrase trains connected speech and travel-service vocabulary.",
+      "tags": ["travel-context", "weak-form", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 19,
+      "startTokenIndex": 6,
+      "endTokenIndex": 8,
+      "text": "self-drive tours",
+      "reason": "Repeated hyphenated tour type reinforces the service label learners must track.",
+      "tags": ["compound", "word-boundary", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 19,
+      "startTokenIndex": 15,
+      "endTokenIndex": 16,
+      "text": "California",
+      "reason": "State name marks the itinerary area and supports place-name discrimination.",
+      "tags": ["proper-noun", "place-name", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 19,
+      "startTokenIndex": 21,
+      "endTokenIndex": 23,
+      "text": "Los Angeles",
+      "reason": "City name trains two-word place-name recognition in an itinerary.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 19,
+      "startTokenIndex": 33,
+      "endTokenIndex": 34,
+      "text": "theme",
+      "reason": "IELTS form-completion answer completes the activity phrase theme parks.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 21,
+      "startTokenIndex": 5,
+      "endTokenIndex": 7,
+      "text": "San Francisco",
+      "reason": "Two-word city name trains place-name boundaries in the route sequence.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 21,
+      "startTokenIndex": 14,
+      "endTokenIndex": 16,
+      "text": "Yosemite Park",
+      "reason": "Named attraction has spelling and place-name value in the itinerary.",
+      "tags": ["proper-noun", "place-name", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 21,
+      "startTokenIndex": 19,
+      "endTokenIndex": 23,
+      "text": "a couple of nights",
+      "reason": "Duration phrase trains weak forms and quantity recognition.",
+      "tags": ["number", "weak-form", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 21,
+      "startTokenIndex": 30,
+      "endTokenIndex": 31,
+      "text": "lodge",
+      "reason": "Accommodation option contrasts with campsite and the later tent answer.",
+      "tags": ["accommodation", "distractor-contrast", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 21,
+      "startTokenIndex": 34,
+      "endTokenIndex": 35,
+      "text": "campsite",
+      "reason": "Accommodation option sets up the tent contrast in the following response.",
+      "tags": ["accommodation", "distractor-contrast", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 22,
+      "startTokenIndex": 9,
+      "endTokenIndex": 10,
+      "text": "tent",
+      "reason": "IELTS form-completion answer identifies the rejected accommodation type.",
+      "tags": ["answer-bearing", "form-completion", "accommodation"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 23,
+      "startTokenIndex": 6,
+      "endTokenIndex": 8,
+      "text": "Las Vegas",
+      "reason": "Two-word city name trains itinerary endpoint recognition.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 25,
+      "startTokenIndex": 12,
+      "endTokenIndex": 14,
+      "text": "San Francisco",
+      "reason": "Route-start city name trains recognition of repeated itinerary labels.",
+      "tags": ["proper-noun", "place-name", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 25,
+      "startTokenIndex": 19,
+      "endTokenIndex": 20,
+      "text": "Cambria",
+      "reason": "Destination place name has spelling value and introduces the castle context.",
+      "tags": ["proper-noun", "place-name", "spelling-risk"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 26,
+      "startTokenIndex": 7,
+      "endTokenIndex": 8,
+      "text": "castle",
+      "reason": "IELTS form-completion answer names the attraction near Cambria.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 27,
+      "startTokenIndex": 0,
+      "endTokenIndex": 2,
+      "text": "Hearst Castle",
+      "reason": "Named attraction trains proper-noun spelling and two-word boundary control.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 28,
+      "startTokenIndex": 13,
+      "endTokenIndex": 14,
+      "text": "desert",
+      "reason": "Route-feature question word helps learners track a rejected itinerary option.",
+      "tags": ["distractor-contrast", "route-detail", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 29,
+      "startTokenIndex": 4,
+      "endTokenIndex": 6,
+      "text": "Santa Monica",
+      "reason": "Two-word place name trains coastal destination recognition.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 29,
+      "startTokenIndex": 15,
+      "endTokenIndex": 16,
+      "text": "shopping",
+      "reason": "Rejected activity contrasts with the traveller's preferred beach activities.",
+      "tags": ["distractor-contrast", "activity", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 31,
+      "startTokenIndex": 8,
+      "endTokenIndex": 10,
+      "text": "San Diego",
+      "reason": "Two-word city name trains final destination recognition.",
+      "tags": ["proper-noun", "place-name", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 32,
+      "startTokenIndex": 3,
+      "endTokenIndex": 4,
+      "text": "beaches",
+      "reason": "IELTS form-completion answer identifies the reason San Diego is suitable.",
+      "tags": ["answer-bearing", "form-completion", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 33,
+      "startTokenIndex": 16,
+      "endTokenIndex": 17,
+      "text": "zoo",
+      "reason": "Suggested child activity contrasts with the traveller's chosen beach activities.",
+      "tags": ["distractor-contrast", "activity", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 34,
+      "startTokenIndex": 9,
+      "endTokenIndex": 12,
+      "text": "sunbathing and swimming",
+      "reason": "Preferred activity phrase trains connected coordination and beach-topic vocabulary.",
+      "tags": ["activity", "word-boundary", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 9,
+      "endTokenIndex": 11,
+      "text": "self-drive tour",
+      "reason": "Hyphenated tour label trains compound recognition in the cost comparison.",
+      "tags": ["compound", "word-boundary", "travel-context"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 15,
+      "endTokenIndex": 17,
+      "text": "twelve days",
+      "reason": "Trip duration trains number-word recognition in a comparison table.",
+      "tags": ["number", "duration", "form-completion"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 19,
+      "endTokenIndex": 20,
+      "text": "2,020",
+      "reason": "IELTS form-completion answer trains recognition of a comma-marked distance number.",
+      "tags": ["answer-bearing", "form-completion", "number"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 25,
+      "endTokenIndex": 27,
+      "text": "206 km",
+      "reason": "Distance phrase trains digit and measurement-unit recognition.",
+      "tags": ["number", "measurement", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 31,
+      "endTokenIndex": 33,
+      "text": "632 kilometres",
+      "reason": "Distance phrase trains three-digit number recognition with a unit.",
+      "tags": ["number", "measurement", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 36,
+      "endTokenIndex": 37,
+      "text": "£525",
+      "reason": "Tour price trains currency and number recognition in cost information.",
+      "tags": ["price", "number", "form-completion"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 41,
+      "endTokenIndex": 42,
+      "text": "accommodation",
+      "reason": "Included-cost item has spelling value and supports comparison of package contents.",
+      "tags": ["included-item", "spelling-risk", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 42,
+      "endTokenIndex": 44,
+      "text": "car rental",
+      "reason": "Included-cost phrase trains travel-service vocabulary and word boundary.",
+      "tags": ["included-item", "travel-context", "word-boundary"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 46,
+      "endTokenIndex": 47,
+      "text": "flight",
+      "reason": "IELTS form-completion answer identifies an included package item.",
+      "tags": ["answer-bearing", "form-completion", "included-item"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 36,
+      "startTokenIndex": 49,
+      "endTokenIndex": 50,
+      "text": "meals",
+      "reason": "Excluded-cost item contrasts with included accommodation, car rental, and flight.",
+      "tags": ["distractor-contrast", "excluded-item", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 38,
+      "startTokenIndex": 2,
+      "endTokenIndex": 4,
+      "text": "nine days",
+      "reason": "Trip duration trains number-word recognition for the second option.",
+      "tags": ["number", "duration", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 38,
+      "startTokenIndex": 8,
+      "endTokenIndex": 10,
+      "text": "three days",
+      "reason": "Driving-time phrase trains number-word recognition in package comparison.",
+      "tags": ["number", "duration", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 38,
+      "startTokenIndex": 16,
+      "endTokenIndex": 18,
+      "text": "980 kilometres",
+      "reason": "Total-distance phrase trains three-digit number and unit recognition.",
+      "tags": ["number", "measurement", "route-detail"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 40,
+      "startTokenIndex": 4,
+      "endTokenIndex": 7,
+      "text": "hundred pounds cheaper",
+      "reason": "Price-comparison phrase prepares learners for the cheaper-tour cost.",
+      "tags": ["price", "distractor-contrast", "weak-form"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 40,
+      "startTokenIndex": 8,
+      "endTokenIndex": 9,
+      "text": "£429",
+      "reason": "IELTS form-completion answer trains currency and number recognition.",
+      "tags": ["answer-bearing", "form-completion", "price"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 41,
+      "startTokenIndex": 5,
+      "endTokenIndex": 7,
+      "text": "car hire",
+      "reason": "Package-content phrase contrasts British travel wording with car rental.",
+      "tags": ["travel-context", "word-boundary", "included-item"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 41,
+      "startTokenIndex": 9,
+      "endTokenIndex": 10,
+      "text": "flights",
+      "reason": "Package-content question sets up the following exclusion contrast.",
+      "tags": ["distractor-contrast", "excluded-item", "noun-phrase"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 42,
+      "startTokenIndex": 1,
+      "endTokenIndex": 3,
+      "text": "aren’t included",
+      "reason": "Negative package phrase trains reduced auxiliary recognition and exclusion meaning.",
+      "tags": ["negative-contrast", "weak-form", "excluded-item"]
+    },
+    {
+      "section": 1,
+      "segmentOrder": 42,
+      "startTokenIndex": 7,
+      "endTokenIndex": 8,
+      "text": "dinner",
+      "reason": "IELTS form-completion answer identifies the included hotel meal.",
+      "tags": ["answer-bearing", "form-completion", "included-item"]
+    }
+  ]
+}

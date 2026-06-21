@@ -1,4 +1,5 @@
 import { ExamWorkspace } from "./components/ExamWorkspace";
+import IntensiveListeningView from "./components/IntensiveListeningView";
 import { MistakeVocabularyView } from "./components/MistakeVocabularyView";
 import { PackErrorScreen } from "./components/PackErrorScreen";
 import { PracticePackHome } from "./components/PracticePackHome";
@@ -32,6 +33,7 @@ function AppContent() {
         onAnswersChange={session.setAnswers}
         onAudioPositionChange={session.setAudioPosition}
         onGoHome={session.goHome}
+        onOpenIntensiveListening={session.openIntensiveListening}
         onReset={session.reset}
         onSectionChange={session.setActiveSection}
         onSubmit={session.submit}
@@ -49,6 +51,26 @@ function AppContent() {
         onRemoveCard={session.removeMistakeCard}
         onSubmitPractice={session.submitMistakePractice}
         pack={session.pack}
+      />
+    );
+  }
+
+  if (session.view === "intensiveListening") {
+    return (
+      <IntensiveListeningView
+        activeSection={session.activeSection}
+        audioPositions={session.audioPositions}
+        pack={session.pack}
+        session={session.intensiveListeningSession}
+        unlockedSections={session.intensiveListeningUnlockedSections}
+        onAnswerChange={session.setIntensiveListeningAnswer}
+        onAudioPositionChange={session.setAudioPosition}
+        onGoBack={session.startPractice}
+        onReset={session.resetIntensiveListening}
+        onRevealAnswers={session.revealIntensiveListeningAnswers}
+        onRevealTranscript={session.revealIntensiveListeningTranscript}
+        onSectionChange={session.setActiveSection}
+        onSubmit={session.submitIntensiveListening}
       />
     );
   }

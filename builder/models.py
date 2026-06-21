@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
@@ -22,6 +23,12 @@ from builder.config import (
     SCHEMA_VERSION,
     SECTION_QUESTION_RANGES,
 )
+
+INTENSIVE_LISTENING_SCHEMA_VERSION = "yasi.intensive-listening.v1"
+INTENSIVE_LISTENING_CANDIDATE_SCHEMA_VERSION = (
+    "yasi.intensive-listening-candidates.v1"
+)
+INTENSIVE_LISTENING_TAG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 class PackModel(BaseModel):
@@ -191,6 +198,114 @@ class TranscriptSection(PackModel):
         return self
 
 
+def validate_intensive_listening_tags(value: list[str]) -> list[str]:
+    stripped = [str(tag).strip() for tag in value]
+    if any(not tag for tag in stripped):
+        raise ValueError("tags must not contain blank values")
+    if len(stripped) != len(set(stripped)):
+        raise ValueError("tags must be unique")
+    invalid = [tag for tag in stripped if not INTENSIVE_LISTENING_TAG_PATTERN.fullmatch(tag)]
+    if invalid:
+        raise ValueError("tags must be kebab-case")
+    return stripped
+
+
+class IntensiveListeningCandidate(PackModel):
+    section: int = Field(ge=1, le=4)
+    segmentOrder: int = Field(ge=1)
+    startTokenIndex: int = Field(ge=0)
+    endTokenIndex: int = Field(gt=0)
+    text: str = Field(min_length=1)
+    reason: str = Field(min_length=1)
+    tags: list[str] = Field(min_length=1)
+
+    @field_validator("text", "reason")
+    @classmethod
+    def validate_non_blank_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("field must not be blank")
+        return value
+
+    @field_validator("tags")
+    @classmethod
+    def validate_tags(cls, value: list[str]) -> list[str]:
+        return validate_intensive_listening_tags(value)
+
+    @model_validator(mode="after")
+    def validate_token_range(self) -> IntensiveListeningCandidate:
+        if self.endTokenIndex <= self.startTokenIndex:
+            raise ValueError("token range endTokenIndex must be greater than startTokenIndex")
+        return self
+
+
+class IntensiveListeningCandidateSource(PackModel):
+    schemaVersion: Literal[INTENSIVE_LISTENING_CANDIDATE_SCHEMA_VERSION]
+    section: int = Field(ge=1, le=4)
+    candidates: list[IntensiveListeningCandidate] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_candidate_sections(self) -> IntensiveListeningCandidateSource:
+        for candidate in self.candidates:
+            if candidate.section != self.section:
+                raise ValueError(
+                    "candidate section must match candidate source section"
+                )
+        return self
+
+
+class IntensiveListeningBlank(PackModel):
+    id: str = Field(min_length=1)
+    segmentOrder: int = Field(ge=1)
+    startTokenIndex: int = Field(ge=0)
+    endTokenIndex: int = Field(gt=0)
+    answer: str = Field(min_length=1)
+    acceptedVariants: list[str] = Field(default_factory=list)
+    reason: str = Field(min_length=1)
+    tags: list[str] = Field(min_length=1)
+
+    @field_validator("id", "answer", "reason")
+    @classmethod
+    def validate_non_blank_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("field must not be blank")
+        return value
+
+    @field_validator("acceptedVariants", "tags")
+    @classmethod
+    def validate_string_list(cls, value: list[str]) -> list[str]:
+        if any(not str(item).strip() for item in value):
+            raise ValueError("list fields must not contain blank values")
+        return value
+
+    @field_validator("tags")
+    @classmethod
+    def validate_tags(cls, value: list[str]) -> list[str]:
+        return validate_intensive_listening_tags(value)
+
+    @model_validator(mode="after")
+    def validate_token_range(self) -> IntensiveListeningBlank:
+        if self.endTokenIndex <= self.startTokenIndex:
+            raise ValueError("token range endTokenIndex must be greater than startTokenIndex")
+        return self
+
+
+class IntensiveListeningSection(PackModel):
+    section: int = Field(ge=1, le=4)
+    blanks: list[IntensiveListeningBlank] = Field(min_length=1)
+
+
+class IntensiveListeningAsset(PackModel):
+    schemaVersion: Literal[INTENSIVE_LISTENING_SCHEMA_VERSION]
+    sections: list[IntensiveListeningSection] = Field(min_length=4, max_length=4)
+
+    @model_validator(mode="after")
+    def validate_section_coverage(self) -> IntensiveListeningAsset:
+        section_numbers = [section.section for section in self.sections]
+        if sorted(section_numbers) != [1, 2, 3, 4]:
+            raise ValueError("intensive listening sections must cover 1 through 4")
+        return self
+
+
 class SectionManifest(PackModel):
     number: int = Field(ge=1, le=4)
     title: str
@@ -206,12 +321,15 @@ class ManifestAssets(PackModel):
     transcript: str
     vocabulary: str
     transcriptTimings: str | SkipJsonSchema[None] = None
+    intensiveListening: str | SkipJsonSchema[None] = None
 
     @model_serializer(mode="wrap")
     def serialize_optional_assets(self, handler):
         data = handler(self)
         if data.get("transcriptTimings") is None:
             data.pop("transcriptTimings", None)
+        if data.get("intensiveListening") is None:
+            data.pop("intensiveListening", None)
         return data
 
 
@@ -314,6 +432,9 @@ def export_json_schemas(output_dir: Path = SCHEMA_ROOT) -> None:
         "vocabulary": VocabularyItem,
         "overlays": Overlay,
         "transcript-section": TranscriptSection,
+        "intensive-listening": IntensiveListeningAsset,
+        "intensive-listening-candidate": IntensiveListeningCandidate,
+        "intensive-listening-candidate-source": IntensiveListeningCandidateSource,
         "answer-review": PendingAnswerCandidate,
         "release-report": ReleaseReport,
     }

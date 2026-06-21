@@ -16,6 +16,10 @@ function questionInput(page: Page, questionNumber: number) {
   return page.getByLabel(new RegExp(`^(\\u7b2c\\s*)?${questionNumber}\\s*(\\u9898|\\.)?$|^Question\\s*${questionNumber}$`, 'i'))
 }
 
+async function nativePlaybackRate(page: Page) {
+  return page.locator('audio').evaluate((audio: HTMLAudioElement) => audio.playbackRate)
+}
+
 test.describe('practice workflow', () => {
   test('continues practice, persists q1, submits, and resets answers', async ({ page }) => {
     await page.goto('/')
@@ -114,5 +118,65 @@ test.describe('practice workflow', () => {
       await expect(page.getByRole('button', { name: /^\u6536\u8d77\u539f\u6587$/ })).toBeVisible()
       await page.getByRole('button', { name: /^\u6536\u8d77\u539f\u6587$/ }).click()
     }
+  })
+
+  test('\u7cbe\u542c unlocks by submitted section and keeps state isolated', async ({ page }) => {
+    await page.goto('/')
+
+    await expect(page.getByRole('button', { name: /^\u7cbe\u542c$/ })).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /^\u539f\u6587\u8ddf\u8bfb$/ })).toHaveCount(0)
+    await startOrContinuePractice(page)
+
+    const actionIntensive = page.getByRole('button', { name: /^\u7cbe\u542c$/ })
+    await expect(actionIntensive).toBeDisabled()
+
+    await questionInput(page, 1).fill('Ardley')
+    await page.getByRole('button', { name: /^\u63d0\u4ea4\u7b54\u6848$/ }).click()
+    await expect(page.getByText(/Raw score:\s*0\s*\/\s*10/)).toBeVisible()
+    await expect(actionIntensive).toBeEnabled()
+
+    await switchToSection(page, '02')
+    await expect(page.getByRole('button', { name: /^\u7cbe\u542c$/ })).toBeDisabled()
+    await switchToSection(page, '01')
+    await page.getByRole('button', { name: /^\u7cbe\u542c$/ }).click()
+
+    await expect(page.getByRole('heading', { name: /Section 01 \u7cbe\u542c/ })).toBeVisible()
+    await expect(page.getByRole('tab', { name: '01' })).toBeEnabled()
+    await expect(page.getByRole('tab', { name: '02' })).toBeDisabled()
+
+    const transcript = page.getByRole('region', { name: 'Section 01 \u7cbe\u542c\u539f\u6587' })
+    const firstTranscriptSegment = page.locator('.intensive-transcript__segment').first()
+    await expect(transcript).toContainText('Good morning')
+    await expect(firstTranscriptSegment).toContainText('How can I help you')
+    await expect(firstTranscriptSegment).not.toContainText('World Tours')
+
+    const firstBlank = page.getByRole('textbox', { name: '\u7cbe\u542c\u7a7a 1', exact: true })
+    await expect(firstBlank).toBeVisible()
+    await firstBlank.fill('world tour')
+
+    const speedButton = page.getByRole('button', { name: '1.25x' })
+    await speedButton.click()
+    await expect(speedButton).toHaveAttribute('aria-pressed', 'true')
+    expect(await nativePlaybackRate(page)).toBe(1.25)
+
+    await page.getByRole('button', { name: /^\u63d0\u4ea4\u7cbe\u542c$/ }).click()
+    await expect(page.getByText('\u62fc\u5199\u6709\u8bef').first()).toBeVisible()
+
+    await page.getByRole('button', { name: /^\u67e5\u770b\u7b54\u6848$/ }).click()
+    await expect(page.getByText('\u6b63\u786e\u7b54\u6848\uff1aWorld Tours')).toBeVisible()
+
+    await page.getByRole('button', { name: /^\u67e5\u770b\u539f\u6587$/ }).click()
+    await expect(firstTranscriptSegment).toContainText('World Tours')
+    await expect(page.getByRole('textbox')).toHaveCount(0)
+
+    await page.getByRole('button', { name: /^\u91cd\u7f6e\u7cbe\u542c$/ }).click()
+    await expect(page.getByRole('textbox', { name: '\u7cbe\u542c\u7a7a 1', exact: true })).toHaveValue('')
+
+    await page.getByRole('button', { name: /^\u8fd4\u56de\u7ec3\u4e60$/ }).click()
+    await expect(questionInput(page, 1)).toHaveValue('Ardley')
+
+    await page.getByRole('button', { name: /^\u8fd4\u56de\u9996\u9875$/ }).click()
+    await page.getByRole('button', { name: /^\u9519\u9898\u672c$/ }).click()
+    await expect(page.getByLabel('\u9519\u9898\u8bcd Ardleigh')).toBeVisible()
   })
 })

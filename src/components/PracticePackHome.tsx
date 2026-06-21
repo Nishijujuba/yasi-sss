@@ -44,14 +44,6 @@ export function PracticePackHome({
         <button className="secondary-action home-mistakes" onClick={onOpenMistakes} type="button">
           错题本
         </button>
-        <div className="placeholder-actions" aria-label="未来功能入口">
-          <button disabled type="button">
-            精听
-          </button>
-          <button disabled type="button">
-            原文跟读
-          </button>
-        </div>
       </section>
     </main>
   );

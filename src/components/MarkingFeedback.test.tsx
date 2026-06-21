@@ -1,5 +1,5 @@
-import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import MarkingFeedback from "./MarkingFeedback";
 import type { MarkResult, Question } from "../types/pack";
 
@@ -43,6 +43,10 @@ function question(id: string, number: number, section: number): Question {
 }
 
 describe("MarkingFeedback", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it("groups submitted results by section and excludes unsubmitted section counts", () => {
     render(
       <MarkingFeedback
@@ -62,6 +66,22 @@ describe("MarkingFeedback", () => {
     const answers = screen.getByLabelText("正确答案");
     expect(within(answers).getByText("Q2")).toBeTruthy();
     expect(within(answers).getByText("正确答案：newspaper")).toBeTruthy();
+  });
+
+  it("falls back to current-section progress when the marking result has no entries for these questions", () => {
+    render(
+      <MarkingFeedback
+        answers={{ q1: "Ardleigh" }}
+        questions={[questions[2]]}
+        result={sectionOneResult}
+        onNextIncorrect={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByLabelText("练习进度")).toHaveTextContent("已作答 0 / 1");
+    expect(screen.queryByText(/Raw score/)).toBeNull();
+    expect(screen.queryByText("Section 01")).toBeNull();
+    expect(screen.queryByText("正确答案：newspaper")).toBeNull();
   });
 
   it("labels submitted feedback as practice reference after transcript viewing", () => {

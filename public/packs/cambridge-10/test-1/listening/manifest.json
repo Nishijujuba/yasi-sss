@@ -93,11 +93,12 @@
     "answers": "answers.json",
     "overlays": "overlays.json",
     "transcript": "transcript.json",
+    "vocabulary": "vocabulary.json",
     "transcriptTimings": "transcript-timings.preview.json",
-    "vocabulary": "vocabulary.json"
+    "intensiveListening": "intensive-listening.json"
   },
   "build": {
-    "sourceCommit": "1a5ab7647fe8374eb454ff675b9865c85173a847",
-    "builtAt": "2026-06-17T11:48:41.052273Z"
+    "sourceCommit": "e161022bb4b0dd0852a2c1dca5d3a1731b5fde45",
+    "builtAt": "2026-06-20T17:26:18.138689Z"
   }
 }

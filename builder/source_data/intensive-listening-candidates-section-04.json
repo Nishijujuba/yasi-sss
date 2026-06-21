@@ -1,0 +1,519 @@
+{
+  "schemaVersion": "yasi.intensive-listening-candidates.v1",
+  "section": 4,
+  "candidates": [
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 6,
+      "endTokenIndex": 9,
+      "text": "ecology and conservation",
+      "reason": "Topic phrase with spelling value for an academic environmental monologue.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 14,
+      "endTokenIndex": 16,
+      "text": "particularly endangered",
+      "reason": "Adjective phrase with reduced-speech and spelling value around the species status.",
+      "tags": ["connected-speech", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 19,
+      "endTokenIndex": 22,
+      "text": "black bear family",
+      "reason": "Key noun phrase that identifies the animal category in the introduction.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 22,
+      "endTokenIndex": 25,
+      "text": "One in ten",
+      "reason": "Number phrase with IELTS note-completion value.",
+      "tags": ["number", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 32,
+      "endTokenIndex": 34,
+      "text": "white coat",
+      "reason": "Compact noun phrase that explains the visual feature of the species.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 41,
+      "endTokenIndex": 42,
+      "text": "gene",
+      "reason": "Official answer-bearing word for q31 with spelling discrimination value.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 53,
+      "endTokenIndex": 55,
+      "text": "spirit bear",
+      "reason": "Named animal phrase with word-boundary value.",
+      "tags": ["proper-noun", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 59,
+      "endTokenIndex": 60,
+      "text": "legends",
+      "reason": "Spelling-risk vocabulary item in the cultural explanation.",
+      "tags": ["spelling-risk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 64,
+      "endTokenIndex": 66,
+      "text": "snowy fur",
+      "reason": "Descriptive noun phrase with clear listening and spelling value.",
+      "tags": ["noun-phrase", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 71,
+      "endTokenIndex": 72,
+      "text": "power",
+      "reason": "Official answer-bearing word for q32 in a short high-value span.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 79,
+      "endTokenIndex": 81,
+      "text": "highly regarded",
+      "reason": "Lexical chunk with reduced-speech value in the explanation of local beliefs.",
+      "tags": ["lexical-chunk", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 87,
+      "endTokenIndex": 90,
+      "text": "do not speak",
+      "reason": "Negative verb phrase that carries the protective taboo detail.",
+      "tags": ["connected-speech", "distractor-contrast"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 1,
+      "startTokenIndex": 104,
+      "endTokenIndex": 105,
+      "text": "strangers",
+      "reason": "Official answer-bearing plural noun for q33 with final-s discrimination value.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 13,
+      "endTokenIndex": 15,
+      "text": "old-growth rainforest",
+      "reason": "Hyphenated compound phrase with strong word-boundary and spelling value.",
+      "tags": ["compound", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 26,
+      "endTokenIndex": 28,
+      "text": "centuries-old trees",
+      "reason": "Hyphenated age phrase that trains compound recognition.",
+      "tags": ["compound", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 40,
+      "endTokenIndex": 43,
+      "text": "extremely long roots",
+      "reason": "Descriptive noun phrase that leads into the erosion answer.",
+      "tags": ["noun-phrase", "answer-context"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 46,
+      "endTokenIndex": 47,
+      "text": "erosion",
+      "reason": "Official answer-bearing word for q34 with strong spelling value.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 56,
+      "endTokenIndex": 58,
+      "text": "fish streams",
+      "reason": "Noun phrase with word-boundary value in the habitat explanation.",
+      "tags": ["noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 60,
+      "endTokenIndex": 62,
+      "text": "banks intact",
+      "reason": "Compressed phrase with connected-speech value around stream protection.",
+      "tags": ["connected-speech", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 70,
+      "endTokenIndex": 71,
+      "text": "salmon",
+      "reason": "Species noun with spelling and topic value in the food-source detail.",
+      "tags": ["spelling-risk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 75,
+      "endTokenIndex": 78,
+      "text": "main food source",
+      "reason": "IELTS-style noun phrase that captures a central habitat relationship.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 96,
+      "endTokenIndex": 99,
+      "text": "skin and bones",
+      "reason": "Coordinated noun phrase with clear word-boundary value.",
+      "tags": ["noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 104,
+      "endTokenIndex": 106,
+      "text": "forest floor",
+      "reason": "Compact environmental noun phrase with repeated-f sound discrimination.",
+      "tags": ["noun-phrase", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 108,
+      "endTokenIndex": 110,
+      "text": "vital nutrients",
+      "reason": "Academic noun phrase with spelling and stress-pattern value.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 2,
+      "startTokenIndex": 112,
+      "endTokenIndex": 114,
+      "text": "lush vegetation",
+      "reason": "Environmental phrase with spelling-risk vocabulary.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 3,
+      "startTokenIndex": 12,
+      "endTokenIndex": 14,
+      "text": "British Columbia",
+      "reason": "Proper place name with capitalization and word-boundary value.",
+      "tags": ["proper-noun", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 3,
+      "startTokenIndex": 17,
+      "endTokenIndex": 18,
+      "text": "islands",
+      "reason": "Official answer-bearing plural noun for q35.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 3,
+      "startTokenIndex": 30,
+      "endTokenIndex": 34,
+      "text": "less than two hundred",
+      "reason": "Quantity phrase with number-listening value.",
+      "tags": ["number", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 3,
+      "startTokenIndex": 53,
+      "endTokenIndex": 55,
+      "text": "delicate balance",
+      "reason": "Academic collocation that carries the conservation concept.",
+      "tags": ["lexical-chunk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 3,
+      "startTokenIndex": 63,
+      "endTokenIndex": 64,
+      "text": "ecosystem",
+      "reason": "Key technical vocabulary with spelling and stress value.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 1,
+      "endTokenIndex": 3,
+      "text": "greatest threat",
+      "reason": "Signposting noun phrase that introduces the problem focus.",
+      "tags": ["signpost", "noun-phrase"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 9,
+      "endTokenIndex": 13,
+      "text": "loss of its habitat",
+      "reason": "Core threat phrase with weak-form and word-boundary value.",
+      "tags": ["noun-phrase", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 16,
+      "endTokenIndex": 18,
+      "text": "logging companies",
+      "reason": "Problem-source noun phrase with spelling and topic value.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 26,
+      "endTokenIndex": 30,
+      "text": "large number of trees",
+      "reason": "Quantity noun phrase that trains connected-speech recognition.",
+      "tags": ["number", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 35,
+      "endTokenIndex": 36,
+      "text": "roads",
+      "reason": "Official answer-bearing plural noun for q36.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 38,
+      "endTokenIndex": 39,
+      "text": "fractured",
+      "reason": "High-value damage verb with spelling and consonant-cluster value.",
+      "tags": ["spelling-risk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 48,
+      "endTokenIndex": 50,
+      "text": "hibernation sites",
+      "reason": "Specialized noun phrase with spelling value.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 70,
+      "endTokenIndex": 74,
+      "text": "To make matters worse",
+      "reason": "Problem-escalation signpost with connected-speech value.",
+      "tags": ["signpost", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 82,
+      "endTokenIndex": 83,
+      "text": "declining",
+      "reason": "Trend verb with IELTS problem-description value.",
+      "tags": ["topic-vocabulary", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 86,
+      "endTokenIndex": 89,
+      "text": "no legal limit",
+      "reason": "Policy phrase that frames the q37 fishing answer.",
+      "tags": ["answer-context", "noun-phrase"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 4,
+      "startTokenIndex": 90,
+      "endTokenIndex": 91,
+      "text": "fishing",
+      "reason": "Official answer-bearing word for q37.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 5,
+      "startTokenIndex": 5,
+      "endTokenIndex": 7,
+      "text": "negative impact",
+      "reason": "Academic collocation with problem-description value.",
+      "tags": ["lexical-chunk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 5,
+      "startTokenIndex": 19,
+      "endTokenIndex": 20,
+      "text": "fragile",
+      "reason": "Spelling-risk adjective that signals vulnerability.",
+      "tags": ["spelling-risk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 5,
+      "startTokenIndex": 24,
+      "endTokenIndex": 25,
+      "text": "reproduction",
+      "reason": "Official answer-bearing word for q38 with strong spelling value.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 5,
+      "startTokenIndex": 31,
+      "endTokenIndex": 33,
+      "text": "disappointingly low",
+      "reason": "Evaluative phrase with adverb spelling and stress-pattern value.",
+      "tags": ["lexical-chunk", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 5,
+      "endTokenIndex": 7,
+      "text": "going forward",
+      "reason": "Section-transition phrase with connected-speech value.",
+      "tags": ["signpost", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 9,
+      "endTokenIndex": 11,
+      "text": "environmental groups",
+      "reason": "Actor noun phrase with spelling and topic value.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 13,
+      "endTokenIndex": 16,
+      "text": "British Columbia government",
+      "reason": "Proper-name organization phrase with word-boundary value.",
+      "tags": ["proper-noun", "word-boundary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 27,
+      "endTokenIndex": 30,
+      "text": "requiring logging companies",
+      "reason": "Policy-action phrase that leads into the q39 answer.",
+      "tags": ["answer-context", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 35,
+      "endTokenIndex": 36,
+      "text": "method",
+      "reason": "Official answer-bearing word for q39.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 45,
+      "endTokenIndex": 49,
+      "text": "may not be sufficient",
+      "reason": "Negative modal phrase that signals limits of the proposed measures.",
+      "tags": ["connected-speech", "distractor-contrast"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 6,
+      "startTokenIndex": 52,
+      "endTokenIndex": 54,
+      "text": "healthy population",
+      "reason": "Conservation noun phrase with word-boundary value.",
+      "tags": ["noun-phrase", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 7,
+      "startTokenIndex": 22,
+      "endTokenIndex": 24,
+      "text": "more emphasis",
+      "reason": "Policy phrase that prepares the q40 expansion answer.",
+      "tags": ["answer-context", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 7,
+      "startTokenIndex": 26,
+      "endTokenIndex": 27,
+      "text": "expansion",
+      "reason": "Official answer-bearing word for q40 with spelling value.",
+      "tags": ["answer-bearing", "spelling-risk"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 7,
+      "startTokenIndex": 30,
+      "endTokenIndex": 31,
+      "text": "justified",
+      "reason": "Spelling-risk verb that explains why habitat expansion is valid.",
+      "tags": ["spelling-risk", "topic-vocabulary"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 7,
+      "startTokenIndex": 35,
+      "endTokenIndex": 37,
+      "text": "create space",
+      "reason": "Result phrase with connected-speech value.",
+      "tags": ["lexical-chunk", "connected-speech"]
+    },
+    {
+      "section": 4,
+      "segmentOrder": 7,
+      "startTokenIndex": 42,
+      "endTokenIndex": 45,
+      "text": "losing their homes",
+      "reason": "Closing noun phrase with weak-form and topic value.",
+      "tags": ["connected-speech", "topic-vocabulary"]
+    }
+  ]
+}

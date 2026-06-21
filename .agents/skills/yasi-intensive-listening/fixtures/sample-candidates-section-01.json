@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "yasi.intensive-listening-candidates.v1",
+  "section": 1,
+  "candidates": [
+    {
+      "section": 1,
+      "segmentOrder": 6,
+      "startTokenIndex": 1,
+      "endTokenIndex": 2,
+      "text": "Ardleigh",
+      "reason": "IELTS form-completion place-name spelling item from an answer-bearing street address.",
+      "tags": ["answer-bearing", "form-completion", "proper-noun", "spelling-risk"]
+    }
+  ]
+}

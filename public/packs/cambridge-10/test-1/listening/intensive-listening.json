@@ -1,0 +1,3297 @@
+{
+  "schemaVersion": "yasi.intensive-listening.v1",
+  "sections": [
+    {
+      "section": 1,
+      "blanks": [
+        {
+          "id": "il-s01-seg001-t002-t004",
+          "segmentOrder": 1,
+          "startTokenIndex": 2,
+          "endTokenIndex": 4,
+          "answer": "World Tours",
+          "acceptedVariants": [],
+          "reason": "Travel-agency proper noun trains capitalization, word boundary, and scenario recognition.",
+          "tags": [
+            "proper-noun",
+            "word-boundary",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg001-t007-t008",
+          "segmentOrder": 1,
+          "startTokenIndex": 7,
+          "endTokenIndex": 8,
+          "answer": "Jamie",
+          "acceptedVariants": [],
+          "reason": "Personal name trains recognition of a short proper noun in an opening exchange.",
+          "tags": [
+            "proper-noun",
+            "name",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg002-t007-t009",
+          "segmentOrder": 2,
+          "startTokenIndex": 7,
+          "endTokenIndex": 9,
+          "answer": "self-drive tours",
+          "acceptedVariants": [],
+          "reason": "Hyphenated travel-service phrase trains compound and word-boundary control.",
+          "tags": [
+            "compound",
+            "word-boundary",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg002-t011-t012",
+          "segmentOrder": 2,
+          "startTokenIndex": 11,
+          "endTokenIndex": 12,
+          "answer": "USA",
+          "acceptedVariants": [],
+          "reason": "Country abbreviation trains letter-name recognition in a travel context.",
+          "tags": [
+            "proper-noun",
+            "abbreviation",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg002-t017-t018",
+          "segmentOrder": 2,
+          "startTokenIndex": 17,
+          "endTokenIndex": 18,
+          "answer": "brochure",
+          "acceptedVariants": [],
+          "reason": "Travel-document noun has spelling value and anchors the request purpose.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg004-t000-t002",
+          "segmentOrder": 4,
+          "startTokenIndex": 0,
+          "endTokenIndex": 2,
+          "answer": "Andrea Brown",
+          "acceptedVariants": [],
+          "reason": "Full personal name trains recognition of first-name and surname boundaries.",
+          "tags": [
+            "proper-noun",
+            "name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg006-t000-t001",
+          "segmentOrder": 6,
+          "startTokenIndex": 0,
+          "endTokenIndex": 1,
+          "answer": "24",
+          "acceptedVariants": [],
+          "reason": "Address number trains digit recognition before the street answer.",
+          "tags": [
+            "number",
+            "address",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s01-seg006-t001-t002",
+          "segmentOrder": 6,
+          "startTokenIndex": 1,
+          "endTokenIndex": 2,
+          "answer": "Ardleigh",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer with uncommon street-name spelling value.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg008-t000-t001",
+          "segmentOrder": 8,
+          "startTokenIndex": 0,
+          "endTokenIndex": 1,
+          "answer": "A-R-D-L-E-I-G-H",
+          "acceptedVariants": [],
+          "reason": "Spelled-out street name trains letter-by-letter recognition for the address answer.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk",
+            "letter-sequence"
+          ]
+        },
+        {
+          "id": "il-s01-seg010-t000-t003",
+          "segmentOrder": 10,
+          "startTokenIndex": 0,
+          "endTokenIndex": 3,
+          "answer": "BH5 2 OP",
+          "acceptedVariants": [],
+          "reason": "Postcode-style sequence trains mixed letters and numbers in grouped form.",
+          "tags": [
+            "postcode",
+            "number",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg014-t001-t002",
+          "segmentOrder": 14,
+          "startTokenIndex": 1,
+          "endTokenIndex": 2,
+          "answer": "07786643091",
+          "acceptedVariants": [],
+          "reason": "Long phone number trains continuous digit recognition.",
+          "tags": [
+            "phone-number",
+            "number",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s01-seg015-t015-t016",
+          "segmentOrder": 15,
+          "startTokenIndex": 15,
+          "endTokenIndex": 16,
+          "answer": "friend",
+          "acceptedVariants": [],
+          "reason": "Rejected source option helps distinguish the newspaper answer from nearby alternatives.",
+          "tags": [
+            "distractor-contrast",
+            "source-option",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s01-seg015-t021-t022",
+          "segmentOrder": 15,
+          "startTokenIndex": 21,
+          "endTokenIndex": 22,
+          "answer": "advert",
+          "acceptedVariants": [],
+          "reason": "Rejected source option contrasts with the later newspaper answer.",
+          "tags": [
+            "distractor-contrast",
+            "source-option",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg016-t007-t008",
+          "segmentOrder": 16,
+          "startTokenIndex": 7,
+          "endTokenIndex": 8,
+          "answer": "newspaper",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer trains recognition of the correct information source.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg018-t005-t006",
+          "segmentOrder": 18,
+          "startTokenIndex": 5,
+          "endTokenIndex": 6,
+          "answer": "California",
+          "acceptedVariants": [],
+          "reason": "State name anchors the tour location and has proper-noun spelling value.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg018-t011-t013",
+          "segmentOrder": 18,
+          "startTokenIndex": 11,
+          "endTokenIndex": 13,
+          "answer": "two children",
+          "acceptedVariants": [],
+          "reason": "Family-detail phrase trains number recognition in the travel enquiry.",
+          "tags": [
+            "number",
+            "noun-phrase",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg018-t017-t020",
+          "segmentOrder": 18,
+          "startTokenIndex": 17,
+          "endTokenIndex": 20,
+          "answer": "hire a car",
+          "acceptedVariants": [],
+          "reason": "Car-rental phrase trains connected speech and travel-service vocabulary.",
+          "tags": [
+            "travel-context",
+            "weak-form",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg019-t006-t008",
+          "segmentOrder": 19,
+          "startTokenIndex": 6,
+          "endTokenIndex": 8,
+          "answer": "self-drive tours",
+          "acceptedVariants": [],
+          "reason": "Repeated hyphenated tour type reinforces the service label learners must track.",
+          "tags": [
+            "compound",
+            "word-boundary",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg019-t015-t016",
+          "segmentOrder": 19,
+          "startTokenIndex": 15,
+          "endTokenIndex": 16,
+          "answer": "California",
+          "acceptedVariants": [],
+          "reason": "State name marks the itinerary area and supports place-name discrimination.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg019-t021-t023",
+          "segmentOrder": 19,
+          "startTokenIndex": 21,
+          "endTokenIndex": 23,
+          "answer": "Los Angeles",
+          "acceptedVariants": [],
+          "reason": "City name trains two-word place-name recognition in an itinerary.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg019-t033-t034",
+          "segmentOrder": 19,
+          "startTokenIndex": 33,
+          "endTokenIndex": 34,
+          "answer": "theme",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer completes the activity phrase theme parks.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg021-t005-t007",
+          "segmentOrder": 21,
+          "startTokenIndex": 5,
+          "endTokenIndex": 7,
+          "answer": "San Francisco",
+          "acceptedVariants": [],
+          "reason": "Two-word city name trains place-name boundaries in the route sequence.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg021-t014-t016",
+          "segmentOrder": 21,
+          "startTokenIndex": 14,
+          "endTokenIndex": 16,
+          "answer": "Yosemite Park",
+          "acceptedVariants": [],
+          "reason": "Named attraction has spelling and place-name value in the itinerary.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg021-t019-t023",
+          "segmentOrder": 21,
+          "startTokenIndex": 19,
+          "endTokenIndex": 23,
+          "answer": "a couple of nights",
+          "acceptedVariants": [],
+          "reason": "Duration phrase trains weak forms and quantity recognition.",
+          "tags": [
+            "number",
+            "weak-form",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg021-t030-t031",
+          "segmentOrder": 21,
+          "startTokenIndex": 30,
+          "endTokenIndex": 31,
+          "answer": "lodge",
+          "acceptedVariants": [],
+          "reason": "Accommodation option contrasts with campsite and the later tent answer.",
+          "tags": [
+            "accommodation",
+            "distractor-contrast",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg021-t034-t035",
+          "segmentOrder": 21,
+          "startTokenIndex": 34,
+          "endTokenIndex": 35,
+          "answer": "campsite",
+          "acceptedVariants": [],
+          "reason": "Accommodation option sets up the tent contrast in the following response.",
+          "tags": [
+            "accommodation",
+            "distractor-contrast",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg022-t009-t010",
+          "segmentOrder": 22,
+          "startTokenIndex": 9,
+          "endTokenIndex": 10,
+          "answer": "tent",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer identifies the rejected accommodation type.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "accommodation"
+          ]
+        },
+        {
+          "id": "il-s01-seg023-t006-t008",
+          "segmentOrder": 23,
+          "startTokenIndex": 6,
+          "endTokenIndex": 8,
+          "answer": "Las Vegas",
+          "acceptedVariants": [],
+          "reason": "Two-word city name trains itinerary endpoint recognition.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg025-t012-t014",
+          "segmentOrder": 25,
+          "startTokenIndex": 12,
+          "endTokenIndex": 14,
+          "answer": "San Francisco",
+          "acceptedVariants": [],
+          "reason": "Route-start city name trains recognition of repeated itinerary labels.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg025-t019-t020",
+          "segmentOrder": 25,
+          "startTokenIndex": 19,
+          "endTokenIndex": 20,
+          "answer": "Cambria",
+          "acceptedVariants": [],
+          "reason": "Destination place name has spelling value and introduces the castle context.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s01-seg026-t007-t008",
+          "segmentOrder": 26,
+          "startTokenIndex": 7,
+          "endTokenIndex": 8,
+          "answer": "castle",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer names the attraction near Cambria.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg027-t000-t002",
+          "segmentOrder": 27,
+          "startTokenIndex": 0,
+          "endTokenIndex": 2,
+          "answer": "Hearst Castle",
+          "acceptedVariants": [],
+          "reason": "Named attraction trains proper-noun spelling and two-word boundary control.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg028-t013-t014",
+          "segmentOrder": 28,
+          "startTokenIndex": 13,
+          "endTokenIndex": 14,
+          "answer": "desert",
+          "acceptedVariants": [],
+          "reason": "Route-feature question word helps learners track a rejected itinerary option.",
+          "tags": [
+            "distractor-contrast",
+            "route-detail",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg029-t004-t006",
+          "segmentOrder": 29,
+          "startTokenIndex": 4,
+          "endTokenIndex": 6,
+          "answer": "Santa Monica",
+          "acceptedVariants": [],
+          "reason": "Two-word place name trains coastal destination recognition.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg029-t015-t016",
+          "segmentOrder": 29,
+          "startTokenIndex": 15,
+          "endTokenIndex": 16,
+          "answer": "shopping",
+          "acceptedVariants": [],
+          "reason": "Rejected activity contrasts with the traveller's preferred beach activities.",
+          "tags": [
+            "distractor-contrast",
+            "activity",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg031-t008-t010",
+          "segmentOrder": 31,
+          "startTokenIndex": 8,
+          "endTokenIndex": 10,
+          "answer": "San Diego",
+          "acceptedVariants": [],
+          "reason": "Two-word city name trains final destination recognition.",
+          "tags": [
+            "proper-noun",
+            "place-name",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg032-t003-t004",
+          "segmentOrder": 32,
+          "startTokenIndex": 3,
+          "endTokenIndex": 4,
+          "answer": "beaches",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer identifies the reason San Diego is suitable.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg033-t016-t017",
+          "segmentOrder": 33,
+          "startTokenIndex": 16,
+          "endTokenIndex": 17,
+          "answer": "zoo",
+          "acceptedVariants": [],
+          "reason": "Suggested child activity contrasts with the traveller's chosen beach activities.",
+          "tags": [
+            "distractor-contrast",
+            "activity",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg034-t009-t012",
+          "segmentOrder": 34,
+          "startTokenIndex": 9,
+          "endTokenIndex": 12,
+          "answer": "sunbathing and swimming",
+          "acceptedVariants": [],
+          "reason": "Preferred activity phrase trains connected coordination and beach-topic vocabulary.",
+          "tags": [
+            "activity",
+            "word-boundary",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t009-t011",
+          "segmentOrder": 36,
+          "startTokenIndex": 9,
+          "endTokenIndex": 11,
+          "answer": "self-drive tour",
+          "acceptedVariants": [],
+          "reason": "Hyphenated tour label trains compound recognition in the cost comparison.",
+          "tags": [
+            "compound",
+            "word-boundary",
+            "travel-context"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t015-t017",
+          "segmentOrder": 36,
+          "startTokenIndex": 15,
+          "endTokenIndex": 17,
+          "answer": "twelve days",
+          "acceptedVariants": [],
+          "reason": "Trip duration trains number-word recognition in a comparison table.",
+          "tags": [
+            "number",
+            "duration",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t019-t020",
+          "segmentOrder": 36,
+          "startTokenIndex": 19,
+          "endTokenIndex": 20,
+          "answer": "2,020",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer trains recognition of a comma-marked distance number.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "number"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t025-t027",
+          "segmentOrder": 36,
+          "startTokenIndex": 25,
+          "endTokenIndex": 27,
+          "answer": "206 km",
+          "acceptedVariants": [],
+          "reason": "Distance phrase trains digit and measurement-unit recognition.",
+          "tags": [
+            "number",
+            "measurement",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t031-t033",
+          "segmentOrder": 36,
+          "startTokenIndex": 31,
+          "endTokenIndex": 33,
+          "answer": "632 kilometres",
+          "acceptedVariants": [],
+          "reason": "Distance phrase trains three-digit number recognition with a unit.",
+          "tags": [
+            "number",
+            "measurement",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t036-t037",
+          "segmentOrder": 36,
+          "startTokenIndex": 36,
+          "endTokenIndex": 37,
+          "answer": "£525",
+          "acceptedVariants": [],
+          "reason": "Tour price trains currency and number recognition in cost information.",
+          "tags": [
+            "price",
+            "number",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t041-t042",
+          "segmentOrder": 36,
+          "startTokenIndex": 41,
+          "endTokenIndex": 42,
+          "answer": "accommodation",
+          "acceptedVariants": [],
+          "reason": "Included-cost item has spelling value and supports comparison of package contents.",
+          "tags": [
+            "included-item",
+            "spelling-risk",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t042-t044",
+          "segmentOrder": 36,
+          "startTokenIndex": 42,
+          "endTokenIndex": 44,
+          "answer": "car rental",
+          "acceptedVariants": [],
+          "reason": "Included-cost phrase trains travel-service vocabulary and word boundary.",
+          "tags": [
+            "included-item",
+            "travel-context",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t046-t047",
+          "segmentOrder": 36,
+          "startTokenIndex": 46,
+          "endTokenIndex": 47,
+          "answer": "flight",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer identifies an included package item.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "included-item"
+          ]
+        },
+        {
+          "id": "il-s01-seg036-t049-t050",
+          "segmentOrder": 36,
+          "startTokenIndex": 49,
+          "endTokenIndex": 50,
+          "answer": "meals",
+          "acceptedVariants": [],
+          "reason": "Excluded-cost item contrasts with included accommodation, car rental, and flight.",
+          "tags": [
+            "distractor-contrast",
+            "excluded-item",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg038-t002-t004",
+          "segmentOrder": 38,
+          "startTokenIndex": 2,
+          "endTokenIndex": 4,
+          "answer": "nine days",
+          "acceptedVariants": [],
+          "reason": "Trip duration trains number-word recognition for the second option.",
+          "tags": [
+            "number",
+            "duration",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg038-t008-t010",
+          "segmentOrder": 38,
+          "startTokenIndex": 8,
+          "endTokenIndex": 10,
+          "answer": "three days",
+          "acceptedVariants": [],
+          "reason": "Driving-time phrase trains number-word recognition in package comparison.",
+          "tags": [
+            "number",
+            "duration",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg038-t016-t018",
+          "segmentOrder": 38,
+          "startTokenIndex": 16,
+          "endTokenIndex": 18,
+          "answer": "980 kilometres",
+          "acceptedVariants": [],
+          "reason": "Total-distance phrase trains three-digit number and unit recognition.",
+          "tags": [
+            "number",
+            "measurement",
+            "route-detail"
+          ]
+        },
+        {
+          "id": "il-s01-seg040-t004-t007",
+          "segmentOrder": 40,
+          "startTokenIndex": 4,
+          "endTokenIndex": 7,
+          "answer": "hundred pounds cheaper",
+          "acceptedVariants": [],
+          "reason": "Price-comparison phrase prepares learners for the cheaper-tour cost.",
+          "tags": [
+            "price",
+            "distractor-contrast",
+            "weak-form"
+          ]
+        },
+        {
+          "id": "il-s01-seg040-t008-t009",
+          "segmentOrder": 40,
+          "startTokenIndex": 8,
+          "endTokenIndex": 9,
+          "answer": "£429",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer trains currency and number recognition.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "price"
+          ]
+        },
+        {
+          "id": "il-s01-seg041-t005-t007",
+          "segmentOrder": 41,
+          "startTokenIndex": 5,
+          "endTokenIndex": 7,
+          "answer": "car hire",
+          "acceptedVariants": [],
+          "reason": "Package-content phrase contrasts British travel wording with car rental.",
+          "tags": [
+            "travel-context",
+            "word-boundary",
+            "included-item"
+          ]
+        },
+        {
+          "id": "il-s01-seg041-t009-t010",
+          "segmentOrder": 41,
+          "startTokenIndex": 9,
+          "endTokenIndex": 10,
+          "answer": "flights",
+          "acceptedVariants": [],
+          "reason": "Package-content question sets up the following exclusion contrast.",
+          "tags": [
+            "distractor-contrast",
+            "excluded-item",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s01-seg042-t001-t003",
+          "segmentOrder": 42,
+          "startTokenIndex": 1,
+          "endTokenIndex": 3,
+          "answer": "aren’t included",
+          "acceptedVariants": [],
+          "reason": "Negative package phrase trains reduced auxiliary recognition and exclusion meaning.",
+          "tags": [
+            "negative-contrast",
+            "weak-form",
+            "excluded-item"
+          ]
+        },
+        {
+          "id": "il-s01-seg042-t007-t008",
+          "segmentOrder": 42,
+          "startTokenIndex": 7,
+          "endTokenIndex": 8,
+          "answer": "dinner",
+          "acceptedVariants": [],
+          "reason": "IELTS form-completion answer identifies the included hotel meal.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "included-item"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "blanks": [
+        {
+          "id": "il-s02-seg001-t003-t005",
+          "segmentOrder": 1,
+          "startTokenIndex": 3,
+          "endTokenIndex": 5,
+          "answer": "LP Clubs",
+          "acceptedVariants": [],
+          "reason": "Proper noun introduction with capitalization and spelling value.",
+          "tags": [
+            "proper-noun",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg001-t015-t017",
+          "segmentOrder": 1,
+          "startTokenIndex": 15,
+          "endTokenIndex": 17,
+          "answer": "Sandy Fisher",
+          "acceptedVariants": [],
+          "reason": "Speaker name with proper-noun spelling value.",
+          "tags": [
+            "proper-noun",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg001-t047-t049",
+          "segmentOrder": 1,
+          "startTokenIndex": 47,
+          "endTokenIndex": 49,
+          "answer": "recent improvements",
+          "acceptedVariants": [],
+          "reason": "Tour signpost that previews the improvement details tested later.",
+          "tags": [
+            "signpost",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg001-t052-t055",
+          "segmentOrder": 1,
+          "startTokenIndex": 52,
+          "endTokenIndex": 55,
+          "answer": "types of membership",
+          "acceptedVariants": [],
+          "reason": "Section signpost for the membership categories and fees.",
+          "tags": [
+            "signpost",
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t006-t008",
+          "segmentOrder": 2,
+          "startTokenIndex": 6,
+          "endTokenIndex": 8,
+          "answer": "swimming pool",
+          "acceptedVariants": [],
+          "reason": "Facility noun phrase tied to the multiple-choice improvement detail.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "facility"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t010-t012",
+          "segmentOrder": 2,
+          "startTokenIndex": 10,
+          "endTokenIndex": 12,
+          "answer": "25 metres",
+          "acceptedVariants": [],
+          "reason": "Measurement detail that trains number and unit recognition.",
+          "tags": [
+            "number",
+            "measurement",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t013-t014",
+          "segmentOrder": 2,
+          "startTokenIndex": 13,
+          "endTokenIndex": 14,
+          "answer": "Olympic-sized",
+          "acceptedVariants": [],
+          "reason": "Hyphenated compound used in a contrast about pool size.",
+          "tags": [
+            "compound",
+            "hyphenated",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t020-t022",
+          "segmentOrder": 2,
+          "startTokenIndex": 20,
+          "endTokenIndex": 22,
+          "answer": "eight lanes",
+          "acceptedVariants": [],
+          "reason": "Answer-bearing improvement detail with number recognition value.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "number"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t048-t050",
+          "segmentOrder": 2,
+          "startTokenIndex": 48,
+          "endTokenIndex": 50,
+          "answer": "outdoor pool",
+          "acceptedVariants": [],
+          "reason": "Facility phrase used in a rejected alternative about pool access.",
+          "tags": [
+            "distractor-contrast",
+            "facility",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t053-t055",
+          "segmentOrder": 2,
+          "startTokenIndex": 53,
+          "endTokenIndex": 55,
+          "answer": "glass roof",
+          "acceptedVariants": [],
+          "reason": "Concrete facility feature that explains the open-air effect.",
+          "tags": [
+            "facility",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t060-t062",
+          "segmentOrder": 2,
+          "startTokenIndex": 60,
+          "endTokenIndex": 62,
+          "answer": "partly retractable",
+          "acceptedVariants": [],
+          "reason": "Technical adjective phrase with spelling and connected-speech value.",
+          "tags": [
+            "spelling-risk",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg002-t070-t072",
+          "segmentOrder": 2,
+          "startTokenIndex": 70,
+          "endTokenIndex": 72,
+          "answer": "open-air experience",
+          "acceptedVariants": [],
+          "reason": "Hyphenated compound phrase linked to the pool feature.",
+          "tags": [
+            "compound",
+            "hyphenated",
+            "facility"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t001-t003",
+          "segmentOrder": 3,
+          "startTokenIndex": 1,
+          "endTokenIndex": 3,
+          "answer": "recently refurbished",
+          "acceptedVariants": [],
+          "reason": "Improvement phrase with spelling value and task relevance.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t003-t005",
+          "segmentOrder": 3,
+          "startTokenIndex": 3,
+          "endTokenIndex": 5,
+          "answer": "fitness suite",
+          "acceptedVariants": [],
+          "reason": "Facility noun phrase tied to the improvement question.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "facility"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t008-t011",
+          "segmentOrder": 3,
+          "startTokenIndex": 8,
+          "endTokenIndex": 11,
+          "answer": "latest exercise equipment",
+          "acceptedVariants": [],
+          "reason": "Noun phrase that carries the refurbished facility detail.",
+          "tags": [
+            "answer-bearing",
+            "facility",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t012-t016",
+          "segmentOrder": 3,
+          "startTokenIndex": 12,
+          "endTokenIndex": 16,
+          "answer": "ten new running machines",
+          "acceptedVariants": [],
+          "reason": "Answer-bearing improvement detail with number and compound value.",
+          "tags": [
+            "answer-bearing",
+            "number",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t021-t023",
+          "segmentOrder": 3,
+          "startTokenIndex": 21,
+          "endTokenIndex": 23,
+          "answer": "weight-training machines",
+          "acceptedVariants": [],
+          "reason": "Hyphenated equipment phrase with word-boundary value.",
+          "tags": [
+            "compound",
+            "hyphenated",
+            "facility"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t027-t029",
+          "segmentOrder": 3,
+          "startTokenIndex": 27,
+          "endTokenIndex": 29,
+          "answer": "full training",
+          "acceptedVariants": [],
+          "reason": "Service-detail noun phrase that can be missed in connected speech.",
+          "tags": [
+            "noun-phrase",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t040-t043",
+          "segmentOrder": 3,
+          "startTokenIndex": 40,
+          "endTokenIndex": 43,
+          "answer": "trainer on duty",
+          "acceptedVariants": [],
+          "reason": "Service-detail phrase with useful word-boundary control.",
+          "tags": [
+            "noun-phrase",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t052-t054",
+          "segmentOrder": 3,
+          "startTokenIndex": 52,
+          "endTokenIndex": 54,
+          "answer": "adult-only times",
+          "acceptedVariants": [],
+          "reason": "Hyphenated schedule phrase with task-detail value.",
+          "tags": [
+            "hyphenated",
+            "schedule",
+            "compound"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t054-t056",
+          "segmentOrder": 3,
+          "startTokenIndex": 54,
+          "endTokenIndex": 56,
+          "answer": "after 6",
+          "acceptedVariants": [],
+          "reason": "Time detail that trains number recognition in a schedule context.",
+          "tags": [
+            "number",
+            "time",
+            "schedule"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t061-t062",
+          "segmentOrder": 3,
+          "startTokenIndex": 61,
+          "endTokenIndex": 62,
+          "answer": "weekends",
+          "acceptedVariants": [],
+          "reason": "Schedule word with plural ending and listening-detail value.",
+          "tags": [
+            "schedule",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t064-t067",
+          "segmentOrder": 3,
+          "startTokenIndex": 64,
+          "endTokenIndex": 67,
+          "answer": "well catered for",
+          "acceptedVariants": [],
+          "reason": "Idiomatic phrase whose final preposition is easy to miss.",
+          "tags": [
+            "idiom",
+            "connected-speech",
+            "weak-form"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t074-t078",
+          "segmentOrder": 3,
+          "startTokenIndex": 74,
+          "endTokenIndex": 78,
+          "answer": "wide range of tuition",
+          "acceptedVariants": [],
+          "reason": "Noun phrase that carries the children's activity detail.",
+          "tags": [
+            "noun-phrase",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t080-t081",
+          "segmentOrder": 3,
+          "startTokenIndex": 80,
+          "endTokenIndex": 81,
+          "answer": "trampolining",
+          "acceptedVariants": [],
+          "reason": "Activity word with spelling and syllable-recognition value.",
+          "tags": [
+            "activity",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg003-t082-t083",
+          "segmentOrder": 3,
+          "startTokenIndex": 82,
+          "endTokenIndex": 83,
+          "answer": "yoga",
+          "acceptedVariants": [],
+          "reason": "Short activity word that contrasts with the longer activity list.",
+          "tags": [
+            "activity",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t024-t026",
+          "segmentOrder": 4,
+          "startTokenIndex": 24,
+          "endTokenIndex": 26,
+          "answer": "personal assessment",
+          "acceptedVariants": [],
+          "reason": "Process noun phrase introducing the health questionnaire sequence.",
+          "tags": [
+            "process",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t030-t032",
+          "segmentOrder": 4,
+          "startTokenIndex": 30,
+          "endTokenIndex": 32,
+          "answer": "fill in",
+          "acceptedVariants": [],
+          "reason": "Phrasal verb with weak-form boundary value before the questionnaire.",
+          "tags": [
+            "phrasal-verb",
+            "weak-form"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t033-t034",
+          "segmentOrder": 4,
+          "startTokenIndex": 33,
+          "endTokenIndex": 34,
+          "answer": "questionnaire",
+          "acceptedVariants": [],
+          "reason": "Form-completion context word with substantial spelling value.",
+          "tags": [
+            "form-completion",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t038-t040",
+          "segmentOrder": 4,
+          "startTokenIndex": 38,
+          "endTokenIndex": 40,
+          "answer": "health problems",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer phrase for question 13.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t043-t045",
+          "segmentOrder": 4,
+          "startTokenIndex": 43,
+          "endTokenIndex": 45,
+          "answer": "personal trainers",
+          "acceptedVariants": [],
+          "reason": "Role phrase with plural-ending and process-detail value.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg004-t047-t049",
+          "segmentOrder": 4,
+          "startTokenIndex": 47,
+          "endTokenIndex": 49,
+          "answer": "go through",
+          "acceptedVariants": [],
+          "reason": "Phrasal verb commonly reduced in connected speech.",
+          "tags": [
+            "phrasal-verb",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t008-t010",
+          "segmentOrder": 5,
+          "startTokenIndex": 8,
+          "endTokenIndex": 10,
+          "answer": "safety rules",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer phrase for question 14.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t021-t023",
+          "segmentOrder": 5,
+          "startTokenIndex": 21,
+          "endTokenIndex": 23,
+          "answer": "exercise session",
+          "acceptedVariants": [],
+          "reason": "Process-detail noun phrase with word-boundary value.",
+          "tags": [
+            "process",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t024-t026",
+          "segmentOrder": 5,
+          "startTokenIndex": 24,
+          "endTokenIndex": 26,
+          "answer": "personal trainer",
+          "acceptedVariants": [],
+          "reason": "Role phrase central to the safety explanation.",
+          "tags": [
+            "process",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t050-t052",
+          "segmentOrder": 5,
+          "startTokenIndex": 50,
+          "endTokenIndex": 52,
+          "answer": "sports injuries",
+          "acceptedVariants": [],
+          "reason": "Safety-outcome noun phrase with plural-ending value.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t057-t060",
+          "segmentOrder": 5,
+          "startTokenIndex": 57,
+          "endTokenIndex": 60,
+          "answer": "looking after yourself",
+          "acceptedVariants": [],
+          "reason": "Connected-speech phrase that contrasts general self-care with weights.",
+          "tags": [
+            "connected-speech",
+            "phrase-boundary"
+          ]
+        },
+        {
+          "id": "il-s02-seg005-t062-t064",
+          "segmentOrder": 5,
+          "startTokenIndex": 62,
+          "endTokenIndex": 64,
+          "answer": "lifting weights",
+          "acceptedVariants": [],
+          "reason": "Exercise collocation with final-consonant and plural recognition value.",
+          "tags": [
+            "collocation",
+            "activity",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg006-t010-t012",
+          "segmentOrder": 6,
+          "startTokenIndex": 10,
+          "endTokenIndex": 12,
+          "answer": "draw up",
+          "acceptedVariants": [],
+          "reason": "Phrasal verb that cues the following official answer.",
+          "tags": [
+            "phrasal-verb",
+            "process"
+          ]
+        },
+        {
+          "id": "il-s02-seg006-t013-t014",
+          "segmentOrder": 6,
+          "startTokenIndex": 13,
+          "endTokenIndex": 14,
+          "answer": "plan",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer for question 15.",
+          "tags": [
+            "answer-bearing",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s02-seg006-t023-t025",
+          "segmentOrder": 6,
+          "startTokenIndex": 23,
+          "endTokenIndex": 25,
+          "answer": "six-week period",
+          "acceptedVariants": [],
+          "reason": "Hyphenated time phrase with number and schedule value.",
+          "tags": [
+            "number",
+            "hyphenated",
+            "schedule"
+          ]
+        },
+        {
+          "id": "il-s02-seg006-t035-t037",
+          "segmentOrder": 6,
+          "startTokenIndex": 35,
+          "endTokenIndex": 37,
+          "answer": "six weeks",
+          "acceptedVariants": [],
+          "reason": "Review-timing phrase that reinforces number recognition.",
+          "tags": [
+            "number",
+            "time",
+            "schedule"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t018-t019",
+          "segmentOrder": 7,
+          "startTokenIndex": 18,
+          "endTokenIndex": 19,
+          "answer": "joining",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer for question 16.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t021-t022",
+          "segmentOrder": 7,
+          "startTokenIndex": 21,
+          "endTokenIndex": 22,
+          "answer": "£90",
+          "acceptedVariants": [],
+          "reason": "Currency amount tied to the joining fee.",
+          "tags": [
+            "currency",
+            "number",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t029-t032",
+          "segmentOrder": 7,
+          "startTokenIndex": 29,
+          "endTokenIndex": 32,
+          "answer": "monthly membership fees",
+          "acceptedVariants": [],
+          "reason": "Fee-category phrase with membership-task value.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t032-t034",
+          "segmentOrder": 7,
+          "startTokenIndex": 32,
+          "endTokenIndex": 34,
+          "answer": "Gold membership",
+          "acceptedVariants": [],
+          "reason": "Membership type with capitalization and category value.",
+          "tags": [
+            "membership",
+            "proper-noun"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t037-t039",
+          "segmentOrder": 7,
+          "startTokenIndex": 37,
+          "endTokenIndex": 39,
+          "answer": "free entry",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer phrase for question 17.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t041-t043",
+          "segmentOrder": 7,
+          "startTokenIndex": 41,
+          "endTokenIndex": 43,
+          "answer": "LP Clubs",
+          "acceptedVariants": [],
+          "reason": "Proper noun phrase tied to Gold membership access.",
+          "tags": [
+            "proper-noun",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t050-t054",
+          "segmentOrder": 7,
+          "startTokenIndex": 50,
+          "endTokenIndex": 54,
+          "answer": "major cities and towns",
+          "acceptedVariants": [],
+          "reason": "Location-distribution phrase explaining the membership advantage.",
+          "tags": [
+            "noun-phrase",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t066-t069",
+          "segmentOrder": 7,
+          "startTokenIndex": 66,
+          "endTokenIndex": 69,
+          "answer": "Individual gold membership",
+          "acceptedVariants": [],
+          "reason": "Membership category phrase that cues the following fee.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t070-t071",
+          "segmentOrder": 7,
+          "startTokenIndex": 70,
+          "endTokenIndex": 71,
+          "answer": "£50",
+          "acceptedVariants": [],
+          "reason": "Currency amount for individual Gold membership.",
+          "tags": [
+            "currency",
+            "number",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t074-t076",
+          "segmentOrder": 7,
+          "startTokenIndex": 74,
+          "endTokenIndex": 76,
+          "answer": "joint membership",
+          "acceptedVariants": [],
+          "reason": "Membership category phrase contrasted with individual membership.",
+          "tags": [
+            "membership",
+            "noun-phrase",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t080-t081",
+          "segmentOrder": 7,
+          "startTokenIndex": 80,
+          "endTokenIndex": 81,
+          "answer": "partner",
+          "acceptedVariants": [],
+          "reason": "Relationship term that clarifies joint membership eligibility.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg007-t083-t084",
+          "segmentOrder": 7,
+          "startTokenIndex": 83,
+          "endTokenIndex": 84,
+          "answer": "£75",
+          "acceptedVariants": [],
+          "reason": "Currency amount for joint membership.",
+          "tags": [
+            "currency",
+            "number",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t000-t002",
+          "segmentOrder": 8,
+          "startTokenIndex": 0,
+          "endTokenIndex": 2,
+          "answer": "Premier membership",
+          "acceptedVariants": [],
+          "reason": "Membership category phrase that introduces the second fee plan.",
+          "tags": [
+            "membership",
+            "proper-noun"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t004-t006",
+          "segmentOrder": 8,
+          "startTokenIndex": 4,
+          "endTokenIndex": 6,
+          "answer": "professional people",
+          "acceptedVariants": [],
+          "reason": "Eligibility phrase for Premier membership.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t007-t009",
+          "segmentOrder": 8,
+          "startTokenIndex": 7,
+          "endTokenIndex": 9,
+          "answer": "work commitments",
+          "acceptedVariants": [],
+          "reason": "Reason phrase explaining why Premier members need flexible access.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t025-t027",
+          "segmentOrder": 8,
+          "startTokenIndex": 25,
+          "endTokenIndex": 27,
+          "answer": "booking preference",
+          "acceptedVariants": [],
+          "reason": "Service phrase that cues the peak-time answer.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t028-t030",
+          "segmentOrder": 8,
+          "startTokenIndex": 28,
+          "endTokenIndex": 30,
+          "answer": "Premier members",
+          "acceptedVariants": [],
+          "reason": "Membership label with proper-noun and plural-ending value.",
+          "tags": [
+            "membership",
+            "proper-noun",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t031-t032",
+          "segmentOrder": 8,
+          "startTokenIndex": 31,
+          "endTokenIndex": 32,
+          "answer": "peak",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer for question 18.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t041-t044",
+          "segmentOrder": 8,
+          "startTokenIndex": 41,
+          "endTokenIndex": 44,
+          "answer": "book the sessions",
+          "acceptedVariants": [],
+          "reason": "Service phrase with connected-speech and task-detail value.",
+          "tags": [
+            "membership",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t049-t051",
+          "segmentOrder": 8,
+          "startTokenIndex": 49,
+          "endTokenIndex": 51,
+          "answer": "Reciprocal arrangements",
+          "acceptedVariants": [],
+          "reason": "Formal membership phrase with substantial spelling value.",
+          "tags": [
+            "membership",
+            "spelling-risk",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t053-t055",
+          "segmentOrder": 8,
+          "startTokenIndex": 53,
+          "endTokenIndex": 55,
+          "answer": "LP Clubs",
+          "acceptedVariants": [],
+          "reason": "Proper noun phrase tied to reciprocal access.",
+          "tags": [
+            "proper-noun",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t064-t066",
+          "segmentOrder": 8,
+          "startTokenIndex": 64,
+          "endTokenIndex": 66,
+          "answer": "individuals only",
+          "acceptedVariants": [],
+          "reason": "Eligibility restriction phrase contrasting Premier with joint plans.",
+          "tags": [
+            "membership",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t073-t074",
+          "segmentOrder": 8,
+          "startTokenIndex": 73,
+          "endTokenIndex": 74,
+          "answer": "guests",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer for question 19.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t074-t076",
+          "segmentOrder": 8,
+          "startTokenIndex": 74,
+          "endTokenIndex": 76,
+          "answer": "every month",
+          "acceptedVariants": [],
+          "reason": "Frequency phrase that clarifies the guest-pass benefit.",
+          "tags": [
+            "membership",
+            "time"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t077-t079",
+          "segmentOrder": 8,
+          "startTokenIndex": 77,
+          "endTokenIndex": 79,
+          "answer": "monthly fee",
+          "acceptedVariants": [],
+          "reason": "Fee label that cues the Premier price.",
+          "tags": [
+            "membership",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg008-t080-t081",
+          "segmentOrder": 8,
+          "startTokenIndex": 80,
+          "endTokenIndex": 81,
+          "answer": "£65",
+          "acceptedVariants": [],
+          "reason": "Currency amount for Premier membership.",
+          "tags": [
+            "currency",
+            "number",
+            "membership"
+          ]
+        },
+        {
+          "id": "il-s02-seg009-t006-t010",
+          "segmentOrder": 9,
+          "startTokenIndex": 6,
+          "endTokenIndex": 10,
+          "answer": "special clothes or equipment",
+          "acceptedVariants": [],
+          "reason": "Rejected requirement phrase that helps distinguish what visitors need.",
+          "tags": [
+            "distractor-contrast",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg009-t017-t020",
+          "segmentOrder": 9,
+          "startTokenIndex": 17,
+          "endTokenIndex": 20,
+          "answer": "robes and hairdryers",
+          "acceptedVariants": [],
+          "reason": "Provided-items phrase with spelling value for hairdryers.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk",
+            "facility"
+          ]
+        },
+        {
+          "id": "il-s02-seg009-t022-t024",
+          "segmentOrder": 9,
+          "startTokenIndex": 22,
+          "endTokenIndex": 24,
+          "answer": "changing rooms",
+          "acceptedVariants": [],
+          "reason": "Facility noun phrase that locates the provided items.",
+          "tags": [
+            "facility",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s02-seg009-t031-t033",
+          "segmentOrder": 9,
+          "startTokenIndex": 31,
+          "endTokenIndex": 33,
+          "answer": "photo card",
+          "acceptedVariants": [],
+          "reason": "Official form-completion answer phrase for question 20.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "noun-phrase"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "blanks": [
+        {
+          "id": "il-s03-seg001-t004-t006",
+          "segmentOrder": 1,
+          "startTokenIndex": 4,
+          "endTokenIndex": 6,
+          "answer": "John Wishart",
+          "acceptedVariants": [],
+          "reason": "Proper noun introduction with surname spelling value in academic dialogue.",
+          "tags": [
+            "proper-noun",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg001-t013-t016",
+          "segmentOrder": 1,
+          "startTokenIndex": 13,
+          "endTokenIndex": 16,
+          "answer": "Global Design Competition",
+          "acceptedVariants": [],
+          "reason": "Named competition title with capitalization and multiword boundary value.",
+          "tags": [
+            "proper-noun",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg003-t003-t006",
+          "segmentOrder": 3,
+          "startTokenIndex": 3,
+          "endTokenIndex": 6,
+          "answer": "international design competition",
+          "acceptedVariants": [],
+          "reason": "Task-setting noun phrase that anchors the competition context for Section 3.",
+          "tags": [
+            "noun-phrase",
+            "task-context"
+          ]
+        },
+        {
+          "id": "il-s03-seg003-t018-t022",
+          "segmentOrder": 3,
+          "startTokenIndex": 18,
+          "endTokenIndex": 22,
+          "answer": "typical domestic kitchen appliance",
+          "acceptedVariants": [],
+          "reason": "Question-context noun phrase with adjective stack and appliance vocabulary.",
+          "tags": [
+            "answer-bearing",
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg005-t006-t009",
+          "segmentOrder": 5,
+          "startTokenIndex": 6,
+          "endTokenIndex": 9,
+          "answer": "last year's competition",
+          "acceptedVariants": [],
+          "reason": "Contrast cue showing the energy-saving focus belongs to the previous year.",
+          "tags": [
+            "distractor-contrast",
+            "signpost"
+          ]
+        },
+        {
+          "id": "il-s03-seg005-t017-t022",
+          "segmentOrder": 5,
+          "startTokenIndex": 17,
+          "endTokenIndex": 22,
+          "answer": "innovative approach to existing technology",
+          "acceptedVariants": [],
+          "reason": "Correct Q21 evidence paraphrasing a new use for current technology.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg005-t028-t033",
+          "segmentOrder": 5,
+          "startTokenIndex": 28,
+          "endTokenIndex": 33,
+          "answer": "hasn't been thought of before",
+          "acceptedVariants": [],
+          "reason": "Connected-speech phrase that confirms novelty rather than simple energy efficiency.",
+          "tags": [
+            "answer-bearing",
+            "weak-form",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s03-seg007-t006-t007",
+          "segmentOrder": 7,
+          "startTokenIndex": 6,
+          "endTokenIndex": 7,
+          "answer": "dishwasher",
+          "acceptedVariants": [],
+          "reason": "Central appliance noun with spelling value and repeated task relevance.",
+          "tags": [
+            "task-context",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg009-t003-t006",
+          "segmentOrder": 9,
+          "startTokenIndex": 3,
+          "endTokenIndex": 6,
+          "answer": "everyday kitchen appliance",
+          "acceptedVariants": [],
+          "reason": "Product-category phrase contrasting ordinary use with the redesigned item.",
+          "tags": [
+            "noun-phrase",
+            "task-context"
+          ]
+        },
+        {
+          "id": "il-s03-seg009-t008-t010",
+          "segmentOrder": 9,
+          "startTokenIndex": 8,
+          "endTokenIndex": 10,
+          "answer": "Australian houses",
+          "acceptedVariants": [],
+          "reason": "Location-linked noun phrase with proper adjective recognition value.",
+          "tags": [
+            "proper-noun",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg009-t013-t018",
+          "segmentOrder": 9,
+          "startTokenIndex": 13,
+          "endTokenIndex": 18,
+          "answer": "pretty boring and almost identical",
+          "acceptedVariants": [],
+          "reason": "Compact negative description explaining why visual appeal matters for Q22.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s03-seg009-t029-t033",
+          "segmentOrder": 9,
+          "startTokenIndex": 29,
+          "endTokenIndex": 33,
+          "answer": "pay a little extra",
+          "acceptedVariants": [],
+          "reason": "Distractor phrase that sounds economic but supports paying for a better-looking design.",
+          "tags": [
+            "distractor-contrast",
+            "weak-form",
+            "phrase-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg009-t036-t038",
+          "segmentOrder": 9,
+          "startTokenIndex": 36,
+          "endTokenIndex": 38,
+          "answer": "looks different",
+          "acceptedVariants": [],
+          "reason": "Correct Q22 evidence for the design being more appealing.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice"
+          ]
+        },
+        {
+          "id": "il-s03-seg010-t010-t012",
+          "segmentOrder": 10,
+          "startTokenIndex": 10,
+          "endTokenIndex": 12,
+          "answer": "the Rockpool",
+          "acceptedVariants": [],
+          "reason": "Design name with proper-noun and spelling recognition value.",
+          "tags": [
+            "proper-noun",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg011-t006-t008",
+          "segmentOrder": 11,
+          "startTokenIndex": 6,
+          "endTokenIndex": 8,
+          "answer": "rock pools",
+          "acceptedVariants": [],
+          "reason": "Compound noun explaining the design name and word-boundary value.",
+          "tags": [
+            "compound",
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg011-t016-t019",
+          "segmentOrder": 11,
+          "startTokenIndex": 16,
+          "endTokenIndex": 19,
+          "answer": "made of glass",
+          "acceptedVariants": [],
+          "reason": "Material phrase with weak-form boundary between made, of, and glass.",
+          "tags": [
+            "noun-phrase",
+            "weak-form",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg012-t003-t007",
+          "segmentOrder": 12,
+          "startTokenIndex": 3,
+          "endTokenIndex": 7,
+          "answer": "stone at the bottom",
+          "acceptedVariants": [],
+          "reason": "Object-location phrase that sets up the Q23 stone-function contrast.",
+          "tags": [
+            "task-context",
+            "noun-phrase",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s03-seg012-t009-t012",
+          "segmentOrder": 12,
+          "startTokenIndex": 9,
+          "endTokenIndex": 12,
+          "answer": "just for decoration",
+          "acceptedVariants": [],
+          "reason": "Distractor phrase rejected by the next turn for Q23.",
+          "tags": [
+            "distractor-contrast",
+            "multiple-choice"
+          ]
+        },
+        {
+          "id": "il-s03-seg013-t008-t011",
+          "segmentOrder": 13,
+          "startTokenIndex": 8,
+          "endTokenIndex": 11,
+          "answer": "pushing a button",
+          "acceptedVariants": [],
+          "reason": "Action phrase contrasted with the actual stone-turning control.",
+          "tags": [
+            "distractor-contrast",
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg013-t012-t015",
+          "segmentOrder": 13,
+          "startTokenIndex": 12,
+          "endTokenIndex": 15,
+          "answer": "turn the stone",
+          "acceptedVariants": [],
+          "reason": "Correct Q23 evidence meaning the stone switches the dishwasher on.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice"
+          ]
+        },
+        {
+          "id": "il-s03-seg014-t005-t007",
+          "segmentOrder": 14,
+          "startTokenIndex": 5,
+          "endTokenIndex": 7,
+          "answer": "novel way",
+          "acceptedVariants": [],
+          "reason": "Compact evaluative phrase signaling the unusual control mechanism.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg014-t008-t011",
+          "segmentOrder": 14,
+          "startTokenIndex": 8,
+          "endTokenIndex": 11,
+          "answer": "starting the dishwasher",
+          "acceptedVariants": [],
+          "reason": "Paraphrase of switching it on, reinforcing the Q23 answer.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg017-t009-t011",
+          "segmentOrder": 17,
+          "startTokenIndex": 9,
+          "endTokenIndex": 11,
+          "answer": "carbon dioxide",
+          "acceptedVariants": [],
+          "reason": "Central technical compound with spelling and word-boundary value.",
+          "tags": [
+            "compound",
+            "technical-term",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg018-t003-t006",
+          "segmentOrder": 18,
+          "startTokenIndex": 3,
+          "endTokenIndex": 6,
+          "answer": "water and detergent",
+          "acceptedVariants": [],
+          "reason": "Contrast phrase showing what the carbon-dioxide system replaces.",
+          "tags": [
+            "distractor-contrast",
+            "technical-term",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg019-t004-t005",
+          "segmentOrder": 19,
+          "startTokenIndex": 4,
+          "endTokenIndex": 5,
+          "answer": "pressurise",
+          "acceptedVariants": [],
+          "reason": "Spelling-risk process verb in British spelling for the technical explanation.",
+          "tags": [
+            "technical-term",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg019-t011-t014",
+          "segmentOrder": 19,
+          "startTokenIndex": 11,
+          "endTokenIndex": 14,
+          "answer": "becomes a liquid",
+          "acceptedVariants": [],
+          "reason": "State-change phrase needed to follow the cleaning process.",
+          "tags": [
+            "technical-term",
+            "process",
+            "weak-form"
+          ]
+        },
+        {
+          "id": "il-s03-seg019-t018-t022",
+          "segmentOrder": 19,
+          "startTokenIndex": 18,
+          "endTokenIndex": 22,
+          "answer": "released into the dishwasher",
+          "acceptedVariants": [],
+          "reason": "Process phrase with connected speech and appliance vocabulary.",
+          "tags": [
+            "process",
+            "technical-term",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg019-t024-t027",
+          "segmentOrder": 19,
+          "startTokenIndex": 24,
+          "endTokenIndex": 27,
+          "answer": "cleans the dishes",
+          "acceptedVariants": [],
+          "reason": "Core process action phrase with useful verb-object boundary.",
+          "tags": [
+            "process",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg020-t009-t012",
+          "segmentOrder": 20,
+          "startTokenIndex": 9,
+          "endTokenIndex": 12,
+          "answer": "do away with",
+          "acceptedVariants": [],
+          "reason": "Phrasal verb with weak-form value in the detergent contrast.",
+          "tags": [
+            "phrasal-verb",
+            "weak-form",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s03-seg020-t015-t017",
+          "segmentOrder": 20,
+          "startTokenIndex": 15,
+          "endTokenIndex": 17,
+          "answer": "strong detergents",
+          "acceptedVariants": [],
+          "reason": "Technical cleaning noun phrase with spelling value.",
+          "tags": [
+            "technical-term",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t007-t010",
+          "segmentOrder": 21,
+          "startTokenIndex": 7,
+          "endTokenIndex": 10,
+          "answer": "liquid carbon dioxide",
+          "acceptedVariants": [],
+          "reason": "Technical noun phrase central to Q24's state-change explanation.",
+          "tags": [
+            "answer-bearing",
+            "technical-term",
+            "compound"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t012-t014",
+          "segmentOrder": 21,
+          "startTokenIndex": 12,
+          "endTokenIndex": 14,
+          "answer": "waste materials",
+          "acceptedVariants": [],
+          "reason": "Process noun phrase with plural ending and word-boundary value.",
+          "tags": [
+            "technical-term",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t021-t023",
+          "segmentOrder": 21,
+          "startTokenIndex": 21,
+          "endTokenIndex": 23,
+          "answer": "holding chamber",
+          "acceptedVariants": [],
+          "reason": "Equipment noun phrase with compound and spelling value.",
+          "tags": [
+            "technical-term",
+            "compound",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t028-t029",
+          "segmentOrder": 21,
+          "startTokenIndex": 28,
+          "endTokenIndex": 29,
+          "answer": "depressurised",
+          "acceptedVariants": [],
+          "reason": "High-risk technical verb whose prefix and British spelling matter.",
+          "tags": [
+            "technical-term",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t032-t036",
+          "segmentOrder": 21,
+          "startTokenIndex": 32,
+          "endTokenIndex": 36,
+          "answer": "reverts to a gas",
+          "acceptedVariants": [],
+          "reason": "Correct Q24 evidence that the liquid changes back to gas.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "technical-term"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t038-t041",
+          "segmentOrder": 21,
+          "startTokenIndex": 38,
+          "endTokenIndex": 41,
+          "answer": "oil and grease",
+          "acceptedVariants": [],
+          "reason": "Waste-material phrase with easily confused vowel sounds.",
+          "tags": [
+            "technical-term",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg021-t048-t050",
+          "segmentOrder": 21,
+          "startTokenIndex": 48,
+          "endTokenIndex": 50,
+          "answer": "waste system",
+          "acceptedVariants": [],
+          "reason": "Process destination compound with word-boundary value.",
+          "tags": [
+            "technical-term",
+            "compound",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg023-t004-t006",
+          "segmentOrder": 23,
+          "startTokenIndex": 4,
+          "endTokenIndex": 6,
+          "answer": "real savings",
+          "acceptedVariants": [],
+          "reason": "Signpost phrase introducing the Q25 reuse benefit.",
+          "tags": [
+            "answer-bearing",
+            "signpost",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg023-t012-t017",
+          "segmentOrder": 23,
+          "startTokenIndex": 12,
+          "endTokenIndex": 17,
+          "answer": "sent back to the cylinder",
+          "acceptedVariants": [],
+          "reason": "Correct Q25 evidence that the carbon dioxide is collected for reuse.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "technical-term"
+          ]
+        },
+        {
+          "id": "il-s03-seg023-t020-t024",
+          "segmentOrder": 23,
+          "startTokenIndex": 20,
+          "endTokenIndex": 24,
+          "answer": "used again and again",
+          "acceptedVariants": [],
+          "reason": "Repetition phrase confirming the reuse answer for Q25.",
+          "tags": [
+            "answer-bearing",
+            "multiple-choice",
+            "weak-form"
+          ]
+        },
+        {
+          "id": "il-s03-seg028-t008-t010",
+          "segmentOrder": 28,
+          "startTokenIndex": 8,
+          "endTokenIndex": 10,
+          "answer": "final stage",
+          "acceptedVariants": [],
+          "reason": "Competition-stage phrase setting up the presentation task.",
+          "tags": [
+            "task-context",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg028-t024-t025",
+          "segmentOrder": 28,
+          "startTokenIndex": 24,
+          "endTokenIndex": 25,
+          "answer": "presentation",
+          "acceptedVariants": [],
+          "reason": "Exact Q26 blank answer with stress and spelling value.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg030-t003-t005",
+          "segmentOrder": 30,
+          "startTokenIndex": 3,
+          "endTokenIndex": 5,
+          "answer": "detailed drawings",
+          "acceptedVariants": [],
+          "reason": "Prepared-materials phrase contrasted with the missing model.",
+          "tags": [
+            "distractor-contrast",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg030-t016-t018",
+          "segmentOrder": 30,
+          "startTokenIndex": 16,
+          "endTokenIndex": 18,
+          "answer": "500-word paper",
+          "acceptedVariants": [],
+          "reason": "Hyphenated number phrase with strong IELTS spelling and boundary value.",
+          "tags": [
+            "number",
+            "compound",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg031-t017-t018",
+          "segmentOrder": 31,
+          "startTokenIndex": 17,
+          "endTokenIndex": 18,
+          "answer": "model",
+          "acceptedVariants": [],
+          "reason": "Exact Q27 blank answer for what John needs to make.",
+          "tags": [
+            "answer-bearing",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s03-seg033-t003-t005",
+          "segmentOrder": 33,
+          "startTokenIndex": 3,
+          "endTokenIndex": 5,
+          "answer": "main difficulty",
+          "acceptedVariants": [],
+          "reason": "Question cue phrase that frames Q28's problem as a specific noun.",
+          "tags": [
+            "signpost",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s03-seg033-t013-t014",
+          "segmentOrder": 33,
+          "startTokenIndex": 13,
+          "endTokenIndex": 14,
+          "answer": "materials",
+          "acceptedVariants": [],
+          "reason": "Exact Q28 blank answer with plural-ending recognition value.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg034-t010-t012",
+          "segmentOrder": 34,
+          "startTokenIndex": 10,
+          "endTokenIndex": 12,
+          "answer": "top quality",
+          "acceptedVariants": [],
+          "reason": "Reason phrase explaining why suitable materials are expensive.",
+          "tags": [
+            "distractor-contrast",
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg034-t014-t016",
+          "segmentOrder": 34,
+          "startTokenIndex": 14,
+          "endTokenIndex": 16,
+          "answer": "very expensive",
+          "acceptedVariants": [],
+          "reason": "Cost phrase confirming the materials difficulty behind Q28.",
+          "tags": [
+            "answer-bearing",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s03-seg035-t012-t015",
+          "segmentOrder": 35,
+          "startTokenIndex": 12,
+          "endTokenIndex": 15,
+          "answer": "lift our profile",
+          "acceptedVariants": [],
+          "reason": "Idiomatic phrase with connected-speech value in the professor's justification.",
+          "tags": [
+            "idiom",
+            "weak-form",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg035-t025-t026",
+          "segmentOrder": 35,
+          "startTokenIndex": 25,
+          "endTokenIndex": 26,
+          "answer": "grant",
+          "acceptedVariants": [],
+          "reason": "Exact Q29 blank answer with short-word recognition value.",
+          "tags": [
+            "answer-bearing",
+            "form-completion"
+          ]
+        },
+        {
+          "id": "il-s03-seg035-t033-t035",
+          "segmentOrder": 35,
+          "startTokenIndex": 33,
+          "endTokenIndex": 35,
+          "answer": "application forms",
+          "acceptedVariants": [],
+          "reason": "Administrative noun phrase linked to getting the grant.",
+          "tags": [
+            "noun-phrase",
+            "form-completion",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s03-seg037-t012-t014",
+          "segmentOrder": 37,
+          "startTokenIndex": 12,
+          "endTokenIndex": 14,
+          "answer": "global competition",
+          "acceptedVariants": [],
+          "reason": "Competition-context noun phrase with proper scope and boundary value.",
+          "tags": [
+            "noun-phrase",
+            "task-context"
+          ]
+        },
+        {
+          "id": "il-s03-seg037-t023-t024",
+          "segmentOrder": 37,
+          "startTokenIndex": 23,
+          "endTokenIndex": 24,
+          "answer": "technical",
+          "acceptedVariants": [],
+          "reason": "Exact Q30 blank answer and spelling-risk adjective.",
+          "tags": [
+            "answer-bearing",
+            "form-completion",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s03-seg037-t028-t031",
+          "segmentOrder": 37,
+          "startTokenIndex": 28,
+          "endTokenIndex": 31,
+          "answer": "accurate and thorough",
+          "acceptedVariants": [],
+          "reason": "Evaluation phrase confirming what the technical details must be.",
+          "tags": [
+            "answer-bearing",
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "blanks": [
+        {
+          "id": "il-s04-seg001-t006-t009",
+          "segmentOrder": 1,
+          "startTokenIndex": 6,
+          "endTokenIndex": 9,
+          "answer": "ecology and conservation",
+          "acceptedVariants": [],
+          "reason": "Topic phrase with spelling value for an academic environmental monologue.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t014-t016",
+          "segmentOrder": 1,
+          "startTokenIndex": 14,
+          "endTokenIndex": 16,
+          "answer": "particularly endangered",
+          "acceptedVariants": [],
+          "reason": "Adjective phrase with reduced-speech and spelling value around the species status.",
+          "tags": [
+            "connected-speech",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t019-t022",
+          "segmentOrder": 1,
+          "startTokenIndex": 19,
+          "endTokenIndex": 22,
+          "answer": "black bear family",
+          "acceptedVariants": [],
+          "reason": "Key noun phrase that identifies the animal category in the introduction.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t022-t025",
+          "segmentOrder": 1,
+          "startTokenIndex": 22,
+          "endTokenIndex": 25,
+          "answer": "One in ten",
+          "acceptedVariants": [],
+          "reason": "Number phrase with IELTS note-completion value.",
+          "tags": [
+            "number",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t032-t034",
+          "segmentOrder": 1,
+          "startTokenIndex": 32,
+          "endTokenIndex": 34,
+          "answer": "white coat",
+          "acceptedVariants": [],
+          "reason": "Compact noun phrase that explains the visual feature of the species.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t041-t042",
+          "segmentOrder": 1,
+          "startTokenIndex": 41,
+          "endTokenIndex": 42,
+          "answer": "gene",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q31 with spelling discrimination value.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t053-t055",
+          "segmentOrder": 1,
+          "startTokenIndex": 53,
+          "endTokenIndex": 55,
+          "answer": "spirit bear",
+          "acceptedVariants": [],
+          "reason": "Named animal phrase with word-boundary value.",
+          "tags": [
+            "proper-noun",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t059-t060",
+          "segmentOrder": 1,
+          "startTokenIndex": 59,
+          "endTokenIndex": 60,
+          "answer": "legends",
+          "acceptedVariants": [],
+          "reason": "Spelling-risk vocabulary item in the cultural explanation.",
+          "tags": [
+            "spelling-risk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t064-t066",
+          "segmentOrder": 1,
+          "startTokenIndex": 64,
+          "endTokenIndex": 66,
+          "answer": "snowy fur",
+          "acceptedVariants": [],
+          "reason": "Descriptive noun phrase with clear listening and spelling value.",
+          "tags": [
+            "noun-phrase",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t071-t072",
+          "segmentOrder": 1,
+          "startTokenIndex": 71,
+          "endTokenIndex": 72,
+          "answer": "power",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q32 in a short high-value span.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t079-t081",
+          "segmentOrder": 1,
+          "startTokenIndex": 79,
+          "endTokenIndex": 81,
+          "answer": "highly regarded",
+          "acceptedVariants": [],
+          "reason": "Lexical chunk with reduced-speech value in the explanation of local beliefs.",
+          "tags": [
+            "lexical-chunk",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t087-t090",
+          "segmentOrder": 1,
+          "startTokenIndex": 87,
+          "endTokenIndex": 90,
+          "answer": "do not speak",
+          "acceptedVariants": [],
+          "reason": "Negative verb phrase that carries the protective taboo detail.",
+          "tags": [
+            "connected-speech",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s04-seg001-t104-t105",
+          "segmentOrder": 1,
+          "startTokenIndex": 104,
+          "endTokenIndex": 105,
+          "answer": "strangers",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing plural noun for q33 with final-s discrimination value.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t013-t015",
+          "segmentOrder": 2,
+          "startTokenIndex": 13,
+          "endTokenIndex": 15,
+          "answer": "old-growth rainforest",
+          "acceptedVariants": [],
+          "reason": "Hyphenated compound phrase with strong word-boundary and spelling value.",
+          "tags": [
+            "compound",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t026-t028",
+          "segmentOrder": 2,
+          "startTokenIndex": 26,
+          "endTokenIndex": 28,
+          "answer": "centuries-old trees",
+          "acceptedVariants": [],
+          "reason": "Hyphenated age phrase that trains compound recognition.",
+          "tags": [
+            "compound",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t040-t043",
+          "segmentOrder": 2,
+          "startTokenIndex": 40,
+          "endTokenIndex": 43,
+          "answer": "extremely long roots",
+          "acceptedVariants": [],
+          "reason": "Descriptive noun phrase that leads into the erosion answer.",
+          "tags": [
+            "noun-phrase",
+            "answer-context"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t046-t047",
+          "segmentOrder": 2,
+          "startTokenIndex": 46,
+          "endTokenIndex": 47,
+          "answer": "erosion",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q34 with strong spelling value.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t056-t058",
+          "segmentOrder": 2,
+          "startTokenIndex": 56,
+          "endTokenIndex": 58,
+          "answer": "fish streams",
+          "acceptedVariants": [],
+          "reason": "Noun phrase with word-boundary value in the habitat explanation.",
+          "tags": [
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t060-t062",
+          "segmentOrder": 2,
+          "startTokenIndex": 60,
+          "endTokenIndex": 62,
+          "answer": "banks intact",
+          "acceptedVariants": [],
+          "reason": "Compressed phrase with connected-speech value around stream protection.",
+          "tags": [
+            "connected-speech",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t070-t071",
+          "segmentOrder": 2,
+          "startTokenIndex": 70,
+          "endTokenIndex": 71,
+          "answer": "salmon",
+          "acceptedVariants": [],
+          "reason": "Species noun with spelling and topic value in the food-source detail.",
+          "tags": [
+            "spelling-risk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t075-t078",
+          "segmentOrder": 2,
+          "startTokenIndex": 75,
+          "endTokenIndex": 78,
+          "answer": "main food source",
+          "acceptedVariants": [],
+          "reason": "IELTS-style noun phrase that captures a central habitat relationship.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t096-t099",
+          "segmentOrder": 2,
+          "startTokenIndex": 96,
+          "endTokenIndex": 99,
+          "answer": "skin and bones",
+          "acceptedVariants": [],
+          "reason": "Coordinated noun phrase with clear word-boundary value.",
+          "tags": [
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t104-t106",
+          "segmentOrder": 2,
+          "startTokenIndex": 104,
+          "endTokenIndex": 106,
+          "answer": "forest floor",
+          "acceptedVariants": [],
+          "reason": "Compact environmental noun phrase with repeated-f sound discrimination.",
+          "tags": [
+            "noun-phrase",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t108-t110",
+          "segmentOrder": 2,
+          "startTokenIndex": 108,
+          "endTokenIndex": 110,
+          "answer": "vital nutrients",
+          "acceptedVariants": [],
+          "reason": "Academic noun phrase with spelling and stress-pattern value.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg002-t112-t114",
+          "segmentOrder": 2,
+          "startTokenIndex": 112,
+          "endTokenIndex": 114,
+          "answer": "lush vegetation",
+          "acceptedVariants": [],
+          "reason": "Environmental phrase with spelling-risk vocabulary.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg003-t012-t014",
+          "segmentOrder": 3,
+          "startTokenIndex": 12,
+          "endTokenIndex": 14,
+          "answer": "British Columbia",
+          "acceptedVariants": [],
+          "reason": "Proper place name with capitalization and word-boundary value.",
+          "tags": [
+            "proper-noun",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg003-t017-t018",
+          "segmentOrder": 3,
+          "startTokenIndex": 17,
+          "endTokenIndex": 18,
+          "answer": "islands",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing plural noun for q35.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg003-t030-t034",
+          "segmentOrder": 3,
+          "startTokenIndex": 30,
+          "endTokenIndex": 34,
+          "answer": "less than two hundred",
+          "acceptedVariants": [],
+          "reason": "Quantity phrase with number-listening value.",
+          "tags": [
+            "number",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg003-t053-t055",
+          "segmentOrder": 3,
+          "startTokenIndex": 53,
+          "endTokenIndex": 55,
+          "answer": "delicate balance",
+          "acceptedVariants": [],
+          "reason": "Academic collocation that carries the conservation concept.",
+          "tags": [
+            "lexical-chunk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg003-t063-t064",
+          "segmentOrder": 3,
+          "startTokenIndex": 63,
+          "endTokenIndex": 64,
+          "answer": "ecosystem",
+          "acceptedVariants": [],
+          "reason": "Key technical vocabulary with spelling and stress value.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t001-t003",
+          "segmentOrder": 4,
+          "startTokenIndex": 1,
+          "endTokenIndex": 3,
+          "answer": "greatest threat",
+          "acceptedVariants": [],
+          "reason": "Signposting noun phrase that introduces the problem focus.",
+          "tags": [
+            "signpost",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t009-t013",
+          "segmentOrder": 4,
+          "startTokenIndex": 9,
+          "endTokenIndex": 13,
+          "answer": "loss of its habitat",
+          "acceptedVariants": [],
+          "reason": "Core threat phrase with weak-form and word-boundary value.",
+          "tags": [
+            "noun-phrase",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t016-t018",
+          "segmentOrder": 4,
+          "startTokenIndex": 16,
+          "endTokenIndex": 18,
+          "answer": "logging companies",
+          "acceptedVariants": [],
+          "reason": "Problem-source noun phrase with spelling and topic value.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t026-t030",
+          "segmentOrder": 4,
+          "startTokenIndex": 26,
+          "endTokenIndex": 30,
+          "answer": "large number of trees",
+          "acceptedVariants": [],
+          "reason": "Quantity noun phrase that trains connected-speech recognition.",
+          "tags": [
+            "number",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t035-t036",
+          "segmentOrder": 4,
+          "startTokenIndex": 35,
+          "endTokenIndex": 36,
+          "answer": "roads",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing plural noun for q36.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t038-t039",
+          "segmentOrder": 4,
+          "startTokenIndex": 38,
+          "endTokenIndex": 39,
+          "answer": "fractured",
+          "acceptedVariants": [],
+          "reason": "High-value damage verb with spelling and consonant-cluster value.",
+          "tags": [
+            "spelling-risk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t048-t050",
+          "segmentOrder": 4,
+          "startTokenIndex": 48,
+          "endTokenIndex": 50,
+          "answer": "hibernation sites",
+          "acceptedVariants": [],
+          "reason": "Specialized noun phrase with spelling value.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t070-t074",
+          "segmentOrder": 4,
+          "startTokenIndex": 70,
+          "endTokenIndex": 74,
+          "answer": "To make matters worse",
+          "acceptedVariants": [],
+          "reason": "Problem-escalation signpost with connected-speech value.",
+          "tags": [
+            "signpost",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t082-t083",
+          "segmentOrder": 4,
+          "startTokenIndex": 82,
+          "endTokenIndex": 83,
+          "answer": "declining",
+          "acceptedVariants": [],
+          "reason": "Trend verb with IELTS problem-description value.",
+          "tags": [
+            "topic-vocabulary",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t086-t089",
+          "segmentOrder": 4,
+          "startTokenIndex": 86,
+          "endTokenIndex": 89,
+          "answer": "no legal limit",
+          "acceptedVariants": [],
+          "reason": "Policy phrase that frames the q37 fishing answer.",
+          "tags": [
+            "answer-context",
+            "noun-phrase"
+          ]
+        },
+        {
+          "id": "il-s04-seg004-t090-t091",
+          "segmentOrder": 4,
+          "startTokenIndex": 90,
+          "endTokenIndex": 91,
+          "answer": "fishing",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q37.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg005-t005-t007",
+          "segmentOrder": 5,
+          "startTokenIndex": 5,
+          "endTokenIndex": 7,
+          "answer": "negative impact",
+          "acceptedVariants": [],
+          "reason": "Academic collocation with problem-description value.",
+          "tags": [
+            "lexical-chunk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg005-t019-t020",
+          "segmentOrder": 5,
+          "startTokenIndex": 19,
+          "endTokenIndex": 20,
+          "answer": "fragile",
+          "acceptedVariants": [],
+          "reason": "Spelling-risk adjective that signals vulnerability.",
+          "tags": [
+            "spelling-risk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg005-t024-t025",
+          "segmentOrder": 5,
+          "startTokenIndex": 24,
+          "endTokenIndex": 25,
+          "answer": "reproduction",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q38 with strong spelling value.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg005-t031-t033",
+          "segmentOrder": 5,
+          "startTokenIndex": 31,
+          "endTokenIndex": 33,
+          "answer": "disappointingly low",
+          "acceptedVariants": [],
+          "reason": "Evaluative phrase with adverb spelling and stress-pattern value.",
+          "tags": [
+            "lexical-chunk",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t005-t007",
+          "segmentOrder": 6,
+          "startTokenIndex": 5,
+          "endTokenIndex": 7,
+          "answer": "going forward",
+          "acceptedVariants": [],
+          "reason": "Section-transition phrase with connected-speech value.",
+          "tags": [
+            "signpost",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t009-t011",
+          "segmentOrder": 6,
+          "startTokenIndex": 9,
+          "endTokenIndex": 11,
+          "answer": "environmental groups",
+          "acceptedVariants": [],
+          "reason": "Actor noun phrase with spelling and topic value.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t013-t016",
+          "segmentOrder": 6,
+          "startTokenIndex": 13,
+          "endTokenIndex": 16,
+          "answer": "British Columbia government",
+          "acceptedVariants": [],
+          "reason": "Proper-name organization phrase with word-boundary value.",
+          "tags": [
+            "proper-noun",
+            "word-boundary"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t027-t030",
+          "segmentOrder": 6,
+          "startTokenIndex": 27,
+          "endTokenIndex": 30,
+          "answer": "requiring logging companies",
+          "acceptedVariants": [],
+          "reason": "Policy-action phrase that leads into the q39 answer.",
+          "tags": [
+            "answer-context",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t035-t036",
+          "segmentOrder": 6,
+          "startTokenIndex": 35,
+          "endTokenIndex": 36,
+          "answer": "method",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q39.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t045-t049",
+          "segmentOrder": 6,
+          "startTokenIndex": 45,
+          "endTokenIndex": 49,
+          "answer": "may not be sufficient",
+          "acceptedVariants": [],
+          "reason": "Negative modal phrase that signals limits of the proposed measures.",
+          "tags": [
+            "connected-speech",
+            "distractor-contrast"
+          ]
+        },
+        {
+          "id": "il-s04-seg006-t052-t054",
+          "segmentOrder": 6,
+          "startTokenIndex": 52,
+          "endTokenIndex": 54,
+          "answer": "healthy population",
+          "acceptedVariants": [],
+          "reason": "Conservation noun phrase with word-boundary value.",
+          "tags": [
+            "noun-phrase",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg007-t022-t024",
+          "segmentOrder": 7,
+          "startTokenIndex": 22,
+          "endTokenIndex": 24,
+          "answer": "more emphasis",
+          "acceptedVariants": [],
+          "reason": "Policy phrase that prepares the q40 expansion answer.",
+          "tags": [
+            "answer-context",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg007-t026-t027",
+          "segmentOrder": 7,
+          "startTokenIndex": 26,
+          "endTokenIndex": 27,
+          "answer": "expansion",
+          "acceptedVariants": [],
+          "reason": "Official answer-bearing word for q40 with spelling value.",
+          "tags": [
+            "answer-bearing",
+            "spelling-risk"
+          ]
+        },
+        {
+          "id": "il-s04-seg007-t030-t031",
+          "segmentOrder": 7,
+          "startTokenIndex": 30,
+          "endTokenIndex": 31,
+          "answer": "justified",
+          "acceptedVariants": [],
+          "reason": "Spelling-risk verb that explains why habitat expansion is valid.",
+          "tags": [
+            "spelling-risk",
+            "topic-vocabulary"
+          ]
+        },
+        {
+          "id": "il-s04-seg007-t035-t037",
+          "segmentOrder": 7,
+          "startTokenIndex": 35,
+          "endTokenIndex": 37,
+          "answer": "create space",
+          "acceptedVariants": [],
+          "reason": "Result phrase with connected-speech value.",
+          "tags": [
+            "lexical-chunk",
+            "connected-speech"
+          ]
+        },
+        {
+          "id": "il-s04-seg007-t042-t045",
+          "segmentOrder": 7,
+          "startTokenIndex": 42,
+          "endTokenIndex": 45,
+          "answer": "losing their homes",
+          "acceptedVariants": [],
+          "reason": "Closing noun phrase with weak-form and topic value.",
+          "tags": [
+            "connected-speech",
+            "topic-vocabulary"
+          ]
+        }
+      ]
+    }
+  ]
+}

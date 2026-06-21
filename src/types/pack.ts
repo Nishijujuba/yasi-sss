@@ -23,6 +23,7 @@ export interface PackManifest {
     transcript: string;
     transcriptTimings?: string;
     vocabulary: string;
+    intensiveListening?: string;
   };
   build?: {
     sourceCommit?: string;
@@ -145,6 +146,27 @@ export interface VocabularyItem {
   audio: string;
 }
 
+export interface IntensiveListeningBlank {
+  id: string;
+  segmentOrder: number;
+  startTokenIndex: number;
+  endTokenIndex: number;
+  answer: string;
+  acceptedVariants: string[];
+  reason: string;
+  tags: string[];
+}
+
+export interface IntensiveListeningSection {
+  section: number;
+  blanks: IntensiveListeningBlank[];
+}
+
+export interface IntensiveListeningArtifact {
+  schemaVersion: "yasi.intensive-listening.v1";
+  sections: IntensiveListeningSection[];
+}
+
 export interface LoadedPack {
   baseUrl: string;
   manifest: PackManifest;
@@ -154,6 +176,7 @@ export interface LoadedPack {
   transcript: TranscriptSection[];
   transcriptTimings: TranscriptTimingArtifact | null;
   vocabulary: VocabularyItem[];
+  intensiveListening?: IntensiveListeningArtifact | null;
   questionsById: Map<string, Question>;
   answersByQuestionId: Map<string, AnswerRule>;
   overlaysByQuestionId: Map<string, OverlayRegion[]>;

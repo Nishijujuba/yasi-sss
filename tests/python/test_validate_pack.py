@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import sys
@@ -13,6 +14,7 @@ import pytest
 import builder.build_pack as build_pack_module
 import builder.validate_pack as validate_pack_module
 from builder.config import PACK_ROOT, SOURCE_DATA_ROOT
+from builder.intensive_listening import INTENSIVE_LISTENING_SCHEMA_VERSION
 from builder.models import PendingAnswerCandidate, ReleaseReport
 from builder.validate_pack import (
     ReleaseBlocked,
@@ -43,6 +45,89 @@ def unique_test_dir(name: str) -> Path:
 def _write_json(path: Path, payload: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _intensive_blank(
+    *,
+    section: int,
+    segment_order: int,
+    start: int,
+    end: int,
+    answer: str,
+) -> dict:
+    return {
+        "id": f"il-s{section:02d}-seg{segment_order:03d}-t{start:03d}-t{end:03d}",
+        "segmentOrder": segment_order,
+        "startTokenIndex": start,
+        "endTokenIndex": end,
+        "answer": answer,
+        "acceptedVariants": [],
+        "reason": "Regression fixture for release validation.",
+        "tags": ["release-fixture"],
+    }
+
+
+def _write_valid_intensive_listening_asset(pack_root: Path) -> None:
+    _write_json(
+        pack_root / "intensive-listening.json",
+        {
+            "schemaVersion": INTENSIVE_LISTENING_SCHEMA_VERSION,
+            "sections": [
+                {
+                    "section": 1,
+                    "blanks": [
+                        _intensive_blank(
+                            section=1,
+                            segment_order=1,
+                            start=0,
+                            end=1,
+                            answer="Good",
+                        )
+                    ],
+                },
+                {
+                    "section": 2,
+                    "blanks": [
+                        _intensive_blank(
+                            section=2,
+                            segment_order=1,
+                            start=0,
+                            end=1,
+                            answer="On",
+                        )
+                    ],
+                },
+                {
+                    "section": 3,
+                    "blanks": [
+                        _intensive_blank(
+                            section=3,
+                            segment_order=1,
+                            start=0,
+                            end=1,
+                            answer="Erm",
+                        )
+                    ],
+                },
+                {
+                    "section": 4,
+                    "blanks": [
+                        _intensive_blank(
+                            section=4,
+                            segment_order=1,
+                            start=0,
+                            end=1,
+                            answer="Today",
+                        )
+                    ],
+                },
+            ],
+        },
+    )
+    manifest_path = pack_root / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["assets"]["intensiveListening"] = "intensive-listening.json"
+    _write_json(manifest_path, manifest)
 
 
 def _load_timing_helpers():
@@ -106,10 +191,36 @@ def _canonical_blank_records() -> list[dict]:
 
 def _copy_pack_with_vocabulary(monkeypatch, name: str) -> tuple[Path, list[dict]]:
     pack_copy = unique_test_dir(name) / "listening"
-    shutil.copytree(PACK_ROOT, pack_copy)
+    pack_copy.mkdir(parents=True, exist_ok=True)
+    for filename in [
+        "manifest.json",
+        "questions.json",
+        "answers.json",
+        "overlays.json",
+        "transcript.json",
+        "transcript-timings.preview.json",
+    ]:
+        shutil.copy2(PACK_ROOT / filename, pack_copy / filename)
 
     manifest_path = pack_copy / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    for section in manifest["sections"]:
+        audio_path = Path(section["audio"])
+        target_audio = pack_copy / audio_path
+        target_audio.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            os.link(PACK_ROOT / audio_path, target_audio)
+        except OSError:
+            target_audio.write_bytes(b"asset")
+        for page in section["pages"]:
+            page_path = Path(page)
+            target_page = pack_copy / page_path
+            target_page.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                os.link(PACK_ROOT / page_path, target_page)
+            except OSError:
+                target_page.write_bytes(b"asset")
+
     manifest["assets"]["vocabulary"] = "vocabulary.json"
     manifest["assets"].pop("transcriptTimings", None)
     _write_json(manifest_path, manifest)
@@ -135,6 +246,7 @@ def _copy_pack_with_vocabulary(monkeypatch, name: str) -> tuple[Path, list[dict]
         )
 
     _write_json(pack_copy / "vocabulary.json", vocabulary)
+    _write_valid_intensive_listening_asset(pack_copy)
 
     def fake_probe_duration(media_path: Path, **kwargs) -> float:
         name = Path(media_path).name
@@ -393,6 +505,7 @@ def _patch_build_steps_to_noop(monkeypatch) -> None:
         "convert_audio_sections",
         "export_answers_and_transcript",
         "export_vocabulary",
+        "export_intensive_listening",
         "build_vocabulary_audio_clips",
     ]:
         monkeypatch.setattr(build_pack_module, name, lambda: None)
@@ -437,7 +550,8 @@ def test_build_pack_writes_released_manifest_and_report(monkeypatch):
     assert report.clipCount == VOCABULARY_COUNT
     assert manifest["status"] == "released"
     assert manifest["assets"]["vocabulary"] == "vocabulary.json"
-    assert "transcriptTimings" not in manifest["assets"]
+    assert manifest["assets"]["transcriptTimings"] == "transcript-timings.preview.json"
+    assert manifest["assets"]["intensiveListening"] == "intensive-listening.json"
     assert release_report["questionCoverage"] == list(range(1, 41))
     assert release_report["overlayCount"] == 53
     assert release_report["answerCount"] == 40
@@ -506,6 +620,108 @@ def test_validate_pack_allows_missing_optional_transcript_timings(monkeypatch):
 
     assert "transcriptTimings" not in manifest["assets"]
     assert report.status == "released"
+
+
+def test_validate_pack_rejects_missing_intensive_listening_manifest_asset(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-missing-manifest-asset",
+    )
+    manifest_path = pack_copy / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["assets"].pop("intensiveListening")
+    _write_json(manifest_path, manifest)
+
+    with pytest.raises(ReleaseBlocked, match="intensiveListening"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_missing_intensive_listening_file(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-missing-file",
+    )
+    manifest_path = pack_copy / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["assets"]["intensiveListening"] = "missing-intensive-listening.json"
+    _write_json(manifest_path, manifest)
+
+    with pytest.raises(ReleaseBlocked, match="missing-intensive-listening"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_malformed_intensive_listening_asset(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-malformed",
+    )
+    _write_json(
+        pack_copy / "intensive-listening.json",
+        {"schemaVersion": INTENSIVE_LISTENING_SCHEMA_VERSION, "sections": []},
+    )
+
+    with pytest.raises(ReleaseBlocked, match="intensive listening"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_intensive_listening_span_that_cannot_map(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-unmapped-span",
+    )
+    payload = json.loads((pack_copy / "intensive-listening.json").read_text(encoding="utf-8"))
+    payload["sections"][0]["blanks"][0]["endTokenIndex"] = 99
+    _write_json(pack_copy / "intensive-listening.json", payload)
+
+    with pytest.raises(ReleaseBlocked, match="token range"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_intensive_listening_answer_disagreement(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-answer-disagreement",
+    )
+    payload = json.loads((pack_copy / "intensive-listening.json").read_text(encoding="utf-8"))
+    payload["sections"][0]["blanks"][0]["answer"] = "Wrong"
+    _write_json(pack_copy / "intensive-listening.json", payload)
+
+    with pytest.raises(ReleaseBlocked, match="answer"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_intensive_listening_duplicate_ids(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-duplicate-id",
+    )
+    payload = json.loads((pack_copy / "intensive-listening.json").read_text(encoding="utf-8"))
+    payload["sections"][1]["blanks"][0]["id"] = payload["sections"][0]["blanks"][0]["id"]
+    _write_json(pack_copy / "intensive-listening.json", payload)
+
+    with pytest.raises(ReleaseBlocked, match="duplicate"):
+        validate_pack(pack_copy)
+
+
+def test_validate_pack_rejects_intensive_listening_overlapping_blanks(monkeypatch):
+    pack_copy, _ = _copy_pack_with_vocabulary(
+        monkeypatch,
+        "pack-intensive-overlap",
+    )
+    payload = json.loads((pack_copy / "intensive-listening.json").read_text(encoding="utf-8"))
+    payload["sections"][0]["blanks"].append(
+        _intensive_blank(
+            section=1,
+            segment_order=1,
+            start=0,
+            end=2,
+            answer="Good morning",
+        )
+    )
+    _write_json(pack_copy / "intensive-listening.json", payload)
+
+    with pytest.raises(ReleaseBlocked, match="overlap"):
+        validate_pack(pack_copy)
 
 
 def test_validate_pack_allows_preview_transcript_timings_for_optional_gate(monkeypatch):

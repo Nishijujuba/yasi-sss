@@ -179,6 +179,82 @@ function packWithSectionOneTimings(): LoadedPack {
   };
 }
 
+function packWithIntensiveListening(): LoadedPack {
+  return {
+    ...fakePack(),
+    manifest: {
+      ...fakePack().manifest,
+      assets: {
+        ...fakePack().manifest.assets,
+        intensiveListening: "intensive-listening.json",
+      },
+    },
+    transcript: [
+      {
+        section: 1,
+        segments: [
+          {
+            order: 1,
+            speaker: "WOMAN",
+            text: "Good morning. I need a photo card.",
+            answerRefs: [],
+            startTime: null,
+            endTime: null,
+          },
+        ],
+      },
+      {
+        section: 2,
+        segments: [
+          {
+            order: 1,
+            speaker: "MAN",
+            text: "Bring your membership card.",
+            answerRefs: [],
+            startTime: null,
+            endTime: null,
+          },
+        ],
+      },
+    ],
+    intensiveListening: {
+      schemaVersion: "yasi.intensive-listening.v1",
+      sections: [
+        {
+          section: 1,
+          blanks: [
+            {
+              id: "il-s01-seg001-t005-t006",
+              segmentOrder: 1,
+              startTokenIndex: 5,
+              endTokenIndex: 6,
+              answer: "photo card",
+              acceptedVariants: [],
+              reason: "IELTS noun phrase with spelling value.",
+              tags: ["noun-phrase"],
+            },
+          ],
+        },
+        {
+          section: 2,
+          blanks: [
+            {
+              id: "il-s02-seg001-t002-t002",
+              segmentOrder: 1,
+              startTokenIndex: 2,
+              endTokenIndex: 2,
+              answer: "membership",
+              acceptedVariants: [],
+              reason: "Common IELTS spelling risk.",
+              tags: ["spelling-risk"],
+            },
+          ],
+        },
+      ],
+    },
+  } as LoadedPack;
+}
+
 const submittedResult: MarkResult = {
   score: 0,
   total: 2,
@@ -243,7 +319,7 @@ describe("ExamWorkspace", () => {
     const submitButton = container.querySelector<HTMLButtonElement>(".primary-submit");
     expect(submitButton).not.toBeNull();
     fireEvent.click(submitButton!);
-    expect(screen.getByText(/Raw score: 0 \/ 2/)).toBeTruthy();
+    expect(screen.getByText(/Raw score: 0 \/ 1/)).toBeTruthy();
     expect(screen.getAllByText("正确答案：Ardleigh").length).toBeGreaterThan(0);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "Ardleigh" } });
@@ -462,6 +538,48 @@ describe("ExamWorkspace", () => {
     expect(screen.queryByText("正确答案：A / C")).toBeNull();
   });
 
+  it("shows active-section feedback only and keeps actions above scoring", () => {
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{ q1: "Ardley" }}
+        canSubmit
+        onAnswerChange={vi.fn()}
+        onSubmit={() => ({
+          score: 0,
+          total: 1,
+          byQuestion: {
+            q1: {
+              questionId: "q1",
+              correct: false,
+              expected: ["Ardleigh"],
+              actual: "Ardley",
+            },
+          },
+          incorrectIds: ["q1"],
+        })}
+      />,
+    );
+
+    fireEvent.click(container.querySelector<HTMLButtonElement>(".primary-submit")!);
+    fireEvent.click(screen.getByRole("tab", { name: "02" }));
+
+    const sidePanel = container.querySelector(".workspace-side-panel");
+    const actionRail = sidePanel?.querySelector(".action-rail");
+    const feedbackCard = sidePanel?.querySelector(".feedback-card");
+
+    expect(screen.queryByText(/Raw score: 0 \/ 1/)).toBeNull();
+    expect(screen.queryByText("Section 01")).toBeNull();
+    expect(screen.queryByText("正确答案：Ardleigh")).toBeNull();
+    expect(screen.getByLabelText("练习进度")).toHaveTextContent("已作答 0 / 2");
+    expect(screen.getByRole("button", { name: "下一错误题" })).toBeDisabled();
+    expect(actionRail).not.toBeNull();
+    expect(feedbackCard).not.toBeNull();
+    expect(sidePanel?.children[0]).toBe(actionRail);
+    expect(sidePanel?.children[1]).toBe(feedbackCard);
+  });
+
   it("does not mark unsubmitted section answers as incorrect when result omits that question", () => {
     render(
       <ExamWorkspace
@@ -490,7 +608,7 @@ describe("ExamWorkspace", () => {
     expect(screen.getByLabelText("第 13 题")).not.toHaveAttribute("data-status", "incorrect");
   });
 
-  it("switches section before navigating to the next incorrect question in another section", () => {
+  it("keeps next-incorrect navigation scoped to the active section", () => {
     Element.prototype.scrollIntoView = vi.fn();
     const onSectionChange = vi.fn();
 
@@ -518,10 +636,11 @@ describe("ExamWorkspace", () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByRole("button", { name: "下一错误题" })[0]);
+    expect(screen.getByRole("button", { name: "下一错误题" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "下一错误题" }));
 
-    expect(onSectionChange).toHaveBeenCalledWith(2);
-    expect(screen.getByRole("tab", { name: "02" })).toHaveAttribute("data-active", "true");
+    expect(onSectionChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("tab", { name: "01" })).toHaveAttribute("data-active", "true");
   });
 
   it("groups feedback and practice actions in a scrollable side panel", () => {
@@ -539,6 +658,101 @@ describe("ExamWorkspace", () => {
     expect(sidePanel).not.toBeNull();
     expect(sidePanel?.querySelector(".feedback-card")).not.toBeNull();
     expect(sidePanel?.querySelector(".action-rail")).not.toBeNull();
+  });
+
+  it("opens Intensive Listening only for the current submitted section", () => {
+    const onOpenIntensiveListening = vi.fn();
+
+    render(
+      <ExamWorkspace
+        pack={packWithIntensiveListening()}
+        activeSection={1}
+        answers={{ q1: "Ardleigh" }}
+        result={{
+          score: 1,
+          total: 1,
+          byQuestion: {
+            q1: {
+              questionId: "q1",
+              correct: true,
+              expected: ["Ardleigh"],
+              actual: "Ardleigh",
+            },
+          },
+          incorrectIds: [],
+        }}
+        onAnswerChange={vi.fn()}
+        onOpenIntensiveListening={onOpenIntensiveListening}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "精听" }));
+    expect(onOpenIntensiveListening).toHaveBeenCalledWith(1);
+
+    fireEvent.click(screen.getByRole("tab", { name: "02" }));
+
+    expect(screen.getByRole("button", { name: "精听" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "精听" }));
+    expect(onOpenIntensiveListening).toHaveBeenCalledTimes(1);
+  });
+
+  it("retains playback rate across section switches without requiring audio controller rate methods", () => {
+    const audioController: AudioController = {
+      pause: vi.fn(),
+    };
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{}}
+        audioController={audioController}
+        onAnswerChange={vi.fn()}
+      />,
+    );
+
+    const audio = container.querySelector<HTMLAudioElement>("audio");
+    expect(audio).not.toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: "1.25x" }));
+    expect(audio!.playbackRate).toBe(1.25);
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("data-active", "true");
+
+    fireEvent.click(screen.getByRole("tab", { name: "02" }));
+
+    const sectionTwoAudio = container.querySelector<HTMLAudioElement>("audio");
+    expect(sectionTwoAudio).not.toBeNull();
+    expect(sectionTwoAudio!.playbackRate).toBe(1.25);
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("data-active", "true");
+  });
+
+  it("resets playback rate to normal speed when the practice is reset", () => {
+    const onReset = vi.fn();
+    const { container } = render(
+      <ExamWorkspace
+        pack={fakePack()}
+        activeSection={1}
+        answers={{}}
+        audioController={{ pause: vi.fn() }}
+        onAnswerChange={vi.fn()}
+        onReset={onReset}
+      />,
+    );
+
+    const audio = container.querySelector<HTMLAudioElement>("audio");
+    expect(audio).not.toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: "1.25x" }));
+    expect(audio!.playbackRate).toBe(1.25);
+
+    fireEvent.click(screen.getByRole("button", { name: "重置练习" }));
+    fireEvent.click(screen.getByRole("button", { name: "确认重置" }));
+
+    expect(onReset).toHaveBeenCalledTimes(1);
+    expect(audio!.playbackRate).toBe(1);
+    expect(screen.getByRole("button", { name: "1x" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "1x" })).toHaveAttribute("data-active", "true");
   });
 
   it("wires built-in audio controls to the native audio element", () => {

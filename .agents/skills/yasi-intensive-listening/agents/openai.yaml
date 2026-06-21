@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yasi Intensive Listening"
+  short_description: "Select IELTS intensive-listening candidates"
+  default_prompt: "Use $yasi-intensive-listening to select section-scoped IELTS intensive-listening candidate JSON."

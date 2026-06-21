@@ -1,12 +1,16 @@
 import { useEffect, type RefObject } from "react";
 import type { AudioController } from "./ExamWorkspace";
 
+const PLAYBACK_RATES = [0.75, 1, 1.25, 1.5, 2] as const;
+
 export interface AudioPlayerProps {
   section: number;
   src: string;
   initialPosition?: number;
+  playbackRate?: number;
   audioController?: AudioController;
   audioRef?: RefObject<HTMLAudioElement | null>;
+  onPlaybackRateChange?: (playbackRate: number) => void;
   onPositionChange?: (section: number, position: number) => void;
   onPlayStateChange?: (playing: boolean) => void;
 }
@@ -15,8 +19,10 @@ export function AudioPlayer({
   section,
   src,
   initialPosition = 0,
+  playbackRate = 1,
   audioController,
   audioRef,
+  onPlaybackRateChange,
   onPositionChange,
   onPlayStateChange,
 }: AudioPlayerProps) {
@@ -73,7 +79,14 @@ export function AudioPlayer({
     if (audio !== null) {
       restorePosition(audio);
     }
-  }, [audioRef, src]);
+  }, [src]);
+
+  useEffect(() => {
+    const audio = audioRef?.current ?? null;
+    if (audio !== null) {
+      audio.playbackRate = playbackRate;
+    }
+  }, [audioRef, playbackRate, src]);
 
   return (
     <section aria-label={`Section ${label} 音频`} className="audio-player">
@@ -107,6 +120,22 @@ export function AudioPlayer({
         <button type="button" onClick={() => seek(5)}>
           前进 5 秒
         </button>
+      </div>
+      <div aria-label="播放速度" className="audio-player__rate-controls">
+        {PLAYBACK_RATES.map((rate) => {
+          const active = rate === playbackRate;
+          return (
+            <button
+              aria-pressed={active}
+              data-active={active ? "true" : undefined}
+              key={rate}
+              type="button"
+              onClick={() => onPlaybackRateChange?.(rate)}
+            >
+              {rate}x
+            </button>
+          );
+        })}
       </div>
     </section>
   );

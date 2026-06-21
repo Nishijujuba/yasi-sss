@@ -116,6 +116,27 @@ const verifiedTranscriptTimings = {
   ],
 };
 
+const intensiveListeningArtifact = {
+  schemaVersion: "yasi.intensive-listening.v1",
+  sections: [
+    {
+      section: 1,
+      blanks: [
+        {
+          id: "il-s01-seg001-t000-t001",
+          segmentOrder: 1,
+          startTokenIndex: 0,
+          endTokenIndex: 1,
+          answer: "Good morning",
+          acceptedVariants: ["good-morning"],
+          reason: "Common greeting phrase with connected-speech value.",
+          tags: ["phrase", "connected-speech"],
+        },
+      ],
+    },
+  ],
+};
+
 function mockJsonFetch(payloads: unknown[]) {
   const fetchMock = vi.fn(async () => {
     const payload = payloads.shift();
@@ -196,6 +217,94 @@ describe("loadPack", () => {
       7,
       "/packs/cambridge-10/test-1/listening/transcript-timings.json",
       { cache: "no-store" },
+    );
+  });
+
+  it("loads an optional intensive listening artifact declared by the manifest", async () => {
+    const manifest = {
+      ...baseManifest,
+      assets: {
+        ...baseManifest.assets,
+        intensiveListening: "intensive-listening.json",
+      },
+    };
+    const fetchMock = mockJsonFetch([
+      manifest,
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      assets.vocabulary,
+      intensiveListeningArtifact,
+    ]);
+
+    const pack = await loadPack("/packs/cambridge-10/test-1/listening");
+
+    expect(pack.intensiveListening).toEqual(intensiveListeningArtifact);
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      7,
+      "/packs/cambridge-10/test-1/listening/intensive-listening.json",
+      { cache: "no-store" },
+    );
+  });
+
+  it("rejects malformed intensive listening artifacts", async () => {
+    mockJsonFetch([
+      {
+        ...baseManifest,
+        assets: { ...baseManifest.assets, intensiveListening: "intensive-listening.json" },
+      },
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      assets.vocabulary,
+      {
+        ...intensiveListeningArtifact,
+        sections: [
+          {
+            ...intensiveListeningArtifact.sections[0],
+            blanks: [{ ...intensiveListeningArtifact.sections[0].blanks[0], answer: "" }],
+          },
+        ],
+      },
+    ]);
+
+    await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(
+      /intensiveListening\.sections\[0\]\.blanks\[0\]\.answer/i,
+    );
+  });
+
+  it("rejects zero-length intensive listening token spans", async () => {
+    mockJsonFetch([
+      {
+        ...baseManifest,
+        assets: { ...baseManifest.assets, intensiveListening: "intensive-listening.json" },
+      },
+      assets.questions,
+      assets.answers,
+      assets.overlays,
+      assets.transcript,
+      assets.vocabulary,
+      {
+        ...intensiveListeningArtifact,
+        sections: [
+          {
+            ...intensiveListeningArtifact.sections[0],
+            blanks: [
+              {
+                ...intensiveListeningArtifact.sections[0].blanks[0],
+                startTokenIndex: 1,
+                endTokenIndex: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    await expect(loadPack("/packs/cambridge-10/test-1/listening")).rejects.toThrow(
+      /token span/i,
     );
   });
 

@@ -1,12 +1,44 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AudioPlayer } from "./AudioPlayer";
+
+function ControlledAudioPlayer() {
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const audioRef = createRef<HTMLAudioElement>();
+  return (
+    <AudioPlayer
+      audioRef={audioRef}
+      initialPosition={0}
+      playbackRate={playbackRate}
+      section={1}
+      src="/packs/example/section-01.mp3"
+      onPlaybackRateChange={setPlaybackRate}
+    />
+  );
+}
 
 describe("AudioPlayer", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+  });
+
+  it("changes native playback rate without moving the current audio time", () => {
+    const { container } = render(<ControlledAudioPlayer />);
+
+    const audio = container.querySelector<HTMLAudioElement>("audio");
+    expect(audio).not.toBeNull();
+    audio!.currentTime = 42;
+    Object.defineProperty(audio!, "paused", { configurable: true, value: true });
+
+    fireEvent.click(screen.getByRole("button", { name: "1.25x" }));
+
+    expect(audio!.playbackRate).toBe(1.25);
+    expect(audio!.currentTime).toBe(42);
+    expect(audio!.paused).toBe(true);
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "1.25x" })).toHaveAttribute("data-active", "true");
   });
 
   it("does not restore position again when playback progress is saved", () => {
@@ -37,6 +69,20 @@ describe("AudioPlayer", () => {
 
     fireEvent.loadedMetadata(audio!);
     expect(setCurrentTime).toHaveBeenLastCalledWith(12);
+
+    setCurrentTime.mockClear();
+    currentTime = 27;
+    rerender(
+      <AudioPlayer
+        audioRef={audioRef}
+        initialPosition={12}
+        section={1}
+        src="/packs/example/section-01.mp3"
+        onPositionChange={onPositionChange}
+      />,
+    );
+
+    expect(setCurrentTime).not.toHaveBeenCalled();
 
     setCurrentTime.mockClear();
     currentTime = 13;

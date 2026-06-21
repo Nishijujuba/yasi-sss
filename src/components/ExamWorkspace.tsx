@@ -33,6 +33,7 @@ export interface ExamWorkspaceProps {
   onReset?: () => void;
   onGoHome?: () => void;
   onAudioPositionChange?: (section: number, position: number) => void;
+  onOpenIntensiveListening?: (section: number) => void;
   transcriptViewed?: boolean;
   onMarkTranscriptViewed?: () => void;
   nextIncorrectId?: string | null;
@@ -103,6 +104,19 @@ function toPanelTimingSection(timingSection: PackTimingSection): PanelTimingSect
   };
 }
 
+function hasIntensiveListeningDrill(pack: LoadedPack, section: number): boolean {
+  return pack.intensiveListening?.sections.some((entry) => entry.section === section) ?? false;
+}
+
+function hasSubmittedSection(pack: LoadedPack, result: MarkResult | null, section: number): boolean {
+  if (result === null) {
+    return false;
+  }
+  return pack.questions.some(
+    (question) => question.section === section && result.byQuestion[question.id] !== undefined,
+  );
+}
+
 export function ExamWorkspace({
   pack,
   activeSection = 1,
@@ -117,6 +131,7 @@ export function ExamWorkspace({
   onReset,
   onGoHome,
   onAudioPositionChange,
+  onOpenIntensiveListening,
   transcriptViewed,
   onMarkTranscriptViewed,
   nextIncorrectId,
@@ -128,6 +143,7 @@ export function ExamWorkspace({
   const [localResult, setLocalResult] = useState<MarkResult | null>(null);
   const [localPositions, setLocalPositions] = useState<Record<string, number>>(audioPositions);
   const [playing, setPlaying] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
   const [pendingFocusQuestionId, setPendingFocusQuestionId] = useState<string | null>(null);
   const [transcriptPanelOpen, setTranscriptPanelOpen] = useState(false);
   const [currentAudioTime, setCurrentAudioTime] = useState(localPositions[String(activeSection)] ?? 0);
@@ -225,12 +241,25 @@ export function ExamWorkspace({
   const effectiveTranscriptViewed = transcriptViewed ?? practiceSession?.transcriptViewed ?? false;
   const markTranscriptViewed = onMarkTranscriptViewed ?? practiceSession?.markTranscriptViewed;
   const sectionQuestions = loadedPack.questions.filter((question) => question.section === active.number);
+  const sectionQuestionIds = new Set(sectionQuestions.map((question) => question.id));
+  const activeSubmittedQuestionCount =
+    effectiveResult === null
+      ? 0
+      : sectionQuestions.filter((question) => effectiveResult.byQuestion[question.id] !== undefined).length;
+  const activeIncorrectIds =
+    effectiveResult?.incorrectIds.filter((questionId) => sectionQuestionIds.has(questionId)) ?? [];
+  const activeNextIncorrectId =
+    nextIncorrectId !== null && nextIncorrectId !== undefined && sectionQuestionIds.has(nextIncorrectId)
+      ? nextIncorrectId
+      : activeIncorrectIds[0] ?? null;
   const audioSrc = resolveAsset(loadedPack.baseUrl, active.audio);
   const activeTranscriptSection = loadedPack.transcript.find((section) => section.section === active.number) ?? null;
   const activeTimingSection = timingSectionFor(loadedPack, active.number);
   const canOpenTranscriptPanel = activeTimingSection !== null && activeTranscriptSection !== null;
   const showTranscriptPanel = transcriptPanelOpen && activeTimingSection !== null && activeTranscriptSection !== null;
   const showTimingReviewMarkers = showTranscriptPanel && (effectiveResult !== null || effectiveTranscriptViewed || transcriptPanelOpen);
+  const intensiveListeningAvailable = hasIntensiveListeningDrill(loadedPack, active.number);
+  const intensiveListeningUnlocked = hasSubmittedSection(loadedPack, effectiveResult, active.number);
 
   function recordAudioPosition(section: number, position: number): void {
     if (section === currentSection) {
@@ -286,8 +315,8 @@ export function ExamWorkspace({
   }
 
   function nextIncorrect(): void {
-    const id = nextIncorrectId ?? effectiveResult?.incorrectIds[0];
-    if (id !== undefined) {
+    const id = activeNextIncorrectId;
+    if (id !== null) {
       const question = loadedPack.questionsById.get(id);
       if (question !== undefined && question.section !== currentSection) {
         setPendingFocusQuestionId(id);
@@ -331,8 +360,10 @@ export function ExamWorkspace({
           audioController={audioController}
           audioRef={audioRef}
           initialPosition={localPositions[String(active.number)] ?? 0}
+          playbackRate={playbackRate}
           section={active.number}
           src={audioSrc}
+          onPlaybackRateChange={setPlaybackRate}
           onPlayStateChange={setPlaying}
           onPositionChange={recordAudioPosition}
         />
@@ -359,19 +390,13 @@ export function ExamWorkspace({
           />
         ) : null}
         <div className="workspace-side-panel">
-          <MarkingFeedback
-            answers={answers}
-            questions={loadedPack.questions}
-            result={effectiveResult}
-            transcriptViewed={effectiveTranscriptViewed}
-            onNextIncorrect={nextIncorrect}
-          />
           <PracticeActions
-            hasIncorrect={(effectiveResult?.incorrectIds.length ?? 0) > 0}
-            hasResult={effectiveResult !== null}
+            hasIncorrect={activeIncorrectIds.length > 0}
+            hasResult={activeSubmittedQuestionCount > 0}
             onGoHome={onGoHome}
             onNextIncorrect={nextIncorrect}
             onReset={() => {
+              setPlaybackRate(1);
               setLocalResult(null);
               setLocalPositions({});
               onReset?.();
@@ -381,6 +406,16 @@ export function ExamWorkspace({
             transcriptShadowingAvailable={canOpenTranscriptPanel}
             transcriptShadowingOpen={showTranscriptPanel}
             onToggleTranscriptShadowing={toggleTranscriptPanel}
+            intensiveListeningAvailable={intensiveListeningAvailable}
+            intensiveListeningUnlocked={intensiveListeningUnlocked}
+            onOpenIntensiveListening={() => onOpenIntensiveListening?.(active.number)}
+          />
+          <MarkingFeedback
+            answers={answers}
+            questions={sectionQuestions}
+            result={effectiveResult}
+            transcriptViewed={effectiveTranscriptViewed}
+            onNextIncorrect={nextIncorrect}
           />
         </div>
       </div>

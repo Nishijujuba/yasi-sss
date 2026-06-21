@@ -80,6 +80,11 @@ button:disabled {
   margin-top: 18px;
 }
 
+.home-mode-entry {
+  display: grid;
+  gap: 6px;
+}
+
 .workspace-shell {
   display: grid;
   height: 100vh;
@@ -165,6 +170,26 @@ button:disabled {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+}
+
+.audio-player__rate-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.audio-player__rate-controls button {
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  min-width: 48px;
+  padding: 4px 8px;
+}
+
+.audio-player__rate-controls button[data-active="true"] {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #ffffff;
 }
 
 .question-scroll {
@@ -492,6 +517,84 @@ button:disabled {
   cursor: default;
 }
 
+.intensive-shell {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto 1fr;
+}
+
+.intensive-topbar {
+  align-items: center;
+  background: #dbeafe;
+  border-bottom: 1px solid #93c5fd;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(260px, 1fr) auto minmax(300px, 520px);
+  padding: 14px 20px;
+}
+
+.intensive-topbar h1 {
+  font-size: 22px;
+  margin: 4px 0 0;
+}
+
+.intensive-body {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  min-height: 0;
+  padding: 18px;
+}
+
+.intensive-transcript,
+.intensive-locked {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  min-height: 0;
+  padding: 18px;
+}
+
+.intensive-transcript {
+  overflow: auto;
+}
+
+.intensive-transcript__segment {
+  line-height: 2;
+  margin: 0 0 12px;
+}
+
+.intensive-blank {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 3px;
+  vertical-align: middle;
+}
+
+.intensive-blank input {
+  border: 2px solid #2563eb;
+  border-radius: 6px;
+  min-width: 132px;
+  padding: 5px 8px;
+}
+
+.intensive-blank__status,
+.intensive-blank__answer {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.intensive-blank__status[data-status="correct"] {
+  color: #15803d;
+}
+
+.intensive-blank__status[data-status="incorrect"],
+.intensive-blank__answer {
+  color: #b91c1c;
+}
+
 @media (max-width: 1280px) {
   body {
     min-width: 0;
@@ -507,8 +610,13 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  .intensive-topbar {
+    grid-template-columns: 1fr;
+  }
+
   .workspace-body,
-  .workspace-body--with-transcript {
+  .workspace-body--with-transcript,
+  .intensive-body {
     grid-template-columns: 1fr;
   }
 

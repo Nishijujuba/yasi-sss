@@ -152,6 +152,14 @@ _Avoid_: Long dictionary entry, generated explanation, semantic marking hint
 An active recall exercise where the learner hears the Mistake Vocabulary Answer Audio, types the English word or phrase, then sees the correct spelling and short Simplified Chinese meaning.
 _Avoid_: Passive word list, multiple-choice drill, Chinese-to-English flashcard
 
+**Mistake Vocabulary Listening Review**:
+A passive review mode where the learner hears a fixed sequence of Mistake Vocabulary Answer Audio assets while the card's spelling and meaning are available as review aids and can be temporarily hidden.
+_Avoid_: Mistake Vocabulary Practice, section audio replay, automatic mastery scoring
+
+**Mistake Vocabulary Dictation Run**:
+A scored review run where the learner hears a fixed-timed sequence of Mistake Vocabulary Answer Audio assets, writes each answer from memory under forced cadence, and receives an end-of-run accuracy result.
+_Avoid_: Listening Review, learner-paced spelling notes, automatic card deletion
+
 **Mistake Vocabulary Practice Queue**:
 A fixed sequence of Mistake Vocabulary Cards created when a review run starts, either from the full notebook order or from a one-time random sample of ten cards, and completed with an end-of-run result summary.
 _Avoid_: Infinite loop, reshuffled after every card, dynamically expanding queue
@@ -159,6 +167,14 @@ _Avoid_: Infinite loop, reshuffled after every card, dynamically expanding queue
 **Mistake Vocabulary Mastery Tracking**:
 The local review state that keeps a Mistake Vocabulary Card after correct practice, records recent practice outcomes and mastery count, and allows the learner to remove the card manually.
 _Avoid_: Automatic removal, permanent pack data deletion, hidden archival
+
+**Mistake Vocabulary Archive**:
+A recoverable collection of mastered or temporarily retired Mistake Vocabulary Cards that preserves historical review statistics while staying outside the active notebook practice scope until the learner restores them.
+_Avoid_: Manual removal, permanent deletion, active notebook card
+
+**Mistake Vocabulary Error Priority**:
+The active notebook ordering rule that promotes cards with weaker recent dictation performance, more mistakes, and more recent failures ahead of easier cards.
+_Avoid_: Mastered-first ordering, static creation order, random list order
 
 **Desktop Practice Workspace**:
 The first-version display environment for the exam simulation, designed for desktop browsers with enough space for the original question layout and supporting controls.

@@ -9,7 +9,7 @@ description: Use when generating, benchmarking, reconciling, reviewing, finalizi
 
 Use this skill to produce verified Transcript Shadowing word timings from local Whisper word timestamps while keeping `transcript.json` as the only transcript text authority.
 
-This skill supersedes `yasi-forced-alignment` for the primary timing workflow. The old Qwen forced-alignment path remains historical context and a source of validation ideas. The primary workflow loads no Qwen models, uses no `D:\model-repo` dependency, and treats ASR text only as timing evidence.
+This skill supersedes `yasi-forced-alignment` for the primary timing workflow. The old Qwen forced-alignment package has been archived out of `.agents\skills\`; use archived copies only for historical context and reusable validation ideas. The primary workflow loads no Qwen models, uses no `D:\model-repo` dependency, and treats ASR text only as timing evidence.
 
 The released frontend contract stays `transcript-timings.json` with `schemaVersion: "yasi.transcript-timings.v1"`. ASR provenance, alignment diagnostics, and reviewer decisions stay in temporary artifacts or release audit artifacts.
 

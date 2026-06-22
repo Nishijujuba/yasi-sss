@@ -132,10 +132,10 @@ def render() -> None:
     label_font = font(FONT_REGULAR, 25)
     group_font = font(FONT_BOLD, 27)
 
-    draw.text((LEFT, TOP), "Yasi Forced Alignment Skill 时序图", font=title_font, fill=COLORS["ink"])
+    draw.text((LEFT, TOP), "Archived Yasi Forced Alignment Skill 时序图", font=title_font, fill=COLORS["ink"])
     draw.text(
         (LEFT, TOP + 62),
-        "核心原则：transcript.json 是官方文本源；ASR 只提供定位证据；Qwen 只对官方文本做强制对齐；Review JSON 是验收轨迹。",
+        "归档说明：该 Qwen 路线已由 ADR-0008 的 ASR Timing Reconciliation 替代；本图仅保留历史流程。",
         font=subtitle_font,
         fill=COLORS["muted"],
     )

@@ -12,6 +12,14 @@ _Avoid_: Single HTML file, PDF clone, screenshot page
 A visual reproduction of the original PDF question pages used to preserve layout fidelity, including tables, spacing, and line lengths.
 _Avoid_: Full HTML conversion, retyped page
 
+**Source Book PDF**:
+The complete official Cambridge IELTS book PDF kept as the immutable source for test pages, audioscripts, answer keys, and supporting sections before chapter-level extraction.
+_Avoid_: Practice pack asset, rendered page image, OCR text dump
+
+**Chapter-Split Source PDF**:
+A stable chapter or test-range PDF derived from a Source Book PDF and used as the immediate source for one builder input such as a test, audioscripts, or answer keys.
+_Avoid_: Temporary crop, page screenshot, runtime PDF slice
+
 **Interaction Overlay**:
 The structured clickable and typable layer placed over the question facsimile layer for answers, choices, focus order, and feedback.
 _Avoid_: Image-only page, manual annotation

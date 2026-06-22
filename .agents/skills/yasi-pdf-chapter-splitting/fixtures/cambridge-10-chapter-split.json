@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "yasi.pdf-chapter-split.v1",
+  "sourcePdf": "../../../../resources/\u5251\u6865/\u5251\u6865\u96c5\u601d10/\u5251\u6865\u96c5\u601d\u771f\u989810.pdf",
+  "outputDir": "../../../../resources/\u5251\u6865/\u5251\u6865\u96c5\u601d10/\u5251\u6865\u96c5\u601d\u771f\u989810\u5206P",
+  "expectedTotalPages": 180,
+  "coverage": "complete",
+  "pageNumberBasis": "pdf-physical-1-based",
+  "chapters": [
+    {"order": 0, "title": "\u5c01\u9762\u7248\u6743\u76ee\u5f55", "fileStem": "00_\u5c01\u9762\u7248\u6743\u76ee\u5f55", "startPage": 1, "endPage": 3},
+    {"order": 1, "title": "Introduction", "fileStem": "01_Introduction", "startPage": 4, "endPage": 9},
+    {"order": 2, "title": "Test 1", "fileStem": "02_Test_1", "startPage": 10, "endPage": 32},
+    {"order": 3, "title": "Test 2", "fileStem": "03_Test_2", "startPage": 33, "endPage": 56},
+    {"order": 4, "title": "Test 3", "fileStem": "04_Test_3", "startPage": 57, "endPage": 79},
+    {"order": 5, "title": "Test 4", "fileStem": "05_Test_4", "startPage": 80, "endPage": 103},
+    {"order": 6, "title": "General Training Reading and Writing Test A", "fileStem": "06_General_Training_Reading_and_Writing_Test_A", "startPage": 104, "endPage": 116},
+    {"order": 7, "title": "General Training Reading and Writing Test B", "fileStem": "07_General_Training_Reading_and_Writing_Test_B", "startPage": 117, "endPage": 129},
+    {"order": 8, "title": "Audioscripts", "fileStem": "08_Audioscripts", "startPage": 130, "endPage": 150},
+    {"order": 9, "title": "Listening and Reading Answer Keys", "fileStem": "09_Listening_and_Reading_Answer_Keys", "startPage": 151, "endPage": 160},
+    {"order": 10, "title": "Model and sample answers for Writing tasks", "fileStem": "10_Model_and_sample_answers_for_Writing_tasks", "startPage": 161, "endPage": 172},
+    {"order": 11, "title": "Sample answer sheets", "fileStem": "11_Sample_answer_sheets", "startPage": 173, "endPage": 178},
+    {"order": 12, "title": "Acknowledgements", "fileStem": "12_Acknowledgements", "startPage": 179, "endPage": 180}
+  ]
+}

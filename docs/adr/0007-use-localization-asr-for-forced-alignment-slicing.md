@@ -4,6 +4,8 @@ status: superseded by ADR-0008
 
 # Use Localization ASR For Forced Alignment Slicing
 
+> **2026-06-22 update:** The project skill package `.agents\skills\yasi-forced-alignment\` has been archived under `D:\Project\yasi\待删除\yasi-forced-alignment\archived-skill-2026-06-22\yasi-forced-alignment\`. This ADR remains historical context for the abandoned Qwen forced-alignment route. Active Transcript Shadowing timing work uses ADR-0008 and `.agents\skills\yasi-asr-timing-reconciliation\`.
+
 Transcript Alignment will use a short-lived localization transcript to find where the official audioscript begins inside the raw listening audio and to estimate per-slice official token ranges before running Qwen3-ForcedAligner. The official `transcript.json` remains the Transcript Text Authority for all displayed text, timing identity, review traces, and final pack artifacts.
 
 This records the boundary between timing evidence and text authority. Cambridge listening audio can contain example audio, section instructions, pauses, and other speech that is absent from the official audioscript. Aligning a 180-second audio slice against the full section transcript creates an unstable alignment task because the audio window and text window describe different spans.

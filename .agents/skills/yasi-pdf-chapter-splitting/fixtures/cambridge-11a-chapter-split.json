@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "yasi.pdf-chapter-split.v1",
+  "sourcePdf": "../../../../resources/\u5251\u6865/\u5251\u6865\u96c5\u601d11/\u5251\u6865\u96c5\u601d\u771f\u989811A.pdf",
+  "outputDir": "../../../../resources/\u5251\u6865/\u5251\u6865\u96c5\u601d11/\u5251\u6865\u96c5\u601d\u771f\u989811A\u5206P",
+  "expectedTotalPages": 136,
+  "coverage": "complete",
+  "pageNumberBasis": "pdf-physical-1-based",
+  "chapters": [
+    {"order": 0, "title": "Introduction", "fileStem": "00_Introduction", "startPage": 1, "endPage": 6},
+    {"order": 1, "title": "Test 1", "fileStem": "01_Test_1", "startPage": 7, "endPage": 29},
+    {"order": 2, "title": "Test 2", "fileStem": "02_Test_2", "startPage": 30, "endPage": 53},
+    {"order": 3, "title": "Test 3", "fileStem": "03_Test_3", "startPage": 54, "endPage": 76},
+    {"order": 4, "title": "Test 4", "fileStem": "04_Test_4", "startPage": 77, "endPage": 99},
+    {"order": 5, "title": "Audioscripts", "fileStem": "05_Audioscripts", "startPage": 100, "endPage": 120},
+    {"order": 6, "title": "Listening and Reading Answer Keys", "fileStem": "06_Listening_and_Reading_Answer_Keys", "startPage": 121, "endPage": 128},
+    {"order": 7, "title": "Sample answers for Writing tasks", "fileStem": "07_Sample_answers_for_Writing_tasks", "startPage": 129, "endPage": 136}
+  ]
+}

@@ -1,6 +1,8 @@
 # ASR Timing Reconciliation Skill Plan
 
 > **Status:** Draft plan for the replacement Transcript Shadowing timing skill. Primary decision record: [ADR 0008](../../adr/0008-use-asr-timing-reconciliation-for-transcript-shadowing.md).
+>
+> **2026-06-22 update:** The superseded `yasi-forced-alignment` package has been archived under `D:\Project\yasi\待删除\yasi-forced-alignment\archived-skill-2026-06-22\yasi-forced-alignment\`. References to that package in this plan are historical; active implementation should use `.agents\skills\yasi-asr-timing-reconciliation\`.
 
 **Goal:** Create a new ASR Timing Reconciliation skill that uses local Whisper word timestamps as timing evidence, reconciles them against official `transcript.json`, produces reviewable artifacts, and emits the existing `yasi.transcript-timings.v1` frontend asset only after validation.
 
@@ -126,5 +128,5 @@ The code-screening layer can approve exact normalized mappings with valid timing
 - Promote the final review trace to `build/review/transcript-timing/<pack-id>/alignment-review.json` before release validation passes.
 - Set `transcript-timings.json.reviewArtifact` to the promoted release audit artifact as a repo-root-relative path, such as `build/review/transcript-timing/cambridge-10-test-1-listening/alignment-review.json`.
 - Extend release validation so released packs fail when the declared review artifact is missing, contains pending decisions, or does not cover every timing entry that requires review.
-- Reuse or port existing timing validation rules from the superseded `yasi-forced-alignment` skill.
+- Use the timing validation rules now present in `.agents\skills\yasi-asr-timing-reconciliation\scripts\validate_timings.py`; consult the archived `yasi-forced-alignment` copy only for historical comparison.
 - Block finalization when any required timing is missing, non-monotonic, non-positive, pending review, or detached from official transcript token identity.

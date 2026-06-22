@@ -8,6 +8,8 @@
 
 **Tech Stack:** Python 3 in `D:\Project\yasi\.venv\Scripts\python.exe`, local Whisper CLI at `D:\Project\video2pdf\kimi\.venv\Scripts\whisper.exe`, pytest, existing pack data under `public/packs/cambridge-10/test-1/listening`, existing release validator in `builder/validate_pack.py`.
 
+> **2026-06-22 update:** The superseded `yasi-forced-alignment` package and `tests/python/test_align_transcript_script.py` have been archived under `D:\Project\yasi\待删除\yasi-forced-alignment\`. Steps that reference those active paths are historical.
+
 ---
 
 ## Coordination Model
@@ -332,7 +334,7 @@ Responsibilities:
 
 - [ ] **Step 3: Port or wrap timing validation**
 
-Move reusable validation rules from `.agents/skills/yasi-forced-alignment/scripts/validate_timings.py` into the new skill path. Keep the old skill historical.
+Reusable validation rules now live in `.agents/skills/yasi-asr-timing-reconciliation/scripts/validate_timings.py`. The archived `yasi-forced-alignment` copy is historical reference material.
 
 - [ ] **Step 4: Update release validation tests**
 
@@ -367,7 +369,7 @@ Expected: pass.
 
 Required sections:
 
-- purpose and superseding relationship to `yasi-forced-alignment`;
+- purpose and superseding relationship to the archived `yasi-forced-alignment` route;
 - local paths;
 - no-Qwen primary workflow;
 - benchmark command;

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yasi PDF Chapter Splitting"
+  short_description: "Split IELTS source PDFs by chapter"
+  default_prompt: "Use $yasi-pdf-chapter-splitting to split a Yasi IELTS source PDF into chapter PDFs from a verified manifest."

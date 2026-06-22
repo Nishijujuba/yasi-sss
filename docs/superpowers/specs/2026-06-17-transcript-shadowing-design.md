@@ -13,7 +13,7 @@ This feature is for follow-reading and listening review. It excludes recording, 
 - Local Whisper word timestamps are the default ASR timing source.
 - ASR output is timing evidence only. It must be reconciled against official transcript token identities before it can enter a verified timing asset.
 - The primary ASR Timing Reconciliation workflow must not load Qwen models.
-- The former `yasi-forced-alignment` route is superseded by ADR-0008 and remains historical implementation context.
+- The former `yasi-forced-alignment` route is superseded by ADR-0008 and has been archived out of active `.agents\skills\`; `.agents\skills\yasi-asr-timing-reconciliation\` is the current timing workflow.
 - The public frontend consumes only verified timing assets.
 - Complete pack release requires verified Transcript Shadowing coverage for all four Listening Sections.
 - Section 01 may be used as a development-only Transcript Alignment Pilot to validate the full workflow before expanding to Sections 02-04.

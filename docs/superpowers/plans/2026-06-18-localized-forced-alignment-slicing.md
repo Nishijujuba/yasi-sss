@@ -1,6 +1,6 @@
 # Localized Forced Alignment Slicing Plan
 
-> **Status:** Superseded by [ADR 0008](../../adr/0008-use-asr-timing-reconciliation-for-transcript-shadowing.md). Keep this plan as historical context for the abandoned Qwen forced-alignment slicing route.
+> **Status:** Superseded by [ADR 0008](../../adr/0008-use-asr-timing-reconciliation-for-transcript-shadowing.md) and archived from active skills on 2026-06-22. Keep this plan as historical context for the abandoned Qwen forced-alignment slicing route.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:test-driven-development` for script behavior changes and `superpowers:verification-before-completion` before claiming completion. This plan uses checkbox syntax for progress tracking.
 
@@ -10,7 +10,9 @@
 
 **Primary Decision Record:** [ADR 0007](../../adr/0007-use-localization-asr-for-forced-alignment-slicing.md).
 
-**Existing Code Surface:**
+**Archive Note:** The code surface listed below was moved from active paths to `D:\Project\yasi\待删除\yasi-forced-alignment\archived-skill-2026-06-22\yasi-forced-alignment\`; `tests/python/test_align_transcript_script.py` was moved to `D:\Project\yasi\待删除\yasi-forced-alignment\archived-tests-2026-06-22\`.
+
+**Archived Code Surface:**
 
 - `.agents/skills/yasi-forced-alignment/SKILL.md`
 - `.agents/skills/yasi-forced-alignment/scripts/align_transcript.py`

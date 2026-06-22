@@ -147,6 +147,7 @@ export function ExamWorkspace({
   const [pendingFocusQuestionId, setPendingFocusQuestionId] = useState<string | null>(null);
   const [transcriptPanelOpen, setTranscriptPanelOpen] = useState(false);
   const [currentAudioTime, setCurrentAudioTime] = useState(localPositions[String(activeSection)] ?? 0);
+  const [revealedExpectedAnswers, setRevealedExpectedAnswers] = useState<ReadonlySet<string>>(() => new Set());
 
   useEffect(() => {
     setCurrentSection(activeSection);
@@ -164,6 +165,7 @@ export function ExamWorkspace({
     if (result === null) {
       setLocalResult(null);
     }
+    setRevealedExpectedAnswers(new Set());
   }, [result]);
 
   const active = useMemo(() => {
@@ -298,6 +300,7 @@ export function ExamWorkspace({
     if (!canSubmit) {
       return;
     }
+    setRevealedExpectedAnswers(new Set());
     const next = onSubmit?.();
     if (next !== undefined) {
       setLocalResult(next);
@@ -306,12 +309,26 @@ export function ExamWorkspace({
 
   function changeAnswer(questionId: string, value: string): void {
     setLocalResult(null);
+    setRevealedExpectedAnswers(new Set());
     onAnswerChange?.(questionId, value);
   }
 
   function changeAnswers(updates: AnswerMap): void {
     setLocalResult(null);
+    setRevealedExpectedAnswers(new Set());
     onAnswersChange?.(updates);
+  }
+
+  function toggleExpectedAnswer(questionId: string): void {
+    setRevealedExpectedAnswers((current) => {
+      const next = new Set(current);
+      if (next.has(questionId)) {
+        next.delete(questionId);
+      } else {
+        next.add(questionId);
+      }
+      return next;
+    });
   }
 
   function nextIncorrect(): void {
@@ -376,9 +393,11 @@ export function ExamWorkspace({
           overlays={loadedPack.overlays}
           pages={active.pages}
           questions={sectionQuestions}
+          revealedExpectedAnswers={revealedExpectedAnswers}
           result={effectiveResult}
           onAnswerChange={changeAnswer}
           onAnswersChange={changeAnswers}
+          onExpectedAnswerToggle={toggleExpectedAnswer}
         />
         {showTranscriptPanel && activeTimingSection !== null && activeTranscriptSection !== null ? (
           <TranscriptShadowingPanel
@@ -398,6 +417,7 @@ export function ExamWorkspace({
             onReset={() => {
               setPlaybackRate(1);
               setLocalResult(null);
+              setRevealedExpectedAnswers(new Set());
               setLocalPositions({});
               onReset?.();
             }}

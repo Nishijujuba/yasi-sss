@@ -10,6 +10,8 @@ export interface QuestionScrollAreaProps {
   result?: MarkResult | null;
   onAnswerChange: (questionId: string, value: string) => void;
   onAnswersChange?: (updates: AnswerMap) => void;
+  revealedExpectedAnswers?: ReadonlySet<string>;
+  onExpectedAnswerToggle?: (questionId: string) => void;
 }
 
 function basename(path: string): string {
@@ -32,6 +34,8 @@ export function QuestionScrollArea({
   result,
   onAnswerChange,
   onAnswersChange,
+  revealedExpectedAnswers,
+  onExpectedAnswerToggle,
 }: QuestionScrollAreaProps) {
   return (
     <section aria-label="题面滚动区" className="question-scroll">
@@ -48,8 +52,10 @@ export function QuestionScrollArea({
             questions={pageQuestions}
             regions={pageRegions}
             result={result}
+            revealedExpectedAnswers={revealedExpectedAnswers}
             onAnswerChange={onAnswerChange}
             onAnswersChange={onAnswersChange}
+            onExpectedAnswerToggle={onExpectedAnswerToggle}
           />
         );
       })}

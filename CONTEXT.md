@@ -192,6 +192,10 @@ _Avoid_: Free-text letter entry, click-order answer
 A question-ordered centered text interaction whose geometry follows the original PDF answer line and remains unchanged by the expected answer length or entered content.
 _Avoid_: Auto-sized answer field, answer-length hint
 
+**Blank Answer Reveal Toggle**:
+A per-Blank Response review action that appears only when marking has produced an accepted answer for that one blank, then opens or closes that one accepted answer display. Its open or closed state is transient review UI state for the current marking result, not persisted Practice Session state.
+_Avoid_: Section-wide answer reveal, page-wide answer reveal, replacing the learner response
+
 **Practice Session**:
 The locally persisted answer and marking state for one exam simulation attempt, saved immediately after answer changes and cleared explicitly by resetting the practice.
 _Avoid_: User account, server session

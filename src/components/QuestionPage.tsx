@@ -10,6 +10,8 @@ export interface QuestionPageProps {
   result?: MarkResult | null;
   onAnswerChange: (questionId: string, value: string) => void;
   onAnswersChange?: (updates: AnswerMap) => void;
+  revealedExpectedAnswers?: ReadonlySet<string>;
+  onExpectedAnswerToggle?: (questionId: string) => void;
 }
 
 function companionFor(question: Question, questions: Question[]): string | undefined {
@@ -36,6 +38,8 @@ export function QuestionPage({
   result,
   onAnswerChange,
   onAnswersChange,
+  revealedExpectedAnswers,
+  onExpectedAnswerToggle,
 }: QuestionPageProps) {
   const byId = new Map(questions.map((question) => [question.id, question]));
 
@@ -56,8 +60,10 @@ export function QuestionPage({
               question={question}
               region={region}
               result={result}
+              revealedExpectedAnswers={revealedExpectedAnswers}
               onAnswerChange={onAnswerChange}
               onAnswersChange={onAnswersChange}
+              onExpectedAnswerToggle={onExpectedAnswerToggle}
             />
           );
         })}

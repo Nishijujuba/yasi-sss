@@ -11,6 +11,8 @@ export interface InteractionOverlayProps {
   onAnswerChange: (questionId: string, value: string) => void;
   onAnswersChange?: (updates: AnswerMap) => void;
   companionQuestionId?: string;
+  revealedExpectedAnswers?: ReadonlySet<string>;
+  onExpectedAnswerToggle?: (questionId: string) => void;
 }
 
 function resultStatus(questionId: string, value: string, result?: MarkResult | null) {
@@ -49,6 +51,8 @@ export function InteractionOverlay({
   onAnswerChange,
   onAnswersChange,
   companionQuestionId,
+  revealedExpectedAnswers,
+  onExpectedAnswerToggle,
 }: InteractionOverlayProps) {
   const rect = region.normalized;
   const style = {
@@ -60,15 +64,18 @@ export function InteractionOverlay({
 
   if (question.responseType === "blank") {
     const value = answers[question.id] ?? "";
+    const answer = expectedAnswer(question.id, result);
     return (
       <div className="interaction-overlay" data-question-id={question.id} style={style}>
         <BlankResponse
-          expectedAnswer={expectedAnswer(question.id, result)}
+          expectedAnswer={answer}
+          expectedAnswerRevealed={revealedExpectedAnswers?.has(question.id) ?? false}
           questionId={question.id}
           questionNumber={question.number}
           status={resultStatus(question.id, value, result)}
           value={value}
           onChange={(next) => onAnswerChange(question.id, next)}
+          onExpectedAnswerToggle={() => onExpectedAnswerToggle?.(question.id)}
         />
       </div>
     );

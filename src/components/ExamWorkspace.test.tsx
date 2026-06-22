@@ -255,6 +255,49 @@ function packWithIntensiveListening(): LoadedPack {
   } as LoadedPack;
 }
 
+function packWithTwoBlankSectionOne(): LoadedPack {
+  const pack = fakePack();
+  const secondBlank: Question = {
+    id: "q2",
+    number: 2,
+    section: 1,
+    responseType: "blank",
+    page: "page-010.png",
+    focusOrder: 2,
+    selectionLimit: null,
+    options: [],
+  };
+  const secondOverlay: OverlayRegion = {
+    questionId: "q2",
+    optionId: null,
+    page: "page-010.png",
+    interactionType: "blank",
+    pixel: { x: 220, y: 100, w: 80, h: 30 },
+    normalized: { x: 0.22, y: 0.1, w: 0.1, h: 0.03 },
+    deterministicConfidence: 1,
+    visionConfidence: 1,
+    confidence: 1,
+    validationEvidence: [],
+  };
+
+  return {
+    ...pack,
+    manifest: {
+      ...pack.manifest,
+      sections: pack.manifest.sections.map((section) =>
+        section.number === 1 ? { ...section, questionNumbers: [1, 2] } : section,
+      ),
+    },
+    questions: [...pack.questions, secondBlank],
+    overlays: [...pack.overlays, secondOverlay],
+    questionsById: new Map([...pack.questions, secondBlank].map((question) => [question.id, question])),
+    overlaysByQuestionId: new Map([
+      ["q1", [pack.overlays[0]]],
+      ["q2", [secondOverlay]],
+    ]),
+  };
+}
+
 const submittedResult: MarkResult = {
   score: 0,
   total: 2,
@@ -320,7 +363,10 @@ describe("ExamWorkspace", () => {
     expect(submitButton).not.toBeNull();
     fireEvent.click(submitButton!);
     expect(screen.getByText(/Raw score: 0 \/ 1/)).toBeTruthy();
-    expect(screen.getAllByText("正确答案：Ardleigh").length).toBeGreaterThan(0);
+    const questionScroll = container.querySelector<HTMLElement>(".question-scroll");
+    expect(questionScroll).not.toBeNull();
+    expect(within(questionScroll!).getByRole("button", { name: "显示第 1 题正确答案" })).toBeTruthy();
+    expect(within(questionScroll!).queryByText("正确答案：Ardleigh")).toBeNull();
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "Ardleigh" } });
 
@@ -356,7 +402,62 @@ describe("ExamWorkspace", () => {
     fireEvent.click(submitButton!);
 
     expect(within(container).getByRole("textbox")).toHaveValue("Ardley");
-    expect(within(container).getAllByText("正确答案：Ardleigh").length).toBeGreaterThan(0);
+    const questionScroll = container.querySelector<HTMLElement>(".question-scroll");
+    expect(questionScroll).not.toBeNull();
+    expect(within(questionScroll!).getByRole("button", { name: "显示第 1 题正确答案" })).toBeTruthy();
+    expect(within(questionScroll!).queryByText("正确答案：Ardleigh")).toBeNull();
+  });
+
+  it("reveals blank accepted answers one at a time and keeps each toggle across section switches", () => {
+    const { container } = render(
+      <ExamWorkspace
+        pack={packWithTwoBlankSectionOne()}
+        activeSection={1}
+        answers={{ q1: "Ardley", q2: "Bristl" }}
+        onAnswerChange={vi.fn()}
+        onSubmit={() => ({
+          score: 0,
+          total: 2,
+          byQuestion: {
+            q1: {
+              questionId: "q1",
+              correct: false,
+              expected: ["Ardleigh"],
+              actual: "Ardley",
+            },
+            q2: {
+              questionId: "q2",
+              correct: false,
+              expected: ["Bristol"],
+              actual: "Bristl",
+            },
+          },
+          incorrectIds: ["q1", "q2"],
+        })}
+      />,
+    );
+
+    fireEvent.click(container.querySelector<HTMLButtonElement>(".primary-submit")!);
+
+    const questionScroll = container.querySelector<HTMLElement>(".question-scroll");
+    expect(questionScroll).not.toBeNull();
+    const questionLayer = within(questionScroll!);
+
+    expect(questionLayer.queryByText("正确答案：Ardleigh")).toBeNull();
+    expect(questionLayer.queryByText("正确答案：Bristol")).toBeNull();
+
+    fireEvent.click(questionLayer.getByRole("button", { name: "显示第 1 题正确答案" }));
+
+    expect(questionLayer.getByText("正确答案：Ardleigh")).toBeTruthy();
+    expect(questionLayer.queryByText("正确答案：Bristol")).toBeNull();
+    expect(questionLayer.getByRole("button", { name: "隐藏第 1 题正确答案" })).toBeTruthy();
+    expect(questionLayer.getByRole("button", { name: "显示第 2 题正确答案" })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("tab", { name: "02" }));
+    fireEvent.click(screen.getByRole("tab", { name: "01" }));
+
+    expect(within(container.querySelector<HTMLElement>(".question-scroll")!).getByText("正确答案：Ardleigh")).toBeTruthy();
+    expect(within(container.querySelector<HTMLElement>(".question-scroll")!).queryByText("正确答案：Bristol")).toBeNull();
   });
 
   it("shows accepted choice answers after submitting", () => {

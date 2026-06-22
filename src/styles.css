@@ -238,8 +238,9 @@ button:disabled {
   display: flex;
   height: 100%;
   justify-content: center;
+  max-width: 160px;
   position: relative;
-  width: 100%;
+  width: min(100%, 160px);
 }
 
 .blank-response {
@@ -252,7 +253,45 @@ button:disabled {
   overflow-x: auto;
   padding: 2px 8px;
   text-align: center;
-  width: min(100%, 160px);
+  width: 100%;
+}
+
+.blank-answer-toggle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #475569;
+  display: inline-flex;
+  height: 24px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  z-index: 3;
+}
+
+.blank-answer-toggle:hover,
+.blank-answer-toggle:focus-visible {
+  background: transparent;
+  border-color: transparent;
+  color: #1d4ed8;
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 1px;
+}
+
+.blank-answer-toggle__icon {
+  display: block;
+  fill: none;
+  height: 16px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 16px;
 }
 
 .expected-answer {

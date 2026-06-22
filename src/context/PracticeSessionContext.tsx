@@ -10,10 +10,13 @@ import {
 import { loadPack } from "../lib/loadPack";
 import { normalizeAnswer } from "../lib/marker";
 import {
+  archiveMistakeCard,
   captureMistakeVocabulary,
   loadMistakeVocabularyNotebook,
+  recordMistakeDictation,
   recordMistakePractice,
   removeMistakeCard,
+  restoreMistakeCard,
   saveMistakeVocabularyNotebook,
   type MistakeVocabularyNotebookState,
 } from "../lib/mistakeVocabulary";
@@ -64,6 +67,9 @@ interface PracticeSessionContextValue {
   markTranscriptViewed: () => void;
   canSubmit: boolean;
   notebook: MistakeVocabularyNotebookState;
+  archiveMistakeCard: (cardKey: string) => void;
+  restoreMistakeCard: (cardKey: string) => void;
+  submitMistakeDictation: (cardKey: string, correct: boolean) => void;
   submitMistakePractice: (cardKey: string, correct: boolean) => void;
   removeMistakeCard: (cardKey: string) => void;
   intensiveListeningSession: IntensiveListeningSessionState;
@@ -396,26 +402,56 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const submitMistakeDictation = useCallback((cardKey: string, correct: boolean) => {
+    setNotebook((current) => {
+      const next = recordMistakeDictation(current, cardKey, correct);
+      saveMistakeVocabularyNotebook(next);
+      return next;
+    });
+  }, []);
+
+  const clearCapturedMistakeSignatures = useCallback((cardKey: string) => {
+    if (pack === null) {
+      return;
+    }
+    const questionIds = capturedQuestionIdsForCard(pack, cardKey);
+    updateAndSave(setSession, (current) => {
+      const nextCapturedMistakes = { ...current.capturedMistakes };
+      for (const questionId of questionIds) {
+        delete nextCapturedMistakes[questionId];
+      }
+      return {
+        ...current,
+        capturedMistakes: nextCapturedMistakes,
+      };
+    });
+  }, [pack]);
+
+  const archiveMistakeCardInNotebook = useCallback((cardKey: string) => {
+    setNotebook((current) => {
+      const next = archiveMistakeCard(current, cardKey);
+      saveMistakeVocabularyNotebook(next);
+      return next;
+    });
+    clearCapturedMistakeSignatures(cardKey);
+  }, [clearCapturedMistakeSignatures]);
+
+  const restoreMistakeCardInNotebook = useCallback((cardKey: string) => {
+    setNotebook((current) => {
+      const next = restoreMistakeCard(current, cardKey);
+      saveMistakeVocabularyNotebook(next);
+      return next;
+    });
+  }, []);
+
   const removeMistakeCardFromNotebook = useCallback((cardKey: string) => {
     setNotebook((current) => {
       const next = removeMistakeCard(current, cardKey);
       saveMistakeVocabularyNotebook(next);
       return next;
     });
-    if (pack !== null) {
-      const questionIds = capturedQuestionIdsForCard(pack, cardKey);
-      updateAndSave(setSession, (current) => {
-        const nextCapturedMistakes = { ...current.capturedMistakes };
-        for (const questionId of questionIds) {
-          delete nextCapturedMistakes[questionId];
-        }
-        return {
-          ...current,
-          capturedMistakes: nextCapturedMistakes,
-        };
-      });
-    }
-  }, [pack]);
+    clearCapturedMistakeSignatures(cardKey);
+  }, [clearCapturedMistakeSignatures]);
 
   const unlockedIntensiveListeningSections = useMemo(
     () => intensiveListeningUnlockedSections(pack, session),
@@ -449,6 +485,9 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       markTranscriptViewed,
       canSubmit: hasAnyAnswer(session.answers),
       notebook,
+      archiveMistakeCard: archiveMistakeCardInNotebook,
+      restoreMistakeCard: restoreMistakeCardInNotebook,
+      submitMistakeDictation,
       submitMistakePractice,
       removeMistakeCard: removeMistakeCardFromNotebook,
       intensiveListeningSession: intensiveSession,
@@ -479,6 +518,9 @@ export function PracticeSessionProvider({ children }: { children: ReactNode }) {
       setAudioPosition,
       markTranscriptViewed,
       notebook,
+      archiveMistakeCardInNotebook,
+      restoreMistakeCardInNotebook,
+      submitMistakeDictation,
       submitMistakePractice,
       removeMistakeCardFromNotebook,
       intensiveSession,

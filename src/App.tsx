@@ -47,8 +47,11 @@ function AppContent() {
     return (
       <MistakeVocabularyView
         notebook={session.notebook}
+        onArchiveCard={session.archiveMistakeCard}
         onGoHome={session.goHome}
         onRemoveCard={session.removeMistakeCard}
+        onRestoreCard={session.restoreMistakeCard}
+        onSubmitDictation={session.submitMistakeDictation}
         onSubmitPractice={session.submitMistakePractice}
         pack={session.pack}
       />

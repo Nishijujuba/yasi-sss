@@ -684,8 +684,52 @@ button:disabled {
   background: #ffffff;
   border: 1px solid #bfdbfe;
   border-radius: 14px;
+  flex-wrap: wrap;
   justify-content: flex-start;
   padding: 12px;
+}
+
+.mistake-toolbar h2,
+.mistake-toolbar p {
+  margin: 0;
+}
+
+.mistake-toolbar-group,
+.mistake-tabs,
+.mistake-card-actions,
+.mistake-aids {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mistake-delay-control {
+  align-items: center;
+  color: #334155;
+  display: flex;
+  font-weight: 700;
+  gap: 6px;
+}
+
+.mistake-delay-control input {
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  padding: 7px 8px;
+  width: 72px;
+}
+
+.mistake-tabs {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.mistake-tabs [aria-selected="true"] {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
 }
 
 .mistake-list {
@@ -704,6 +748,11 @@ button:disabled {
   padding: 14px;
 }
 
+.mistake-card--active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
 .mistake-card h2 {
   font-size: 18px;
   margin: 0;
@@ -718,6 +767,34 @@ button:disabled {
   margin-bottom: 16px;
 }
 
+.mistake-run-meta,
+.mistake-current-marker {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.mistake-round-status {
+  border-radius: 6px;
+  font-weight: 800;
+  justify-self: start;
+  padding: 3px 8px;
+}
+
+.mistake-round-status--correct {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mistake-round-status--incorrect {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.mistake-round-status--pending {
+  background: #e0f2fe;
+  color: #075985;
+}
+
 .mistake-practice label {
   display: grid;
   gap: 6px;
@@ -727,6 +804,22 @@ button:disabled {
   border: 1px solid #93c5fd;
   border-radius: 8px;
   padding: 8px 10px;
+}
+
+.mistake-icon-toggle {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  color: #334155;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 5px 10px;
+}
+
+.mistake-icon-toggle[aria-pressed="true"] {
+  background: #ecfdf5;
+  border-color: #86efac;
+  color: #166534;
 }
 
 .practice-reveal {

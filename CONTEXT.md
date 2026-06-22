@@ -128,6 +128,10 @@ _Avoid_: One card per variant, learner-error-derived term, hidden accepted varia
 The rule that the Mistake Vocabulary Notebook keeps one card per normalized accepted answer word or phrase and updates only its mistake count when the learner misses it again.
 _Avoid_: Per-attempt card, per-question card, question-number history
 
+**Mistake Vocabulary Error Count**:
+The visible count of how many times a Mistake Vocabulary Card has been missed, including original submitted-listening captures and incorrect scored Dictation Run answers. Correct review answers do not reduce it.
+_Avoid_: Dictation attempt count, mastery count, hidden review-only metric
+
 **Mistake Vocabulary Capture**:
 The section-scoped submission rule that adds only non-empty, incorrect Blank Responses from submitted Attempted Listening Sections to the Mistake Vocabulary Notebook.
 _Avoid_: Unanswered blank capture, choice mistake capture, full answer-key import
@@ -153,11 +157,11 @@ An active recall exercise where the learner hears the Mistake Vocabulary Answer 
 _Avoid_: Passive word list, multiple-choice drill, Chinese-to-English flashcard
 
 **Mistake Vocabulary Listening Review**:
-A passive review mode where the learner hears a fixed sequence of Mistake Vocabulary Answer Audio assets while the card's spelling and meaning are available as review aids and can be temporarily hidden.
+A passive review mode where the learner hears a fixed sequence of Mistake Vocabulary Answer Audio assets while the card's spelling and meaning are available as run-scoped review aids and can be temporarily hidden for the current run.
 _Avoid_: Mistake Vocabulary Practice, section audio replay, automatic mastery scoring
 
 **Mistake Vocabulary Dictation Run**:
-A scored review run where the learner hears a fixed-timed sequence of Mistake Vocabulary Answer Audio assets, writes each answer from memory under forced cadence, and receives an end-of-run accuracy result.
+A scored automatic review run where each Mistake Vocabulary Answer Audio asset plays in sequence, the learner writes from memory under a fixed three-second post-audio cadence, each answer is submitted and advanced automatically, and the learner receives an end-of-run accuracy result.
 _Avoid_: Listening Review, learner-paced spelling notes, automatic card deletion
 
 **Mistake Vocabulary Practice Queue**:
@@ -173,7 +177,7 @@ A recoverable collection of mastered or temporarily retired Mistake Vocabulary C
 _Avoid_: Manual removal, permanent deletion, active notebook card
 
 **Mistake Vocabulary Error Priority**:
-The active notebook ordering rule that promotes cards with weaker recent dictation performance, more mistakes, and more recent failures ahead of easier cards.
+The active notebook ordering rule that promotes cards with a higher Mistake Vocabulary Error Count first, then uses weaker recent review performance and more recent failures to order cards with the same error count.
 _Avoid_: Mastered-first ordering, static creation order, random list order
 
 **Desktop Practice Workspace**:
